@@ -55,9 +55,21 @@ export default function App() {
       <NavigationContainer>
         <Tab.Navigator>
           <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Board" component={Board} />
-          <Tab.Screen name="Market" component={Market} />
-          <Tab.Screen name="Diary" component={MyPageScreen} />
+          <Tab.Screen
+            name="Board"
+            component={Board}
+            options={{headerShown: false}}
+          />
+          <Tab.Screen
+            name="Market"
+            component={Market}
+            options={{headerShown: false}}
+          />
+          <Tab.Screen
+            name="Diary"
+            component={MyPageScreen}
+            options={{headerShown: false}}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </ApolloProvider>
