@@ -20,8 +20,6 @@ const styles = StyleSheet.create({
   },
 });
 
-function fetchBoardUI(props) {}
-
 export function BoardMain({navigation}) {
   const {data} = useQuery(FETCH_BOARDS);
   return (
