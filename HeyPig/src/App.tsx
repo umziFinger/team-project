@@ -1,21 +1,23 @@
 import * as React from 'react';
+import SplashScreen from 'react-native-splash-screen';
 import { Text, TextInput, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MyPageScreen } from './components/unit/diary';
+import { DiaryMain } from './components/unit/diary/diaryMain';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
 } from "@apollo/client";
-import { DiaryDetailScreen } from './components/unit/diaryDetail';
 import { BoardMain } from './components/unit/board/boardMain';
 import { BoardWrite } from './components/unit/board/boardWrite';
 import { BoardDetail } from './components/unit/board/boardDetail';
 import { MarketMain } from './components/unit/market/marketMain';
 import { MarketWrite } from './components/unit/market/marketWrite';
 import { MarketDetail } from './components/unit/market/marketDetail';
+import { DiaryWrite } from './components/unit/diary/diaryWrite';
+import { DiaryDetail } from './components/unit/diary/diaryDetail';
 
 function HomeScreen() {
   return (
@@ -46,9 +48,23 @@ function Market() {
   );
 }
 
+function Diary() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="DiaryMain" component={DiaryMain} />
+      <Stack.Screen name="DiaryWrite" component={DiaryWrite} />
+      <Stack.Screen name="DiaryDetail" component={DiaryDetail} />
+    </Stack.Navigator>
+  );
+}
+
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+
+  React.useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 
   const client = new ApolloClient({
     uri: 'http://backend03.codebootcamp.co.kr/graphql',
@@ -59,10 +75,10 @@ export default function App() {
     <ApolloProvider client={client}>
       <NavigationContainer>
         <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Board" component={Board} />
-          <Tab.Screen name="Market" component={Market} />
-          <Tab.Screen name="Diary" component={MyPageScreen} />
+          <Tab.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
+          <Tab.Screen name="Board" component={Board} options={{headerShown: false}}/>
+          <Tab.Screen name="Market" component={Market} options={{headerShown: false}}/>
+          <Tab.Screen name="Diary" component={Diary} options={{headerShown: false}}/>
         </Tab.Navigator>    
       </NavigationContainer>
     </ApolloProvider>

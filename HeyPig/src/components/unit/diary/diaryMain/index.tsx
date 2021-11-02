@@ -1,5 +1,4 @@
 import {gql, useQuery} from '@apollo/client';
-import { NavigationContainer } from '@react-navigation/native';
 import * as React from 'react';
 import { Image, Text, TextInput, View, ScrollView, StyleSheet, Button } from 'react-native';
 
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
     }
 })
 
-export function MyPageScreen({navigation}) {
+export function DiaryMain({navigation}) {
 
     const {data} = useQuery(FETCH_BOARDS)
 
@@ -45,7 +44,7 @@ export function MyPageScreen({navigation}) {
             <View>
                 {data?.fetchBoards.map((el,i) => 
                 <View key={i} style={styles.DiaryView}>
-                    {/* <Image style={styles.DiaryImage} source={require('../../../Assets/images/add.png')} /> */}
+                    <Image style={styles.DiaryImage} source={require('../../../../Assets/images/add.png')} />
                     <View>
                         <Text>writer:{el.writer}</Text>
                         <Text>title:{el.title}</Text>
@@ -54,7 +53,7 @@ export function MyPageScreen({navigation}) {
                 </View>)}
             </View>
         </ScrollView>
-        <Button title="detail" onPress={() => navigation.navigate('DiaryDetails')}/>
+        <Button title="detail" onPress={() => navigation.navigate('DiaryDetail')}/>
       </View>
     )
   }
