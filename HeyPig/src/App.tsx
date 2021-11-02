@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, TextInput, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {MyPageScreen} from './components/unit/diary'
+import { MyPageScreen } from './components/unit/diary'
 import { BoardScreen } from './components/unit/board';
 import { MarketScreen } from './components/unit/market';
 
