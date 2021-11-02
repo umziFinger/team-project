@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         margin: 10, 
         justifyContent:'center', 
         paddingHorizontal: 30,
-        elevation: 3,
+        elevation: 4,
     },
 
     DiaryImage: {
