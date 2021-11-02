@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {MyPageScreen} from './components/unit/diary'
+import { BoardScreen } from './components/unit/board';
+import { MarketScreen } from './components/unit/market';
 
 function HomeScreen() {
   return (
@@ -11,22 +14,6 @@ function HomeScreen() {
   );
 }
 
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
-
-function MyPageScreen() {
-  return(
-    <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>
-      <Text>MyPage!</Text>
-    </View>
-  )
-}
-
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -34,8 +21,9 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-        <Tab.Screen name="MyPage" component={MyPageScreen} />
+        <Tab.Screen name="Board" component={BoardScreen} />
+        <Tab.Screen name="Market" component={MarketScreen} />
+        <Tab.Screen name="Diary" component={MyPageScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
