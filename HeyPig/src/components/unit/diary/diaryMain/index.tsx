@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     }
 })
 
-export function DiaryMain({navigation}) {
+export function DiaryMain({navigation}:any) {
 
     const {data} = useQuery(FETCH_BOARDS)
 
@@ -42,7 +42,7 @@ export function DiaryMain({navigation}) {
       <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>    
         <ScrollView>
             <View>
-                {data?.fetchBoards.map((el,i) => 
+                {data?.fetchBoards.map((el:any,i:number) => 
                 <View key={i} style={styles.DiaryView}>
                     <Image style={styles.DiaryImage} source={require('../../../../Assets/images/add.png')} />
                     <View>
