@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Image, Text, TextInput, View, ScrollView, StyleSheet ,Button} from 'react-native';
+import { Image, Text, TextInput, View, ScrollView, StyleSheet ,Button, Dimensions} from 'react-native';
+import Carousel from './Carousel';
 const styles = StyleSheet.create({
     Banner: {
         height: 200,
@@ -7,13 +8,13 @@ const styles = StyleSheet.create({
         margin: 5,
         backgroundColor:"gray"
     },
-    DiaryView: {
+    marketMain: {
         height: 120, 
-        width: 400, 
-        borderRadius:10, 
-        backgroundColor: "white", 
-        margin: 10, 
-        justifyContent:'center', 
+        width: 400,
+        borderRadius:10,
+        backgroundColor: "white",
+        margin: 10,
+        justifyContent:'center',
         paddingHorizontal: 30,
         elevation: 3,
     },
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
         justifyContent:'center', 
         alignItems:'center'
     },
+
     BestProduct:{
         fontSize:18,
         fontWeight:'bold',
@@ -33,16 +35,48 @@ const styles = StyleSheet.create({
     ProductSeller:{
     }
 })
+const screenWidth = Math.round(Dimensions.get('window').width);
+const PAGES = [
+    {
+    //   num: 1,
+      color: '#86E3CE',
+    },
+    {
+    //   num: 2,
+      color: '#D0E6A5',
+    },
+    {
+    //   num: 3,
+      color: '#FFDD94',
+    },
+    {
+    //   num: 4,
+      color: '#FA897B',
+    },
+    {
+    //   num: 5,
+      color: '#CCABD8',
+    },
+  ];
 
 export function MarketMain({navigation}) {
     return(
+        
       <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>    
-      <Text style={styles.BestProduct}>Best 상품</Text>
+      
         <ScrollView>
+             <Text style={styles.BestProduct}>Best 상품</Text>
+      <Carousel
+          gap={5}
+          offset={0} // left margin
+          pages={PAGES}
+          pageWidth={screenWidth}
+            //   pageWidth={screenWidth - (16 + 36) * 2}
+        />
+     
             <View>
-                <View style={styles.Banner} />
                 {new Array(10).fill(1).map((el,i) => 
-                <View key={i} style={styles.DiaryView}>
+                <View key={i} style={styles.marketMain}>
                     <Image style={styles.marketImage} source={require('../../../../Assets/images/add.png')} />
                     <Text style={styles.ProductContents}>내용 : </Text>
                     <Text style={styles.ProductPrice}>가격 : </Text>
@@ -55,3 +89,4 @@ export function MarketMain({navigation}) {
       </View>
     )
 }
+
