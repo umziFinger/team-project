@@ -8,7 +8,7 @@ interface IPage {
 }
 
 const PageItem = styled.View<{color: string}>`
-  background-color: ${(props) => props.color};
+  background-color: ${(props:any) => props.color};
   justify-content: center;
   align-items: center;
   border-radius: 20px;

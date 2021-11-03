@@ -55,14 +55,16 @@ export default function Carousel({pages, pageWidth, gap, offset}: ICarousel) {
         }}
         data={pages}
         decelerationRate="fast"
-        horizontal
+        horizontal={true}
         keyExtractor={(item: any) => `page__${item.color}`}
         onScroll={onScroll}
         pagingEnabled
         renderItem={renderItem}
-        snapToInterval={pageWidth + gap}
+        // snapToInterval={pageWidth + gap}
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
+
+
       />
       <IndicatorWrapper>
         {Array.from({length: pages.length}, (_, i) => i).map((i) => (

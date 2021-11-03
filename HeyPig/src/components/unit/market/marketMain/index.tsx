@@ -38,23 +38,23 @@ const styles = StyleSheet.create({
 const screenWidth = Math.round(Dimensions.get('window').width);
 const PAGES = [
     {
-      num: 1,
+    //   num: 1,
       color: '#86E3CE',
     },
     {
-      num: 2,
+    //   num: 2,
       color: '#D0E6A5',
     },
     {
-      num: 3,
+    //   num: 3,
       color: '#FFDD94',
     },
     {
-      num: 4,
+    //   num: 4,
       color: '#FA897B',
     },
     {
-      num: 5,
+    //   num: 5,
       color: '#CCABD8',
     },
   ];
@@ -65,18 +65,18 @@ export function MarketMain({navigation}) {
       <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>    
       
         <ScrollView>
-        <Text style={styles.BestProduct}>Best 상품</Text>
+             <Text style={styles.BestProduct}>Best 상품</Text>
       <Carousel
-          gap={16}
-          offset={36}
+          gap={5}
+          offset={0} // left margin
           pages={PAGES}
-          pageWidth={screenWidth - (16 + 36) * 2}
+          pageWidth={screenWidth}
+            //   pageWidth={screenWidth - (16 + 36) * 2}
         />
      
             <View>
                 {new Array(10).fill(1).map((el,i) => 
                 <View key={i} style={styles.marketMain}>
-                    
                     <Image style={styles.marketImage} source={require('../../../../Assets/images/add.png')} />
                     <Text style={styles.ProductContents}>내용 : </Text>
                     <Text style={styles.ProductPrice}>가격 : </Text>
