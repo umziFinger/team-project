@@ -65,6 +65,10 @@ export const FETCH_USED_ITEMS = gql`
       price
       tags
       pickedCount
+      images
+      seller{
+        name
+      }
     }
   }
 `;
