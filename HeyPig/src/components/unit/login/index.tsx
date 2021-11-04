@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Button, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import AsyncStorage from "@react-native-community/async-storage"
 const styles = StyleSheet.create({
     WrapperView: {
         flex:1,

@@ -16,7 +16,6 @@ import {DiaryWrite} from './components/unit/diary/diaryWrite';
 import {DiaryDetail} from './components/unit/diary/diaryDetail';
 import {LoginScreen} from './components/unit/login';
 import {SignUpScreen} from './components/unit/signup';
-import AsyncStorage from '@react-native-community/async-storage';
 
 function HomeScreen() {
   return (

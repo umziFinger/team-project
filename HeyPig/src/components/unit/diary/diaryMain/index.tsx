@@ -1,7 +1,6 @@
 import {gql, useQuery} from '@apollo/client';
 import * as React from 'react';
 import { Image, Text, TextInput, View, ScrollView, StyleSheet, Button, Pressable } from 'react-native';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const FETCH_BOARDS = gql`
     query {
@@ -42,7 +41,19 @@ const styles = StyleSheet.create({
         justifyContent:'center', 
         alignItems:'center',
         marginRight: 30
-    }
+    },
+
+    ButtonStyle: {
+        position: 'absolute',
+        backgroundColor: '#58ccff',
+        right: 30,
+        bottom: 30,
+        height: 60,
+        width: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 100,
+    },
 })
 
 
@@ -51,31 +62,9 @@ export function DiaryMain({navigation}:any) {
 
     const {data} = useQuery(FETCH_BOARDS)
     
-    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
-
-    const handleConfirm = (date:any) => {
-        console.log("A date has been picked: ", date);
-        hideDatePicker();
-    };
-
     return(
       <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>
         <Image style={styles.DiaryTitle} source={require('../../../../Assets/images/diary.png')}/>
-        <Button title="Show Date Picker" onPress={showDatePicker} />
-        <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
-        />
         <ScrollView>
             <View>
                 {data?.fetchBoards.map((el:any,i:number) => 
@@ -92,6 +81,11 @@ export function DiaryMain({navigation}:any) {
                 )}
             </View>
         </ScrollView>
+        <Pressable
+            style={styles.ButtonStyle}
+            onPress={() => navigation.navigate('DiaryWrite')}>
+            <Text style={{color: 'white', fontWeight: "bold"}}>New</Text>
+        </Pressable>
       </View>
     )
   }
