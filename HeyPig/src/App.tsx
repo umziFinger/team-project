@@ -29,14 +29,16 @@ function HomeScreen() {
 
 const Stack = createNativeStackNavigator();
 
-function LoginSignup(props:any) {
+function LoginSignup(parentProps:any) {
   return(
     <Stack.Navigator>
       <Stack.Screen 
         name="Login" 
-        component={LoginScreen} 
         options={{headerShown: false}}
-      />
+      >
+        {(props) => <LoginScreen {...props} {...parentProps}/>}
+      </Stack.Screen>
+      {/* <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/> */}
       <Stack.Screen name="Signup" component={SignUpScreen} options={{headerShown: false}}/>
     </Stack.Navigator>
   )

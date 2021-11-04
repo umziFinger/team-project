@@ -35,9 +35,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export function LoginScreen({navigation, props}:any) {
+export function LoginScreen({navigation, setIsLoggedIn}:any) {
 
     function onPressLogin() {
+        setIsLoggedIn(true)
     }
 
     return(
