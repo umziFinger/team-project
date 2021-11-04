@@ -20,8 +20,8 @@ export const FETCH_BOARD = gql`
 `;
 
 export const FETCH_BOARDS = gql`
-  query {
-    fetchBoards {
+  query fetchBoards($page: Int) {
+    fetchBoards(page: $page) {
       _id
       title
       contents
@@ -96,5 +96,28 @@ export const FETCH_BOARD_COMMENTS = gql`
 export const DELETE_BOARD_COMMENT = gql`
   mutation deleteBoardComment($password: String, $boardCommentId: ID!) {
     deleteBoardComment(password: $password, boardCommentId: $boardCommentId)
+  }
+`;
+
+export const CREATE_BOARD = gql`
+  mutation createBoard($createBoardInput: CreateBoardInput!) {
+    createBoard(createBoardInput: $createBoardInput) {
+      _id
+    }
+  }
+`;
+export const UPDATE_BOARD = gql`
+  mutation updateBoard(
+    $updateBoardInput: UpdateBoardInput!
+    $password: String
+    $boardId: ID!
+  ) {
+    updateBoard(
+      updateBoardInput: $updateBoardInput
+      password: $password
+      boardId: $boardId
+    ) {
+      _id
+    }
   }
 `;
