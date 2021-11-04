@@ -1,7 +1,6 @@
 import {gql, useQuery} from '@apollo/client';
 import * as React from 'react';
 import { Image, Text, TextInput, View, ScrollView, StyleSheet, Button, Pressable } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
 
 const FETCH_BOARDS = gql`
     query {
@@ -42,7 +41,19 @@ const styles = StyleSheet.create({
         justifyContent:'center', 
         alignItems:'center',
         marginRight: 30
-    }
+    },
+
+    ButtonStyle: {
+        position: 'absolute',
+        backgroundColor: '#58ccff',
+        right: 30,
+        bottom: 30,
+        height: 60,
+        width: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 100,
+    },
 })
 
 
@@ -50,18 +61,10 @@ const styles = StyleSheet.create({
 export function DiaryMain({navigation}:any) {
 
     const {data} = useQuery(FETCH_BOARDS)
-
+    
     return(
       <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>
         <Image style={styles.DiaryTitle} source={require('../../../../Assets/images/diary.png')}/>
-        <RNPickerSelect
-            onValueChange={(value) => console.log(value)}
-            items={[
-                    { label: 'Football', value: 'football' },
-                    { label: 'Baseball', value: 'baseball' },
-                    { label: 'Hockey', value: 'hockey' },
-            ]}
-        />
         <ScrollView>
             <View>
                 {data?.fetchBoards.map((el:any,i:number) => 
@@ -78,6 +81,11 @@ export function DiaryMain({navigation}:any) {
                 )}
             </View>
         </ScrollView>
+        <Pressable
+            style={styles.ButtonStyle}
+            onPress={() => navigation.navigate('DiaryWrite')}>
+            <Text style={{color: 'white', fontWeight: "bold"}}>New</Text>
+        </Pressable>
       </View>
     )
   }

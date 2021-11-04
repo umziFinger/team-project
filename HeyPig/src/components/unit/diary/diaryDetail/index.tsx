@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     FoodColorLine: {
         width: 10,
         height: 100,
-        backgroundColor: "#55DF00",
+        backgroundColor: "#CBF4B1",
         marginRight: 20
     },
 
@@ -73,15 +73,15 @@ export function DiaryDetail() {
                     <Image style={styles.TopImage} source={{uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}}/>
                 </View>
                 <View style={styles.ContentsWrapper}>
-                    <Text>체중</Text>
+                    <Text>체중 :</Text>
                     <View style={styles.WeightColorLine}></View>
                 </View>
                 <View style={styles.ContentsWrapper}>
-                    <Text>식단</Text>
+                    <Text>식단 :</Text>
                     <View style={styles.FoodColorLine}></View>
                 </View>
                 <View style={styles.ContentsWrapper}>
-                    <Text>운동</Text>
+                    <Text>운동 :</Text>
                     <View style={styles.WorkOutColorLine}></View>
                 </View>
             </View>
