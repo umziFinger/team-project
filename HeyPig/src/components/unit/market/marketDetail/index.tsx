@@ -1,10 +1,23 @@
+import {gql, useQuery} from '@apollo/client';
 import * as React from 'react';
-import { Text, View } from "react-native";
+import { Text, View, Image ,StyleSheet } from "react-native";
+
+const styles = StyleSheet.create({
+       Img:{
+           width: 400,
+           height: 200,
+           backgroundColor:'gray',
+           
+       }
+})
 
 export function MarketDetail() {
     return(
         <View>
-            <Text>detail</Text>
+            <View style={styles.Img}/>
+            <Text>name</Text>
+            <Text>remark</Text>
+            <Text>price123</Text>
         </View>
     )
 }

@@ -18,7 +18,7 @@ const Container = styled.View`
 
 const Indicator = styled.View<{focused: boolean}>`
   margin: 0px 4px;
-  background-color: ${(props) => (props.focused ? '#262626' : '#dfdfdf')};
+  background-color: ${(props : any) => (props.focused ? '#262626' : '#dfdfdf')};
   width: 6px;
   height: 6px;
   border-radius: 3px;
@@ -55,16 +55,14 @@ export default function Carousel({pages, pageWidth, gap, offset}: ICarousel) {
         }}
         data={pages}
         decelerationRate="fast"
-        horizontal={true}
+        horizontal={true} // 가로 세로
         keyExtractor={(item: any) => `page__${item.color}`}
         onScroll={onScroll}
         pagingEnabled
         renderItem={renderItem}
-        // snapToInterval={pageWidth + gap}
+        // snapToInterval={pageWidth + gap} // 한칸씩 이동하게 함
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
-
-
       />
       <IndicatorWrapper>
         {Array.from({length: pages.length}, (_, i) => i).map((i) => (
