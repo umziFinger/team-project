@@ -17,7 +17,7 @@ export function MarketDetail() {
             <View style={styles.Img}/>
             <Text>name</Text>
             <Text>remark</Text>
-            <Text>price</Text>
+            <Text>price123</Text>
         </View>
     )
 }
