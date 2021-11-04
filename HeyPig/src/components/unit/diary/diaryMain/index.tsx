@@ -1,7 +1,7 @@
 import {gql, useQuery} from '@apollo/client';
 import * as React from 'react';
 import { Image, Text, TextInput, View, ScrollView, StyleSheet, Button, Pressable } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const FETCH_BOARDS = gql`
     query {
@@ -50,17 +50,31 @@ const styles = StyleSheet.create({
 export function DiaryMain({navigation}:any) {
 
     const {data} = useQuery(FETCH_BOARDS)
+    
+    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+
+    const handleConfirm = (date:any) => {
+        console.log("A date has been picked: ", date);
+        hideDatePicker();
+    };
 
     return(
       <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>
         <Image style={styles.DiaryTitle} source={require('../../../../Assets/images/diary.png')}/>
-        <RNPickerSelect
-            onValueChange={(value) => console.log(value)}
-            items={[
-                    { label: 'Football', value: 'football' },
-                    { label: 'Baseball', value: 'baseball' },
-                    { label: 'Hockey', value: 'hockey' },
-            ]}
+        <Button title="Show Date Picker" onPress={showDatePicker} />
+        <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
         />
         <ScrollView>
             <View>
