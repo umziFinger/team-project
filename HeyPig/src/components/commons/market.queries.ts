@@ -27,6 +27,13 @@ export const FETCH_USED_ITEM = gql`
   }
 `;
 
+export const CREATE_USED_ITEM = gql`
+  mutation createUseditem($createUseditemInput: CreateUseditemInput!) {
+    createUseditem(createUseditemInput: $createUseditemInput) {
+      _id
+    }
+  }
+`;
 ///////////////////////////////////////////////////////////////////////////  상품 디테일
 
 export const DELETE_USED_ITEM = gql`

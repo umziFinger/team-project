@@ -63,8 +63,6 @@ export default function Carousel({pages, pageWidth, gap, offset}: ICarousel) {
         // snapToInterval={pageWidth + gap} // 한칸씩 이동하게 함
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
-
-
       />
       <IndicatorWrapper>
         {Array.from({length: pages.length}, (_, i) => i).map((i) => (

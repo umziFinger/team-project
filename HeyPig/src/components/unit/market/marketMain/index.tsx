@@ -17,34 +17,29 @@ const styles = StyleSheet.create({
         borderRadius:10,
         backgroundColor: "white",
         margin: 10,
-        justifyContent:'center',
+        
+        // justifyContent:'center',
+        
         paddingHorizontal: 30,
         elevation: 3,
+        flexDirection:"row"
+        
     },
     marketImage: {
         justifyContent:'center', 
         alignItems:'center',
-        marginTop:18
+        marginTop:18,
+        marginRight:15
     },
     BestProduct:{
         fontSize:18,
         fontWeight:'bold',
     },
     Wrapper:{
-        flexDirection: 'row'
+        // flexDirection: 'row'
         
     },
-    Wrapper__Contents:{
-        flexDirection: 'column',
-        paddingHorizontal: 20,
-    },
-    ProductContents:{
-
-    },
-    ProductPrice:{
-
-    },
-    ProductSeller:{
+    contentsWrapper:{
 
     }
 })
@@ -84,25 +79,22 @@ export function MarketMain({navigation}) {
             pageWidth={screenWidth} 
               //   pageWidth={screenWidth - (16 + 36) * 2}
           />
-          <View>
-            
-                <View style={styles.marketMain}>
-                
-                    <View  style={styles.Wrapper}>
-                    {data?.fetchUseditems.map((el,i) => 
-                    <View key={i} >
-                        <Image style={styles.marketImage} source={require('../../../../Assets/images/add.png')} />
-                        <View style={styles.Wrapper__Contents}>
-                            <Text style={styles.ProductContents}>{el.contents}</Text>
-                            <Text style={styles.ProductPrice}>{el.price}</Text>
-                            <Text style={styles.ProductSeller}>{el.seller.name}</Text>
-                        </View>
-                        </View>
-                        )}                    
-                    </View>
+         <View>
+          <View  style={styles.Wrapper}>
+            {data?.fetchUseditems.map((el:any,i:number) =>
+              <View key={i} style={styles.marketMain}>
+                <Image style={styles.marketImage} source={require('../../../../Assets/images/add.png')} />
+                <View>
+                  <View style={styles.contentsWrapper}>
+                    <Text >{el.contents}</Text>
+                    <Text >{el.price}</Text>
+                    <Text >{el.seller.name}</Text>
+                  </View>
                 </View>
-                
-          </View>
+              </View>
+            )}
+          </View>                
+        </View>
         </ScrollView>
             <Button title="detail" onPress={() => navigation.navigate('MarketDetail')}/>
             <Button title="write" onPress={() => navigation.navigate('MarketWrite')}/>

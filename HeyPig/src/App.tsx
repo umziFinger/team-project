@@ -78,7 +78,7 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
 
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false)
+  const [isLoggedIn, setIsLoggedIn] = React.useState(true)
 
 
 
