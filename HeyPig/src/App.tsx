@@ -16,29 +16,58 @@ import {DiaryWrite} from './components/unit/diary/diaryWrite';
 import {DiaryDetail} from './components/unit/diary/diaryDetail';
 import {LoginScreen} from './components/unit/login';
 import {SignUpScreen} from './components/unit/signup';
-import AsyncStorage from '@react-native-community/async-storage';
+import {useState, useEffect} from 'react';
+import WeightPage from './components/unit/homeScreen/weight';
+import GoalPage from './components/unit/homeScreen/goal';
+import MealPage from './components/unit/homeScreen/meal';
+import HomePage from './components/unit/homeScreen';
+import ExercisePage from './components/unit/homeScreen/exercise';
 
 function HomeScreen() {
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Home!</Text>
-    </View>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="HomePage"
+        component={HomePage}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="GoalPage"
+        component={GoalPage}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="WeightPage"
+        component={WeightPage}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ExercisePage"
+        component={ExercisePage}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="MealPage"
+        component={MealPage}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
   );
 }
 
 const Stack = createNativeStackNavigator();
 
-function LoginSignup(parentProps:any) {
-  return(
+function LoginSignup(parentProps: any) {
+  return (
     <Stack.Navigator>
-      <Stack.Screen 
-        name="Login" 
-        options={{headerShown: false}}
-      >
-        {(props) => <LoginScreen {...props} {...parentProps}/>}
+      <Stack.Screen name="Login" options={{headerShown: false}}>
+        {props => <LoginScreen {...props} {...parentProps} />}
       </Stack.Screen>
-      {/* <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/> */}
-      <Stack.Screen name="Signup" component={SignUpScreen} options={{headerShown: false}}/>
+      <Stack.Screen
+        name="Signup"
+        component={SignUpScreen}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 }
@@ -112,9 +141,10 @@ function Diary() {
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [accessToken, setAccessToken] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     SplashScreen.hide();
   }, []);
 
@@ -152,7 +182,10 @@ export default function App() {
         </NavigationContainer>
       ) : (
         <NavigationContainer>
-          <LoginSignup setIsLoggedIn={setIsLoggedIn} />
+          <LoginSignup
+            setIsLoggedIn={setIsLoggedIn}
+            setAccessToken={setAccessToken}
+          />
         </NavigationContainer>
       )}
     </ApolloProvider>
