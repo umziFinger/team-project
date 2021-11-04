@@ -14,6 +14,8 @@ import {
   FETCH_BOARD_COMMENTS,
 } from '~/components/commons/board.queries';
 
+import AsyncStorage from '@react-native-community/async-storage';
+
 const styles = StyleSheet.create({
   BoardView: {
     height: 50,
