@@ -1,6 +1,6 @@
 import {gql, useQuery} from '@apollo/client';
 import * as React from 'react';
-import { Image, Text, TextInput, View, ScrollView, StyleSheet ,Button, Dimensions} from 'react-native';
+import { Image, Text, TextInput, View, ScrollView, StyleSheet ,Button, Dimensions, Pressable} from 'react-native';
 import Carousel from './Carousel';
 // import styled from 'styled-components/native';
 import { FETCH_USED_ITEMS } from '~/components/commons/market.queries'
@@ -82,7 +82,7 @@ export function MarketMain({navigation}) {
          <View>
           <View  style={styles.Wrapper}>
             {data?.fetchUseditems.map((el:any,i:number) =>
-              <View key={i} style={styles.marketMain}>
+              <Pressable key={i} style={styles.marketMain} onPress={() => navigation.navigate('MarketDetail', {useditemId : el._id})}>
                 <Image style={styles.marketImage} source={require('../../../../Assets/images/add.png')} />
                 <View>
                   <View style={styles.contentsWrapper}>
@@ -91,7 +91,7 @@ export function MarketMain({navigation}) {
                     <Text >{el.seller.name}</Text>
                   </View>
                 </View>
-              </View>
+              </Pressable>
             )}
           </View>                
         </View>
