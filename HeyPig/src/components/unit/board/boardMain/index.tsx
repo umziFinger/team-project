@@ -14,7 +14,7 @@ import {
   FETCH_BOARD_COMMENTS,
 } from '~/components/commons/board.queries';
 
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
   BoardView: {
@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
 export function BoardMain({navigation}) {
   const {data, fetchMore, refetch} = useQuery(FETCH_BOARDS);
   refetch();
-  const {data: best} = useQuery(FETCH_BOARDS_OF_THE_BEST);
+  const {data: best, refetch: refetchBest} = useQuery(FETCH_BOARDS_OF_THE_BEST);
+  refetchBest();
   let page = 1;
   function onScroll() {
     if (!data) return;
@@ -78,7 +79,6 @@ export function BoardMain({navigation}) {
     });
     return comments;
   }
-
   return (
     <>
       <ScrollView
@@ -106,7 +106,9 @@ export function BoardMain({navigation}) {
               key={el._id}
               style={styles.BoardView}
               onPress={() =>
-                navigation.navigate('BoardDetail', {boardId: el._id})
+                navigation.navigate('BoardDetail', {
+                  boardId: el._id,
+                })
               }>
               <Text style={styles.BestText}>BEST</Text>
               <Text>{el.title}</Text>
