@@ -9,9 +9,9 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import {gql, useMutation} from '@apollo/client';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const LOGIN_USER = gql`
   mutation loginUser($email: String!, $password: String!) {
