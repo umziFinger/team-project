@@ -9,6 +9,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
 
 import {gql, useMutation} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -61,6 +63,19 @@ export function LoginScreen({navigation, setIsLoggedIn, setAccessToken}: any) {
   const [error, setError] = useState('');
   const [loginUser] = useMutation(LOGIN_USER);
 
+  React.useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '516372818226-seegpa8dim5dmlevehf8d3an5dh17pmh.apps.googleusercontent.com'
+    });
+  }, []);
+
+  async function onGoogleButtonPress() {
+    const { idToken } = await GoogleSignin.signIn();
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    return auth().signInWithCredential(googleCredential);
+  }
+
   async function onPressLogin() {
     try {
       const result = await loginUser({
@@ -98,6 +113,9 @@ export function LoginScreen({navigation, setIsLoggedIn, setAccessToken}: any) {
       <Pressable style={styles.LoginButton} onPress={onPressLogin}>
         <Text>로그인</Text>
       </Pressable>
+      <View>
+          <GoogleSigninButton onPress={onGoogleButtonPress} />
+      </View>
       <Pressable onPress={() => navigation.navigate('Signup')}>
         <Text>회원가입</Text>
       </Pressable>

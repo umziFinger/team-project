@@ -1,6 +1,6 @@
 import * as React from 'react';
 import SplashScreen from 'react-native-splash-screen';
-import {Text, TextInput, View} from 'react-native';
+import {Button, Text, TextInput, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {DiaryMain} from './components/unit/diary/diaryMain';
@@ -22,6 +22,7 @@ import GoalPage from './components/unit/homeScreen/goal';
 import MealPage from './components/unit/homeScreen/meal';
 import HomePage from './components/unit/homeScreen';
 import ExercisePage from './components/unit/homeScreen/exercise';
+import auth from '@react-native-firebase/auth';
 
 function HomeScreen() {
   return (
@@ -148,6 +149,16 @@ export default function App() {
     SplashScreen.hide();
   }, []);
 
+  auth().onAuthStateChanged((user) => {
+    if (user) {
+    	setIsLoggedIn(true);
+    } else {
+    	setIsLoggedIn(false);
+    }
+  });
+
+  const user = auth().currentUser;
+
   const client = new ApolloClient({
     uri: 'http://backend03.codebootcamp.co.kr/graphql',
     cache: new InMemoryCache(),
@@ -157,6 +168,29 @@ export default function App() {
     <ApolloProvider client={client}>
       {isLoggedIn ? (
         <NavigationContainer>
+          <View style={{
+            flexDirection:'row', 
+            justifyContent:'flex-end', 
+            alignItems:'center',
+            marginBottom:5
+          }}>
+            <Text>{user?.displayName}님 환영합니다!</Text>
+            <View>
+              <Text style={{
+                backgroundColor: '#58ccff', 
+                width: 60, 
+                height: 30, 
+                textAlign: 'center', 
+                fontSize: 15, 
+                fontWeight:'bold', 
+                color:'white', 
+                padding:3, 
+                borderRadius: 3,
+                marginLeft: 5,
+                marginRight: 5
+              }} onPress={() => auth().signOut()}>Logout</Text>
+            </View>
+          </View>
           <Tab.Navigator>
             <Tab.Screen
               name="Home"
