@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth'
 
 const styles = StyleSheet.create({
 
@@ -105,7 +106,8 @@ export function DiaryWrite({navigation}:any) {
     const [exercise, setExercise] = React.useState('')
 
     async function writeDiary() {
-        firestore().collection('User').doc("a").collection("Diary").add({ title, weight, food, exercise, createdAt: new Date() })
+        const user = auth().currentUser
+        firestore().collection('Users').doc(user?.email).collection("Diary").add({ title, weight, food, exercise, createdAt: new Date() })
         navigation.navigate('DiaryMain')
     }
 

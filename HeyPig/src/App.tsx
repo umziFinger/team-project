@@ -23,6 +23,7 @@ import MealPage from './components/unit/homeScreen/meal';
 import HomePage from './components/unit/homeScreen';
 import ExercisePage from './components/unit/homeScreen/exercise';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 function HomeScreen() {
   return (
@@ -61,11 +62,12 @@ const Stack = createNativeStackNavigator();
 function LoginSignup(parentProps: any) {
   return (
     <Stack.Navigator>
+      
       <Stack.Screen name="Login" options={{headerShown: false}}>
         {props => <LoginScreen {...props} {...parentProps} />}
       </Stack.Screen>
       <Stack.Screen
-        name="Signup"
+        name="SignUp"
         component={SignUpScreen}
         options={{headerShown: false}}
       />
@@ -149,15 +151,25 @@ export default function App() {
     SplashScreen.hide();
   }, []);
 
+  const user = auth().currentUser;
+
+
   auth().onAuthStateChanged((user) => {
     if (user) {
+
     	setIsLoggedIn(true);
     } else {
     	setIsLoggedIn(false);
     }
   });
 
-  const user = auth().currentUser;
+    const email = user?.email
+    const arr = firestore().collection('Users').get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+            console.log('aaa',doc.data());
+        });
+    })
 
   const client = new ApolloClient({
     uri: 'http://backend03.codebootcamp.co.kr/graphql',

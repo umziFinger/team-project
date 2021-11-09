@@ -89,6 +89,13 @@ export function LoginScreen({navigation, setIsLoggedIn, setAccessToken}: any) {
     }
   }
 
+  
+  // auth().onAuthStateChanged((user) => {
+  //     if(user) {
+  //     navigation.navigate('SignUp')
+  //   }
+  // });
+
   return (
     <View style={styles.WrapperView}>
       <Image
@@ -116,7 +123,7 @@ export function LoginScreen({navigation, setIsLoggedIn, setAccessToken}: any) {
       <View>
           <GoogleSigninButton onPress={onGoogleButtonPress} />
       </View>
-      <Pressable onPress={() => navigation.navigate('Signup')}>
+      <Pressable onPress={() => navigation.navigate('SignUp')}>
         <Text>회원가입</Text>
       </Pressable>
     </View>
