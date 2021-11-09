@@ -53,17 +53,17 @@ export function MarketDetail(props:any) {
     function SubmitComment(){
         createUseditemQuestion({
             variables:{
-                useditemId : props.route.parms.useditemId,
+                useditemId : props.route.params.useditemId,
                 createUseditemQuestionInput :{
                     contents
                 }
             },
-            // refetchQueries: [
-            //     {
-            //       query: FETCH_USED_ITEM,
-            //       variables: {useditemId: props.route.params.useditemId},
-            //     },
-            // ],
+            refetchQueries: [
+                {
+                  query: FETCH_USED_ITEM,
+                  variables: {useditemId: props.route.params.useditemId},
+                },
+            ],
         })
     }
 
@@ -73,9 +73,9 @@ export function MarketDetail(props:any) {
         <View style={styles.Info__Wrapper}>
             <View style={styles.Contents__Wrapper}>
                 <Text>{data && data.fetchUseditem.name}</Text>
-                <Text>상품명</Text>
-                <Text>remark</Text>
-                <Text>price123</Text>    
+                <Text>{data && data.fetchUseditem.remarks}</Text>
+                <Text>{data && data.fetchUseditem.price}</Text>    
+                <Text>{data && data.fetchUseditem.contents}</Text>
             </View>
             <View style={styles.Pick__Wrapper}>
             <Image style={styles.Heart} source={require('../../../../Assets/images/Heart.png')}/>
@@ -91,7 +91,12 @@ export function MarketDetail(props:any) {
                 onPress={()=> SubmitComment()}>
                 <Text>입력</Text>
             </Pressable>
-            
+            {comments?.fetchUseditemQuestions.map((el:any, index:number) => (
+                <View key={el._id}>
+                    <Text>{el.user.name}</Text>
+                    <Text>{el.contents}</Text>
+                </View>
+            ))}
             </View>
     </ScrollView>
     )

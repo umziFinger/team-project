@@ -84,7 +84,7 @@ export function MarketMain({navigation}) {
             {data?.fetchUseditems.map((el:any,i:number) =>
               <Pressable key={i} style={styles.marketMain} onPress={() => navigation.navigate('MarketDetail', {useditemId : el._id})}>
                 <Image style={styles.marketImage} source={require('../../../../Assets/images/add.png')} />
-                <View>
+                <View> 
                   <View style={styles.contentsWrapper}>
                     <Text >{el.contents}</Text>
                     <Text >{el.price}</Text>
@@ -93,7 +93,7 @@ export function MarketMain({navigation}) {
                 </View>
               </Pressable>
             )}
-          </View>                
+          </View>
         </View>
         </ScrollView>
             <Button title="detail" onPress={() => navigation.navigate('MarketDetail')}/>
@@ -101,3 +101,4 @@ export function MarketMain({navigation}) {
       </View>
     )
 }
+ 
