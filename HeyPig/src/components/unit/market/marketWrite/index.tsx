@@ -2,6 +2,8 @@ import { useMutation } from '@apollo/client';
 import * as React from 'react';
 import { Text, View, TextInput, StyleSheet, Button, ScrollView} from "react-native";
 import {CREATE_USED_ITEM} from '~/components/commons/market.queries';
+import firestore from '@react-native-firebase/firestore';
+
 
 const styles = StyleSheet.create({
     Inputbox: {
@@ -53,8 +55,11 @@ export function MarketWrite() {
              console.log(error)
          }
     }
+    function writeData(){
+        firestore().collection('Users').add({ name:"철수", age:8 })
+    }
     return(
-        <View >
+    <View >
         <ScrollView>
             <Text>상품명</Text>
             <TextInput style={styles.Inputbox} onChangeText={text=>setName(text)}/>
@@ -65,8 +70,9 @@ export function MarketWrite() {
             <Text>내용</Text>
             <TextInput style={styles.InputContents} onChangeText={text=>setRemarks(text)}/>
             <Button title="상품등록" onPress={() => onClickSubmit}/>
-            </ScrollView>
+            <Button  title= "데이터보내기" onPress={writeData} />
+        </ScrollView>
             
-        </View>
+    </View>
     )
 }

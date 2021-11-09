@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "516372818226",
+    "project_id": "heypig-36685",
+    "storage_bucket": "heypig-36685.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516372818226:android:2fe20e5053100e4da08f2b",
+        "android_client_info": {
+          "package_name": "com.heypig"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "516372818226-cpl36cfn6ni2nccif2qbanfaij9af7jv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heypig",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "516372818226-seegpa8dim5dmlevehf8d3an5dh17pmh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDONvxr9nZGBra3dfDE5t_Lmf-sYzX5S7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "516372818226-seegpa8dim5dmlevehf8d3an5dh17pmh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
