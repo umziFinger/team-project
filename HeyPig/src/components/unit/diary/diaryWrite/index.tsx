@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
 
 
 
-export function DiaryWrite() {
+export function DiaryWrite({navigation}:any) {
 
     const [title, setTitle] = React.useState('')
     const [weight, setWeight] = React.useState('')
@@ -105,13 +105,8 @@ export function DiaryWrite() {
     const [exercise, setExercise] = React.useState('')
 
     async function writeDiary() {
-        firestore().collection('User').doc("a").collection("Diary").add({ title, weight, food, exercise })
-        const doc = await firestore().collection('User').doc("a").collection("Diary").get()
-            .then(snapshot => {
-                snapshot.forEach(doc => {
-                    console.log(doc.id, '=>', doc.data());
-                });
-            })
+        firestore().collection('User').doc("a").collection("Diary").add({ title, weight, food, exercise, createdAt: new Date() })
+        navigation.navigate('DiaryMain')
     }
 
     return(

@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
 
 
 
-export function DiaryDetail() {
+export function DiaryDetail({route}) {
 
     return(
         <ScrollView>
@@ -74,14 +74,17 @@ export function DiaryDetail() {
                 </View>
                 <View style={styles.ContentsWrapper}>
                     <Text>체중 :</Text>
+                    <Text>{route.params.el.weight}</Text>
                     <View style={styles.WeightColorLine}></View>
                 </View>
                 <View style={styles.ContentsWrapper}>
                     <Text>식단 :</Text>
+                    <Text>{route.params.el.food}</Text>
                     <View style={styles.FoodColorLine}></View>
                 </View>
                 <View style={styles.ContentsWrapper}>
                     <Text>운동 :</Text>
+                    <Text>{route.params.el.exercise}</Text>
                     <View style={styles.WorkOutColorLine}></View>
                 </View>
             </View>
