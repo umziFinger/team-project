@@ -1,6 +1,6 @@
 import {gql, useQuery} from '@apollo/client';
 import * as React from 'react';
-import { Image, Text, TextInput, View, ScrollView, StyleSheet ,Button, Dimensions, Pressable} from 'react-native';
+import { Image, Text, View, ScrollView, StyleSheet , Dimensions, Pressable} from 'react-native';
 import Carousel from './Carousel';
 // import styled from 'styled-components/native';
 import { FETCH_USED_ITEMS } from '~/components/commons/market.queries'
@@ -12,23 +12,22 @@ const styles = StyleSheet.create({
         backgroundColor:"gray"
     },
     marketMain: {
-        height: 120, 
-        width: 400,
-        borderRadius:10,
-        backgroundColor: "white",
-        margin: 10,
-        
-        // justifyContent:'center',
-        
-        paddingHorizontal: 30,
-        elevation: 3,
-        flexDirection:"row"
+      flexDirection: 'row',
+      height: 100, 
+      width: 350, 
+      borderRadius:10, 
+      backgroundColor: "white", 
+      margin: 10, 
+      justifyContent:'flex-start', 
+      alignItems: 'center',
+      paddingHorizontal: 30,
+      elevation: 3,
         
     },
     marketImage: {
         justifyContent:'center', 
         alignItems:'center',
-        marginTop:18,
+        
         marginRight:15
     },
     BestProduct:{
@@ -41,7 +40,26 @@ const styles = StyleSheet.create({
     },
     contentsWrapper:{
 
-    }
+    },
+    contents:{
+      
+
+    },
+    price:{
+      marginTop:5
+    },
+    name:{},
+    ButtonStyle: {
+      position: 'absolute',
+      backgroundColor: '#89FF7F',
+      right: 30,
+      bottom: 30,
+      height: 60,
+      width: 60,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 100,
+    },
 })
 const screenWidth = Math.round(Dimensions.get('window').width);
 const PAGES = [
@@ -86,9 +104,10 @@ export function MarketMain({navigation}) {
                 <Image style={styles.marketImage} source={require('../../../../Assets/images/add.png')} />
                 <View> 
                   <View style={styles.contentsWrapper}>
-                    <Text >{el.contents}</Text>
-                    <Text >{el.price}</Text>
-                    <Text >{el.seller.name}</Text>
+                    <Text >상품이름 : {el.name}</Text>
+                    <Text style={styles.contents}>상품설명 : {el.contents}</Text>
+                    <Text style={styles.price}>가격 : {el.price}</Text>
+                    <Text style={styles.name}>판매자 : {el.seller.name}</Text>
                   </View>
                 </View>
               </Pressable>
@@ -96,8 +115,10 @@ export function MarketMain({navigation}) {
           </View>
         </View>
         </ScrollView>
-            <Button title="detail" onPress={() => navigation.navigate('MarketDetail')}/>
-            <Button title="write" onPress={() => navigation.navigate('MarketWrite')}/>
+            {/* <Button title="detail" onPress={() => navigation.navigate('MarketDetail')}/> */}
+            <Pressable style={styles.ButtonStyle} onPress={() => navigation.navigate('MarketWrite')}>
+            <Text style={{color: 'white', fontWeight: "bold"}}>상품등록</Text>
+            </Pressable>
       </View>
     )
 }

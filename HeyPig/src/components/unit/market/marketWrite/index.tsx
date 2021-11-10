@@ -55,9 +55,7 @@ export function MarketWrite() {
              console.log(error)
          }
     }
-    function writeData(){
-        firestore().collection('Users').add({ name:"철수", age:8 })
-    }
+
     return(
     <View >
         <ScrollView>
@@ -65,14 +63,12 @@ export function MarketWrite() {
             <TextInput style={styles.Inputbox} onChangeText={text=>setName(text)}/>
             <Text>가격</Text>
             <TextInput style={styles.Inputbox} onChangeText={text=>setPrice(text)}/>
+            <Text>한줄요약</Text>
+            <TextInput style={styles.Inputbox} onChangeText={text=>setRemarks(text)}/>
             <Text>내용</Text>
             <TextInput style={styles.InputContents} onChangeText={text=>setContents(text)}/>
-            <Text>내용</Text>
-            <TextInput style={styles.InputContents} onChangeText={text=>setRemarks(text)}/>
             <Button title="상품등록" onPress={() => onClickSubmit}/>
-            <Button  title= "데이터보내기" onPress={writeData} />
         </ScrollView>
-            
     </View>
     )
 }

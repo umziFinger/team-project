@@ -10,22 +10,25 @@ const styles = StyleSheet.create({
            backgroundColor:'gray',
        },
        Info__Wrapper:{
-            width: 380,
+            width: 400,
             height: 230,
             backgroundColor:'#ddf5ff',
             marginTop:25,
             flexDirection:'row',
             justifyContent:'space-between',
             padding: 20,
-            paddingRight:30,
+            paddingRight:50,
             paddingLeft:30
        },
        Heart:{
            justifyContent:'flex-end',
+            
            
        },
        Contents__Wrapper:{
-
+        width: "100%",
+        
+        
        },
        Pick__Wrapper:{
            
@@ -37,7 +40,25 @@ const styles = StyleSheet.create({
        },
        CommentButton:{
 
+       },
+       name:{
+        fontSize:22,
+        fontFamily:"bold",
+        marginBottom:10
+       },
+       remarks:{
+           fontSize:13,
+           marginBottom:10
+       },
+       price:{
+           fontSize:15,
+           marginBottom:10
+       },
+       contents:{
+           fontSize:14,
+           marginBottom:10
        }
+
 })
 
 export function MarketDetail(props:any) {
@@ -72,18 +93,21 @@ export function MarketDetail(props:any) {
         <View style={styles.Img}/>
         <View style={styles.Info__Wrapper}>
             <View style={styles.Contents__Wrapper}>
-                <Text>{data && data.fetchUseditem.name}</Text>
-                <Text>{data && data.fetchUseditem.remarks}</Text>
-                <Text>{data && data.fetchUseditem.price}</Text>    
-                <Text>{data && data.fetchUseditem.contents}</Text>
+                <Text style={styles.name}>{data && data.fetchUseditem.name}</Text>
+                <Text style={styles.remarks}>{data && data.fetchUseditem.remarks}</Text>
+                <Text style={styles.price}>{data && data.fetchUseditem.price}</Text>    
+                <Text style={styles.contents}>{data && data.fetchUseditem.contents}</Text>
             </View>
             <View style={styles.Pick__Wrapper}>
             <Image style={styles.Heart} source={require('../../../../Assets/images/Heart.png')}/>
             <Text>0</Text>
             </View>
+            <Pressable>
+                <Text>구매하기</Text>
+            </Pressable>
         </View>
         <View>
-            <Text>댓글</Text>
+            <Text style={{marginTop:30}}>댓글</Text>
             <TextInput style={styles.CommentBox}
             placeholder="내용을 입력해주세요"
             onChangeText={text=> setContents(text)}/>
@@ -97,7 +121,7 @@ export function MarketDetail(props:any) {
                     <Text>{el.contents}</Text>
                 </View>
             ))}
-            </View>
+        </View>
     </ScrollView>
     )
 }
