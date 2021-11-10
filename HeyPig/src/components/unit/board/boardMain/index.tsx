@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
+  Image,
 } from 'react-native';
 import {gql, useQuery} from '@apollo/client';
 import {
@@ -41,6 +42,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 100,
+  },
+
+  DiaryTitle: {
+    width: 150,
+    height: 40,
+    marginRight: 250,
+    marginTop: 10,
+    marginBottom: 10,
   },
 });
 
@@ -81,6 +90,10 @@ export function BoardMain({navigation}) {
   }
   return (
     <>
+      <Image
+        style={styles.DiaryTitle}
+        source={require('../../../../Assets/images/Board.png')}
+      />
       <ScrollView
         onScroll={({nativeEvent}) => {
           if (isCloseToBottom(nativeEvent)) {
