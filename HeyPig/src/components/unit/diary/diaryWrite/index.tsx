@@ -107,7 +107,7 @@ export function DiaryWrite({navigation}:any) {
 
     async function writeDiary() {
         const user = auth().currentUser
-        firestore().collection('Users').doc(user?.email).collection("Diary").add({ title, weight, food, exercise, createdAt: new Date() })
+        firestore().collection('Users').doc(user?.email).collection("Diary").add({ title, weight, food, exercise, createdAt: new Date().toISOString().slice(0,10) })
         navigation.navigate('DiaryMain')
     }
 

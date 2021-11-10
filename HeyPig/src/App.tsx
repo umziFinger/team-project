@@ -146,6 +146,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useState('');
+  const [date, setDate]:any = useState()
 
   useEffect(() => {
     SplashScreen.hide();
@@ -153,6 +154,12 @@ export default function App() {
 
   const user = auth().currentUser;
 
+  useEffect(() => {
+    setDate(((new Date(new Date().toISOString().slice(0,10)))-(new Date(user?.metadata.creationTime.slice(0,10))))/(3600000*24))
+  },[])
+  
+
+  // console.log(new Date(new Date().toISOString().slice(0,10)))
 
   auth().onAuthStateChanged((user) => {
     if (user) {
@@ -186,7 +193,10 @@ export default function App() {
             alignItems:'center',
             marginBottom:5
           }}>
-            <Text>{user?.displayName}님 환영합니다!</Text>
+            <View style={{width: 300, flexDirection: 'row', justifyContent:'space-between'}}>
+              <Text>{date+1}일째</Text>
+              <Text>{user?.displayName}님 환영합니다!</Text>
+            </View>
             <View>
               <Text style={{
                 backgroundColor: '#58ccff', 
