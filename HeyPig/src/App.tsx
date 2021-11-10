@@ -24,6 +24,7 @@ import HomePage from './components/unit/homeScreen';
 import ExercisePage from './components/unit/homeScreen/exercise';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function HomeScreen() {
   return (
@@ -152,10 +153,12 @@ export default function App() {
     SplashScreen.hide();
   }, []);
 
-  const user = auth().currentUser;
+  const user:any = auth().currentUser  
+  const signinDate:any = new Date(user?.metadata.creationTime.slice(0,10))
+  const currentDate:any = new Date(new Date().toISOString().slice(0,10))
 
-  useEffect(() => {
-    setDate(((new Date(new Date().toISOString().slice(0,10)))-(new Date(user?.metadata.creationTime.slice(0,10))))/(3600000*24))
+  React.useEffect(() => {
+    setDate((currentDate-signinDate)/(3600000*24))
   },[])
   
 
@@ -193,12 +196,13 @@ export default function App() {
             alignItems:'center',
             marginBottom:5
           }}>
-            <View style={{width: 300, flexDirection: 'row', justifyContent:'space-between'}}>
-              <Text>{date+1}일째</Text>
-              <Text>{user?.displayName}님 환영합니다!</Text>
+            <View style={{backgroundColor:'yellow', width: 330, flexDirection: 'row', justifyContent:'space-between', marginBottom: 20}}>
+              <Text style={{position:'absolute', marginLeft: 10, fontSize:18, fontWeight:'bold'}}>{date+1}일째</Text>
+              <Text style={{position:'absolute', marginLeft: 200}}>{user?.displayName}님 환영합니다!</Text>
             </View>
             <View>
-              <Text style={{
+              <Ionicons style={{fontSize: 30, color:'#58ccff', marginLeft: 5, marginRight: 15}} name={'log-out-outline'}  onPress={() => auth().signOut()}/>
+              {/* <Text style={{
                 backgroundColor: '#58ccff', 
                 width: 60, 
                 height: 30, 
@@ -210,14 +214,35 @@ export default function App() {
                 borderRadius: 3,
                 marginLeft: 5,
                 marginRight: 5
-              }} onPress={() => auth().signOut()}>Logout</Text>
+              }} onPress={() => auth().signOut()}>Logout</Text> */}
             </View>
           </View>
-          <Tab.Navigator>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName:any;
+    
+                if (route.name === 'Home') {
+                  iconName = focused ? 'home' : 'home-outline';
+                } else if (route.name === 'Board'){
+                  iconName = focused ? 'clipboard' : 'clipboard-outline';
+                } else if (route.name === 'Market'){
+                  iconName = focused ? 'cart' : 'cart-outline';
+                } else if (route.name === 'Diary'){
+                  iconName = focused ? 'checkbox' : 'checkbox-outline';
+                }
+
+                return <Ionicons name={iconName} size={size}  color={color}/>;
+              },
+              tabBarActiveTintColor: 'tomato',
+              tabBarInactiveTintColor: 'gray',
+            })}
+          >
             <Tab.Screen
               name="Home"
               component={HomeScreen}
               options={{headerShown: false}}
+               
             />
             <Tab.Screen
               name="Board"

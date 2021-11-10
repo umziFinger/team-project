@@ -98,16 +98,27 @@ const styles = StyleSheet.create({
 
 
 
-export function DiaryWrite({navigation}:any) {
+export function DiaryWrite({navigation, route}:any) {
+
+    const [date, setDate] = React.useState(0)
 
     const [title, setTitle] = React.useState('')
     const [weight, setWeight] = React.useState('')
     const [food, setFood] = React.useState('')
     const [exercise, setExercise] = React.useState('')
 
+    const user:any = auth().currentUser
+
+    const signinDate:any = new Date(user?.metadata.creationTime.slice(0,10))
+    const currentDate:any = new Date(new Date().toISOString().slice(0,10))
+  
+    React.useEffect(() => {
+      setDate((currentDate-signinDate)/(3600000*24))
+    },[])
+
     async function writeDiary() {
-        const user = auth().currentUser
-        firestore().collection('Users').doc(user?.email).collection("Diary").add({ title, weight, food, exercise, createdAt: new Date().toISOString().slice(0,10) })
+
+        firestore().collection('Users').doc(String(user?.email)).collection("Diary").doc(`${String(date+1)}day`).set({ title, weight, food, exercise, createdAt: new Date().toISOString(), date:date+1 })
         navigation.navigate('DiaryMain')
     }
 
@@ -117,24 +128,43 @@ export function DiaryWrite({navigation}:any) {
                 <Image style={styles.DiaryTitle} source={require('../../../../Assets/images/diary.png')}/>
                 <View style={styles.ImageWrapper}>
                     <View style={styles.TitleWrapper}>
-                        <Text style={{fontSize: 20, fontWeight: 'bold'}}>10일차</Text>
-                        <TextInput placeholder="제목을 입력해주세요" onChangeText={text => setTitle(text)}/>
+                        <Text style={{fontSize: 20, fontWeight: 'bold'}}>{date+1}일차</Text>
+                        <TextInput 
+                            placeholder="제목을 입력해주세요" 
+                            onChangeText={text => setTitle(text)}
+                            defaultValue={route.params?.route.params.el.title}
+                        />
                     </View>
                     <Image style={styles.TopImage} source={{uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}}/>
                 </View>
                 <View style={styles.ContentsWrapper}>
                     <Text>체중 :</Text>
-                    <TextInput style={styles.InputStyle} placeholder="체중을 입력해주세요." onChangeText={text => setWeight(text)}/>
+                    <TextInput 
+                        style={styles.InputStyle} 
+                        placeholder="체중을 입력해주세요." 
+                        defaultValue={route.params?.route.params.el.weight} 
+                        onChangeText={text => setWeight(text)}
+                    />
                     <View style={styles.WeightColorLine}></View>
                 </View>
                 <View style={styles.ContentsWrapper}>
                     <Text>식단 :</Text>
-                    <TextInput style={styles.InputStyle} placeholder="식단을 입력해주세요." onChangeText={text => setFood(text)}/>
+                    <TextInput 
+                        style={styles.InputStyle} 
+                        placeholder="식단을 입력해주세요." 
+                        onChangeText={text => setFood(text)}
+                        defaultValue={route.params?.route.params.el.food}
+                    />
                     <View style={styles.FoodColorLine}></View>
                 </View>
                 <View style={styles.ContentsWrapper}>
                     <Text>운동 :</Text>
-                    <TextInput style={styles.InputStyle} placeholder="운동을 입력해주세요." onChangeText={text => setExercise(text)}/>
+                    <TextInput 
+                        style={styles.InputStyle} 
+                        placeholder="운동을 입력해주세요." 
+                        onChangeText={text => setExercise(text)}
+                        defaultValue={route.params?.route.params.el.exercise}
+                    />
                     <View style={styles.WorkOutColorLine}></View>
                 </View>
                 <TouchableOpacity style={styles.SubmitButton} onPress={writeDiary}>

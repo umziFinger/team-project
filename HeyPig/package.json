@@ -33,6 +33,7 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.9.0",
     "react-native-splash-screen": "^3.2.0",
+    "react-native-vector-icons": "^9.0.0",
     "react-navigation": "^4.4.4",
     "styled-components": "^5.3.3"
   },
@@ -42,6 +43,7 @@
     "@react-native-community/eslint-config": "^3.0.1",
     "@types/react": "^17.0.33",
     "@types/react-native": "^0.66.1",
+    "@types/react-native-vector-icons": "^6.4.9",
     "@types/styled-components": "^5.1.15",
     "babel-jest": "^27.3.1",
     "eslint": "^8.1.0",

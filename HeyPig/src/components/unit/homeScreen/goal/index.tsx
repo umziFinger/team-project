@@ -33,23 +33,40 @@ const styles = StyleSheet.create({
 })
 
 export default function GoalPage({navigation}:any) {
+
+    const [height, setHeight] = React.useState('')
+    const [currentWeight, setCurrentWeight] = React.useState('')
+    const [goal, setGoal] = React.useState('')
+
+    function onChangeHeight (event:any) {
+        setHeight(event.target.value)
+    }
+
+    function onChangeCurrentWeight (event:any) {
+        setCurrentWeight(event.target.value)
+    }
+
+    function onChangeGoal (event:any) {
+        setGoal(event.target.value)
+    }
+
     const user = auth().currentUser;
     function onPressSignUp() {
       const user = auth().currentUser
-        firestore().collection('Users').doc(user?.email).collection("Info").add({ goal: "11", height:"11" })
-        //main으로
+        firestore().collection('Users').doc(String(user?.email)).collection("Info").doc("myInfo").set({ goal, height, currentWeight })
+        navigation.navigate('HomePage')
         
     }
 
     return(
         <View style={styles.WrapperView}>
             <View>
-                <TextInput style={styles.SignupInput} placeholder="키(cm)를 입력해주세요." />
-                <TextInput style={styles.SignupInput} placeholder="현재 몸무게를 입력해주세요." />
-                <TextInput style={styles.SignupInput} placeholder="목표 몸무게를 입력해주세요."/>
+                <TextInput style={styles.SignupInput} placeholder="키(cm)를 입력해주세요." onChangeText={text => setHeight(text)}/>
+                <TextInput style={styles.SignupInput} placeholder="현재 몸무게를 입력해주세요." onChangeText={text => setCurrentWeight(text)}/>
+                <TextInput style={styles.SignupInput} placeholder="목표 몸무게를 입력해주세요." onChangeText={text => setGoal(text)}/>
             </View>
             <Pressable style={styles.SignupButton} onPress={onPressSignUp}>
-                <Text>회원가입</Text>
+                <Text>목표 설정</Text>
             </Pressable>
         </View>
     )

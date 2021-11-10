@@ -84,7 +84,7 @@ export function LoginScreen({navigation, setIsLoggedIn, setAccessToken}: any) {
       AsyncStorage.setItem('accessToken', result.data?.loginUser.accessToken);
       setIsLoggedIn(true);
       setAccessToken(result.data?.loginUser.accessToken);
-    } catch (error) {
+    } catch (error:any) {
       setError(error.message);
     }
   }
