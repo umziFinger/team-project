@@ -161,5 +161,4 @@ export function DiaryDetail({navigation, route}:any) {
             </View>
         </ScrollView>
     )
-
 }

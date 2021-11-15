@@ -1,6 +1,7 @@
 import {gql, useMutation, useQuery} from '@apollo/client';
 import * as React from 'react';
 import { Text, View, Image ,StyleSheet, ScrollView, TextInput, Pressable } from "react-native";
+import { TabRouter } from 'react-navigation';
 import { FETCH_USED_ITEM,CREATE_USED_ITEM_QUESTION, FETCH_USED_ITEM_QUESTIONS } from '~/components/commons/market.queries';
 
 const styles = StyleSheet.create({
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
        CommentButton:{
 
        },
-       name:{
+       productName:{
         fontSize:22,
         fontFamily:"bold",
         marginBottom:10
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
 
 })
 
-export function MarketDetail(props:any) {
+export function MarketDetail({props,route}:any) {
     const {data} = useQuery(FETCH_USED_ITEM , {
         variables: {useditemId:props.route.params.useditemId}
     });
@@ -93,10 +94,10 @@ export function MarketDetail(props:any) {
         <View style={styles.Img}/>
         <View style={styles.Info__Wrapper}>
             <View style={styles.Contents__Wrapper}>
-                <Text style={styles.name}>{data && data.fetchUseditem.name}</Text>
-                <Text style={styles.remarks}>{data && data.fetchUseditem.remarks}</Text>
-                <Text style={styles.price}>{data && data.fetchUseditem.price}</Text>    
-                <Text style={styles.contents}>{data && data.fetchUseditem.contents}</Text>
+                <Text style={styles.productName}>{route.params.el.productName}</Text>
+                <Text style={styles.remarks}>{route.params.el.remarks}</Text>
+                <Text style={styles.price}>{route.params.el.price}</Text>    
+                <Text style={styles.contents}>{route.params.el.contents}</Text>
             </View>
             <View style={styles.Pick__Wrapper}>
             <Image style={styles.Heart} source={require('../../../../Assets/images/Heart.png')}/>
