@@ -7,17 +7,17 @@ import { FETCH_USED_ITEMS } from '~/components/commons/market.queries'
 const styles = StyleSheet.create({
     Banner: {
         height: 200,
-        width:400,
-        margin: 5,
+        width:'95%',
+        margin: '5%',
         backgroundColor:"gray"
     },
     marketMain: {
       flexDirection: 'row',
-      height: 100, 
-      width: 350, 
+      height: '8%',
+      width: '94%', 
       borderRadius:10, 
       backgroundColor: "white", 
-      margin: 10, 
+      margin: '3%', 
       justifyContent:'flex-start', 
       alignItems: 'center',
       paddingHorizontal: 30,
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         justifyContent:'center', 
         alignItems:'center',
         
-        marginRight:15
+        marginRight:20
     },
     BestProduct:{
         fontSize:18,
@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
 
     },
     contents:{
-      
 
     },
     price:{
@@ -84,7 +83,7 @@ const PAGES = [
       color: '#CCABD8',
     },
   ];
-export function MarketMain({navigation}) {
+export function MarketMain({navigation}:any) {
   const { data } = useQuery(FETCH_USED_ITEMS);
     return(
       <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>    
@@ -117,9 +116,8 @@ export function MarketMain({navigation}) {
         </ScrollView>
             {/* <Button title="detail" onPress={() => navigation.navigate('MarketDetail')}/> */}
             <Pressable style={styles.ButtonStyle} onPress={() => navigation.navigate('MarketWrite')}>
-            <Text style={{color: 'white', fontWeight: "bold"}}>상품등록</Text>
+              <Text style={{color: 'white', fontWeight: "bold"}}>상품등록</Text>
             </Pressable>
       </View>
     )
 }
- 

@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   ButtonStyle: {
     position: 'absolute',
-    backgroundColor: 'hotpink',
+    backgroundColor: '#FF69B4',
     right: 30,
     bottom: 30,
     height: 60,
