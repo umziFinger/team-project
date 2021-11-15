@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     name:{},
     ButtonStyle: {
       position: 'absolute',
-      backgroundColor: '#89FF7F',
+      backgroundColor: '#58ccff',
       right: 30,
       bottom: 30,
       height: 60,
