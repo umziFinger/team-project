@@ -1,5 +1,3 @@
-import {useQuery} from '@apollo/client';
-import {useMutation} from '@apollo/react-hooks';
 import * as React from 'react';
 import {useState} from 'react';
 import {
@@ -11,13 +9,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {
-  CREATE_BOARD_COMMENT,
-  DELETE_BOARD,
-  DELETE_BOARD_COMMENT,
-  FETCH_BOARD,
-  FETCH_BOARD_COMMENTS,
-} from '~/components/commons/board.queries';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const styles = StyleSheet.create({
   Wrapper: {
@@ -66,14 +59,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export function BoardDetail(props) {
-  const {data} = useQuery(FETCH_BOARD, {
-    variables: {boardId: props.route.params.boardId},
-  });
-  const {data: comments, refetch} = useQuery(FETCH_BOARD_COMMENTS, {
-    variables: {boardId: props.route.params.boardId},
-  });
-  function when(then) {
+export function BoardDetail({navigation, route}: any) {
+  function when(then: any) {
     const now = new Date();
     let date = '방금전';
     if (
@@ -98,60 +85,62 @@ export function BoardDetail(props) {
     return date;
   }
 
+  const user: any = auth().currentUser;
   const [comment, setComment] = useState('');
-  const [createBoardComment] = useMutation(CREATE_BOARD_COMMENT);
   function submitComment() {
     if (comment !== '') {
-      createBoardComment({
-        variables: {
-          boardId: props.route.params.boardId,
-          createBoardCommentInput: {
-            writer: '익명',
-            password: '1234',
-            contents: comment,
-            rating: 5,
-          },
-        },
-        refetchQueries: [
-          {
-            query: FETCH_BOARD_COMMENTS,
-            variables: {boardId: props.route.params.boardId},
-          },
-        ],
-      });
+      firestore()
+        .collection('Board')
+        .doc(route.params.el.id)
+        .collection('Comments')
+        .add({writer: user?.email, contents: comment, createdAt: new Date()});
     }
   }
-  const [deleteBoard] = useMutation(DELETE_BOARD);
   function onClickdelete() {
-    deleteBoard({
-      variables: {
-        boardId: props.route.params.boardId,
-      },
-    }),
-      props.navigation.navigate('BoardMain');
-  }
-  const [deleteBoardComment] = useMutation(DELETE_BOARD_COMMENT);
-  function onClickDeleteComment(bcId) {
     try {
-      deleteBoardComment({
-        variables: {
-          password: '1234',
-          boardCommentId: bcId,
-        },
-        refetchQueries: [
-          {
-            query: FETCH_BOARD_COMMENTS,
-            variables: {boardId: props.route.params.boardId},
-          },
-        ],
-      });
+      firestore()
+        .collection('Board')
+        .doc(route.params.el.id)
+        .delete()
+        .then(() => {
+          console.log('Document successfully deleted!');
+        });
+      navigation.navigate('BoardMain');
     } catch (error) {
       console.log(error);
     }
   }
+
+  function onClickDeleteComment() {
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const temp: any = [];
+  const [comments, setComments] = React.useState([]);
+  const id: any = [];
+  React.useEffect(() => {
+    firestore()
+      .collection('Board')
+      .doc(route.params.el.id)
+      .collection('Comments')
+      .orderBy('createdAt', 'desc')
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          const a = doc.data();
+          a.push(doc.id);
+          temp.push(a);
+        });
+        setComments(temp);
+      });
+  }, []);
+  console.log(comments);
+
   return (
     <ScrollView>
-      <Text style={styles.BoardTitle}>자유게시판</Text>
+      <Text style={styles.BoardTitle}>익명게시판</Text>
       <View style={styles.Wrapper}>
         <View
           style={{
@@ -160,7 +149,8 @@ export function BoardDetail(props) {
             justifyContent: 'space-between',
           }}>
           <Text style={styles.Title}>
-            {data ? data.fetchBoard.title : 'loading...'}
+            {route.params.el.title}
+            {/* {route ? route.params.el.title : 'loading'} */}
           </Text>
           <Pressable
             style={styles.CommentButton}
@@ -169,20 +159,15 @@ export function BoardDetail(props) {
           </Pressable>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.Context}>
-            익명(글쓴이)
-            {/* {data ? data.fetchBoard.title : 'loading...'} */}
-          </Text>
+          <Text style={styles.Context}>익명(글쓴이)</Text>
 
-          <Text style={styles.Context}>
-            {when(data?.fetchBoard?.createdAt)}
-          </Text>
+          {/* <Text style={styles.Context}>{route.params.el.createdAt}</Text> */}
 
           {/* <Text style={styles.Context}>
             {data ? data.fetchBoard.createdAt : 'loading...'}
           </Text> */}
         </View>
-        {data &&
+        {/* {data &&
           data.fetchBoard.images
             ?.filter((el: string) => el)
             .map((el: string) => (
@@ -190,11 +175,11 @@ export function BoardDetail(props) {
                 style={{width: 300, height: 300}}
                 source={{uri: `https://storage.googleapis.com/${el}`}}
               />
-            ))}
-        <Text style={styles.Context}>{data && data.fetchBoard.contents}</Text>
+            ))} */}
+        <Text style={styles.Context}>{route.params.el.contents}</Text>
 
         <Text style={styles.CommentText}>
-          댓글({comments?.fetchBoardComments.length})
+          댓글({comments && comments.length})
         </Text>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <TextInput
@@ -208,19 +193,20 @@ export function BoardDetail(props) {
             <Text>입력</Text>
           </Pressable>
         </View>
-        {comments?.fetchBoardComments.map((el, index) => (
-          <View key={el._id} style={styles.CommentDiv}>
+
+        {comments?.map((el, index) => (
+          <View key={index} style={styles.CommentDiv}>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text>익명{index + 1}</Text>
-              <Text>{when(el.createdAt)}</Text>
+              {/* <Text>{el.createdAt}</Text> */}
             </View>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text>{el.contents}</Text>
               <Pressable
                 style={styles.DeleteCommentButton}
-                onPress={() => onClickDeleteComment(el._id)}>
+                onPress={() => onClickDeleteComment()}>
                 <Text style={{fontSize: 15, color: 'white'}}>삭제</Text>
               </Pressable>
             </View>

@@ -7,6 +7,7 @@ import {
   ScrollView,
   Pressable,
   Image,
+  DatePickerIOSBase,
 } from 'react-native';
 import {gql, useQuery} from '@apollo/client';
 import {
@@ -14,12 +15,14 @@ import {
   FETCH_BOARDS_OF_THE_BEST,
   FETCH_BOARD_COMMENTS,
 } from '~/components/commons/board.queries';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import {useEffect} from 'react';
+import {useState} from 'react';
 
 const styles = StyleSheet.create({
   BoardView: {
-    height: 50,
+    height: 30,
     width: 380,
     // borderRadius: 10,
     backgroundColor: 'white',
@@ -53,54 +56,69 @@ const styles = StyleSheet.create({
   },
 });
 
-export function BoardMain({navigation}) {
-  const {data, fetchMore, refetch} = useQuery(FETCH_BOARDS);
-  refetch();
-  const {data: best, refetch: refetchBest} = useQuery(FETCH_BOARDS_OF_THE_BEST);
-  refetchBest();
-  let page = 1;
-  function onScroll() {
-    if (!data) return;
-    page++;
-
-    fetchMore({
-      variables: {
-        page,
-      },
-      updateQuery: (prev, {fetchMoreResult}) => {
-        return {
-          fetchBoards: [...prev.fetchBoards, ...fetchMoreResult.fetchBoards],
-        };
-      },
+export function BoardMain({navigation}: any) {
+  const user = auth().currentUser;
+  let temp: any = [];
+  const [board, setBoard] = useState([]);
+  const doc = firestore()
+    .collection('Board')
+    .orderBy('createdAt', 'desc')
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        temp.push(doc.data());
+        temp.push({id: doc.id});
+      });
+      setBoard(temp);
     });
-  }
 
-  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
-    const paddingToBottom = 20;
-    return (
-      layoutMeasurement.height + contentOffset.y >=
-      contentSize.height - paddingToBottom
-    );
-  };
-  function comment(boardId: String) {
-    const comments = useQuery(FETCH_BOARD_COMMENTS, {
-      variables: {boardId: String(boardId)},
-    });
-    return comments;
-  }
+  //   const {data, fetchMore, refetch} = useQuery(FETCH_BOARDS);
+  //   refetch();
+  //   const {data: best, refetch: refetchBest} = useQuery(FETCH_BOARDS_OF_THE_BEST);
+  //   refetchBest();
+  //   let page = 1;
+  //   function onScroll() {
+  //     if (!data) return;
+  //     page++;
+
+  //     fetchMore({
+  //       variables: {
+  //         page,
+  //       },
+  //       updateQuery: (prev, {fetchMoreResult}) => {
+  //         return {
+  //           fetchBoards: [...prev.fetchBoards, ...fetchMoreResult.fetchBoards],
+  //         };
+  //       },
+  //     });
+  //   }
+
+  //   const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+  //     const paddingToBottom = 20;
+  //     return (
+  //       layoutMeasurement.height + contentOffset.y >=
+  //       contentSize.height - paddingToBottom
+  //     );
+  //   };
+  //   function comment(boardId: String) {
+  //     const comments = useQuery(FETCH_BOARD_COMMENTS, {
+  //       variables: {boardId: String(boardId)},
+  //     });
+  //     return comments;
+  //   }
   return (
     <>
-      <Image
+      {/* <Image
         style={styles.DiaryTitle}
         source={require('../../../../Assets/images/Board.png')}
-      />
-      <ScrollView
-        onScroll={({nativeEvent}) => {
+      /> */}
+      <ScrollView>
+        {/* onScroll={({nativeEvent}) => {
           if (isCloseToBottom(nativeEvent)) {
             onScroll();
           }
         }}
-        scrollEventThrottle={100}>
+        scrollEventThrottle={100}> */}
         <View
           style={{
             flexDirection: 'row',
@@ -111,7 +129,7 @@ export function BoardMain({navigation}) {
           <Text> | </Text>
           <Text>자랑게시판</Text>
         </View>
-        {best?.fetchBoardsOfTheBest.map(function aa(el: any) {
+        {/* {best?.fetchBoardsOfTheBest.map(function aa(el: any) {
           //   const comments = comment(el._id);
 
           return (
@@ -126,20 +144,17 @@ export function BoardMain({navigation}) {
               <Text style={styles.BestText}>BEST</Text>
               <Text>{el.title}</Text>
               <Text>{el.likeCount}</Text>
-              {/* <Text>{comments}</Text> */}
+              {/* <Text>{comments}</Text> 
             </Pressable>
           );
-        })}
-        {data?.fetchBoards.map(function aaa(el: any) {
+        })} */}
+        {board?.map(function aaa(el: any, i: number) {
           return (
             <Pressable
-              key={el._id}
+              key={i}
               style={styles.BoardView}
-              onPress={() =>
-                navigation.navigate('BoardDetail', {boardId: el._id})
-              }>
+              onPress={() => navigation.navigate('BoardDetail', {el})}>
               <Text>{el.title}</Text>
-              <Text>{el.likeCount}</Text>
             </Pressable>
           );
         })}

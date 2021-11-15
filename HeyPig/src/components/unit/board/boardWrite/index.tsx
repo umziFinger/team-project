@@ -60,14 +60,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export function BoardWrite({navigation}) {
+export function BoardWrite({navigation}: any) {
   const user = auth().currentUser;
 
   const writer = user?.email;
   const [title, setTitle] = useState('');
   const [contents, setContents] = useState('');
-
-  //   const [createBoard] = useMutation(CREATE_BOARD);
 
   async function onClickSubmit() {
     if (title !== '' && contents !== '') {
@@ -75,16 +73,6 @@ export function BoardWrite({navigation}) {
         .collection('Board')
         .add({writer, title, contents, createdAt: new Date()});
 
-      //   const result = await createBoard({
-      //     variables: {
-      //       createBoardInput: {
-      //         writer: mywriter,
-      //         password: mypassword,
-      //         title: mytitle,
-      //         contents: mycontents,
-      //       },
-      //     },
-      //   });
       navigation.navigate('BoardMain');
     }
   }
