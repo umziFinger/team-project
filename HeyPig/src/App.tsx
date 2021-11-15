@@ -197,7 +197,7 @@ export default function App() {
             marginBottom:5
           }}>
             <View style={{backgroundColor:'yellow', width: 330, flexDirection: 'row', justifyContent:'space-between', marginBottom: 20}}>
-              <Text style={{position:'absolute', marginLeft: 10, fontSize:18, fontWeight:'bold'}}>{date+1}일째</Text>
+              <Text style={{position:'absolute', marginLeft: 10, fontSize:18, fontWeight:'bold'}}>다이어트 {date+1}일째</Text>
               <Text style={{position:'absolute', marginLeft: 200}}>{user?.displayName}님 환영합니다!</Text>
             </View>
             <View>
