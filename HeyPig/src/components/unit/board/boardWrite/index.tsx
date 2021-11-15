@@ -11,8 +11,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import styled from 'styled-components';
-import {CREATE_BOARD} from '~/components/commons/board.queries';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const styles = StyleSheet.create({
   TextSelect: {
@@ -60,26 +60,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export function BoardWrite({navigation}) {
-  const mywriter = 'suhyang';
-  const mypassword = '1234';
-  const [mytitle, setTitle] = useState('');
-  const [mycontents, setContents] = useState('');
+export function BoardWrite({navigation}: any) {
+  const user = auth().currentUser;
 
-  const [createBoard] = useMutation(CREATE_BOARD);
+  const writer = user?.email;
+  const [title, setTitle] = useState('');
+  const [contents, setContents] = useState('');
 
   async function onClickSubmit() {
-    if (mytitle !== '' && mycontents !== '') {
-      const result = await createBoard({
-        variables: {
-          createBoardInput: {
-            writer: mywriter,
-            password: mypassword,
-            title: mytitle,
-            contents: mycontents,
-          },
-        },
-      });
+    if (title !== '' && contents !== '') {
+      firestore()
+        .collection('Board')
+        .add({writer, title, contents, createdAt: new Date()});
+
       navigation.navigate('BoardMain');
     }
   }
