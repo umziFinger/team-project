@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     },
     ButtonStyle: {
         position: 'absolute',
-        backgroundColor: '#89FF7F',
+        backgroundColor: '#58ccff',
         right: 30,
         bottom: 30,
         height: 60,
@@ -50,7 +50,6 @@ export function MarketWrite({navigation,route}:any) {
     const [files , setFiles] = React.useState("")
 
     // const [createUseditem] = useMutation(CREATE_USED_ITEM)
-
     // async function onClickSubmit() {
     //    try{ if(
     //         name !== '' && 
@@ -82,6 +81,9 @@ export function MarketWrite({navigation,route}:any) {
         .add({writer,productName,price,remarks,contents})
         navigation.navigate('MarketMain');
     }
+    async function onClickUpdateImage() {
+
+    }
 
     return(
     <View >
@@ -110,7 +112,7 @@ export function MarketWrite({navigation,route}:any) {
                 onChangeText={text=>setContents(text)}
                 // defaultValue={route.params?.route.params.el.contents}
                 />
-            <Pressable style={styles.ImageStyle}>
+            <Pressable style={styles.ImageStyle} onPress={() => onClickUpdateImage()}>
                 <Text>+</Text>
             </Pressable>
         </ScrollView>

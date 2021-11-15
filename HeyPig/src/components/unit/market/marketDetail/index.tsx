@@ -1,8 +1,10 @@
 import {gql, useMutation, useQuery} from '@apollo/client';
+import { firestore } from 'firebase-admin';
 import * as React from 'react';
 import { Text, View, Image ,StyleSheet, ScrollView, TextInput, Pressable } from "react-native";
 import { TabRouter } from 'react-navigation';
 import { FETCH_USED_ITEM,CREATE_USED_ITEM_QUESTION, FETCH_USED_ITEM_QUESTIONS } from '~/components/commons/market.queries';
+import auth from '@react-native-firebase/auth';
 
 const styles = StyleSheet.create({
        Img:{
@@ -58,37 +60,57 @@ const styles = StyleSheet.create({
        contents:{
            fontSize:14,
            marginBottom:10
+       },
+       BottomButton:{
+
        }
 
 })
 
-export function MarketDetail({props,route}:any) {
-    const {data} = useQuery(FETCH_USED_ITEM , {
-        variables: {useditemId:props.route.params.useditemId}
-    });
-    const {data: comments} = useQuery(FETCH_USED_ITEM_QUESTIONS, {
-        variables: {useditemId: props.route.params.useditemId},
-      });
-    const[createUseditemQuestion] = useMutation(CREATE_USED_ITEM_QUESTION)
-    const [contents, setContents] = React.useState("");
-
+export function MarketDetail({navigation,route}:any) {
+    // const {data} = useQuery(FETCH_USED_ITEM , {
+    //     variables: {useditemId:props.route.params.useditemId}
+    // });
+    // const {data: comments} = useQuery(FETCH_USED_ITEM_QUESTIONS, {
+    //     variables: {useditemId: props.route.params.useditemId},
+    //   });
+    // const[createUseditemQuestion] = useMutation(CREATE_USED_ITEM_QUESTION)
+    // function SubmitComment(){
+    //     createUseditemQuestion({
+    //         variables:{
+    //             useditemId : props.route.params.useditemId,
+    //             createUseditemQuestionInput :{
+    //                 contents
+    //             }
+    //         },
+    //         refetchQueries: [
+    //             {
+    //               query: FETCH_USED_ITEM,
+    //               variables: {useditemId: props.route.params.useditemId},
+    //             },
+    //         ],
+    //     })
+    // }
+    const [comment, setComment] = React.useState("");
+    const user: any = auth().currentUser;
     function SubmitComment(){
-        createUseditemQuestion({
-            variables:{
-                useditemId : props.route.params.useditemId,
-                createUseditemQuestionInput :{
-                    contents
-                }
-            },
-            refetchQueries: [
-                {
-                  query: FETCH_USED_ITEM,
-                  variables: {useditemId: props.route.params.useditemId},
-                },
-            ],
+        if (comment !== '') {
+            firestore()
+              .collection('Market')
+              .doc(route.params.el.id)
+              .collection('Comments')
+              .add({writer: user?.email, contents: comment});
+          }
+    }
+    function onClickDelete() {
+        firestore()
+        .collection('Market')
+        .doc(route.params.el.id)
+        .delete()
+        .then(() => {
+            navigation.navigate('MarketMain')
         })
     }
-
     return(
     <ScrollView>
         <View style={styles.Img}/>
@@ -110,19 +132,24 @@ export function MarketDetail({props,route}:any) {
         <View>
             <Text style={{marginTop:30}}>댓글</Text>
             <TextInput style={styles.CommentBox}
-            placeholder="내용을 입력해주세요"
-            onChangeText={text=> setContents(text)}/>
+                placeholder="내용을 입력해주세요"
+                onChangeText={text=> setComment(text)}/>
             <Pressable style={styles.CommentButton}
                 onPress={()=> SubmitComment()}>
                 <Text>입력</Text>
             </Pressable>
-            {comments?.fetchUseditemQuestions.map((el:any, index:number) => (
+            {/* {comments?.fetchUseditemQuestions.map((el:any, index:number) => (
                 <View key={el._id}>
                     <Text>{el.user.name}</Text>
                     <Text>{el.contents}</Text>
                 </View>
-            ))}
+            ))} */}
         </View>
+        <Pressable style={styles.BottomButton}>
+            <Text style={{backgroundColor:}}>수정하기</Text>
+            <Text style={{backgroundColor:}}>삭제하기</Text>
+            <Text style={{backgroundColor:}}>목록으로</Text>
+        </Pressable>
     </ScrollView>
     )
 }

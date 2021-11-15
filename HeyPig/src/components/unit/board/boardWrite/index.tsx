@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   ButtonStyle: {
-    backgroundColor: 'pink',
+    backgroundColor: '#58ccff',
     height: 30,
     width: 80,
     justifyContent: 'center',
