@@ -146,9 +146,9 @@ export function MarketDetail({navigation,route}:any) {
             ))} */}
         </View>
         <Pressable style={styles.BottomButton}>
-            <Text style={{backgroundColor:}}>수정하기</Text>
+            {/* <Text style={{backgroundColor:}}>수정하기</Text>
             <Text style={{backgroundColor:}}>삭제하기</Text>
-            <Text style={{backgroundColor:}}>목록으로</Text>
+            <Text style={{backgroundColor:}}>목록으로</Text> */}
         </Pressable>
     </ScrollView>
     )
