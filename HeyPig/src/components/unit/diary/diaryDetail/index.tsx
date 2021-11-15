@@ -133,7 +133,7 @@ export function DiaryDetail({navigation, route}:any) {
                         <Text style={styles.DateText}>{route.params.el.date}일차</Text>
                         <Text style={styles.TitleText}>{route.params.el.title}</Text>
                     </View>
-                    <Image style={styles.TopImage} source={{uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}}/>
+                    <Image style={styles.TopImage} source={route.params.el.image ? {uri:`${route.params.el.image}`} : {uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}}/>
                 </View>
                 <View style={styles.ContentsWrapper}>
                     <Text>체중 :</Text>

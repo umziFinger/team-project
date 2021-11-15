@@ -43,11 +43,13 @@ const styles = StyleSheet.create({
     margin: 10,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     elevation: 3,
   },
 
   DiaryImage: {
+    width:80,
+    height:80,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 30,
@@ -101,7 +103,7 @@ export function DiaryMain({navigation}: any) {
               <View style={styles.DiaryView}>
                 <Image
                   style={styles.DiaryImage}
-                  source={require('../../../../Assets/images/add.png')}
+                  source={el.image ? {uri:`${el.image}`} : {uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}}
                 />
                 <View>
                   <Text>제목 : {el.title}</Text>
