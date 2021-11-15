@@ -126,7 +126,7 @@ export function DiaryWrite({navigation, route}:any) {
             cancelButtonTitle: '취소'
         };
 
-        launchCamera(options, response => {
+        launchCamera(options, (response:any) => {
             console.log(response.assets[0].uri)
             setImage(response.assets[0].uri)
         })
