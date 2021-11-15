@@ -1,5 +1,5 @@
 import {gql, useMutation, useQuery} from '@apollo/client';
-import { firestore } from 'firebase-admin';
+import firestore from '@react-native-firebase/firestore';
 import * as React from 'react';
 import { Text, View, Image ,StyleSheet, ScrollView, TextInput, Pressable } from "react-native";
 import { TabRouter } from 'react-navigation';
