@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth'
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -94,9 +94,46 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         marginBottom: 20
+    },
+
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+
+    modalView: {
+        width: 250,
+        height: 160,
+        backgroundColor: "white",
+        padding: 20,
+        elevation: 5,
+        borderRadius: 5,
+    },
+    
+    button: {
+        marginTop: 10,
+        marginLeft: 170,
+        width: 50,
+        padding: 5,
+    },
+      
+    buttonClose: {
+        // backgroundColor: "#2196F3",
+    },
+      
+    textStyle: {
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+      
+    modalText: {
+        marginBottom: 15,
+        fontSize: 18,
+        fontWeight: 'bold'
     }
 })
-
 
 
 export function DiaryWrite({navigation, route}:any) {
@@ -118,7 +155,7 @@ export function DiaryWrite({navigation, route}:any) {
       setDate((currentDate-signinDate)/(3600000*24))
     },[])
 
-    const addImage = () => {
+    const addCameraImage = () => {
 
         const options:any = {
             takePhotoButtonTitle: '카메라',
@@ -127,9 +164,37 @@ export function DiaryWrite({navigation, route}:any) {
         };
 
         launchCamera(options, (response:any) => {
-            console.log(response.assets[0].uri)
-            setImage(response.assets[0].uri)
+            console.log(response)
+            if(response.didCancel){
+                console.log("취소됨")
+            }else if (response.error) {
+                console.log('ImagePicker Error: ', response.error)
+            }else{
+                setImage(response.assets[0].uri)
+            }
         })
+        setModalVisible(!modalVisible)
+    }
+
+    const addGalleryImage = () => {
+
+        const options:any = {
+            takePhotoButtonTitle: '카메라',
+            chooseFromLibraryButtonTitle: '이미지 선택',
+            cancelButtonTitle: '취소'
+        };
+
+        launchImageLibrary(options, (response:any) => {
+            console.log(response)
+            if(response.didCancel){
+                console.log("취소됨")
+            }else if (response.error) {
+                console.log('ImagePicker Error: ', response.error)
+            }else{
+                setImage(response.assets[0].uri)
+            }
+        })
+        setModalVisible(!modalVisible)
     }
 
     async function writeDiary() {
@@ -142,9 +207,37 @@ export function DiaryWrite({navigation, route}:any) {
             .set({ title, weight, food, exercise, createdAt: new Date().toISOString(), date:date+1, image })
         navigation.navigate('DiaryMain')
     }
-
+    const [modalVisible, setModalVisible] = React.useState(false);
     return(
         <ScrollView>
+            <View style={styles.centeredView}>
+                <Modal
+                    // animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>사진</Text>
+                        <TouchableOpacity style={{marginTop: 7}} onPress={addCameraImage}>
+                            <Text>카메라</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{marginTop: 5}} onPress={addGalleryImage}>
+                            <Text>이미지 선택</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setModalVisible(!modalVisible)}
+                        >
+                            <Text style={styles.textStyle}>취소</Text>
+                        </TouchableOpacity>
+                    </View>
+                    </View>
+                </Modal>
+            </View>
             <View style={styles.Wrapper}>
                 <Image style={styles.DiaryTitle} source={require('../../../../Assets/images/diary.png')}/>
                 <View style={styles.ImageWrapper}>
@@ -156,9 +249,8 @@ export function DiaryWrite({navigation, route}:any) {
                             defaultValue={route.params?.route.params.el.title}
                         />
                     </View>
-                    <Image style={styles.TopImage} source={image ? {uri:`${image}`} : {uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}}/>
-                    <TouchableOpacity onPress={addImage}>
-                        <Text>++이미지++</Text>
+                    <TouchableOpacity onPress={() => setModalVisible(true)}>
+                        <Image style={styles.TopImage} source={image ? {uri:`${image}`} : {uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.ContentsWrapper}>

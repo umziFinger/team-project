@@ -6905,6 +6905,11 @@ react-native-codegen@^0.0.7:
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
 
+react-native-fbsdk-next@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-fbsdk-next/-/react-native-fbsdk-next-5.0.0.tgz#f5359fa0017417b9514c90aa87746ca6e936b827"
+  integrity sha512-UDzTRHggI/POYexcM5/RGZRKXBf9AAyCpdoH57ULT9la9wMq62PqrYk7br/MhrqUhQ3h7tGL8mOoWPdLZdZfYA==
+
 react-native-image-picker@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-4.2.0.tgz#852867e340da464fda6895b32d383d88a143e623"

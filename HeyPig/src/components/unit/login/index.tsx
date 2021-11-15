@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
-
+import { LoginButton, AccessToken, Profile } from 'react-native-fbsdk-next';
 import {gql, useMutation} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -89,12 +89,11 @@ export function LoginScreen({navigation, setIsLoggedIn, setAccessToken}: any) {
     }
   }
 
-  
-  // auth().onAuthStateChanged((user) => {
-  //     if(user) {
-  //     navigation.navigate('SignUp')
-  //   }
-  // });
+  const currentProfile = Profile.getCurrentProfile().then(
+    function(currentProfile){
+      console.log(currentProfile)
+    }
+  )
 
   return (
     <View style={styles.WrapperView}>
@@ -122,6 +121,24 @@ export function LoginScreen({navigation, setIsLoggedIn, setAccessToken}: any) {
       </Pressable>
       <View>
           <GoogleSigninButton onPress={onGoogleButtonPress} />
+      </View>
+      <View>
+        <LoginButton
+          style={{width: 222, height: 35, marginTop: 5}}
+          onLoginFinished={
+            (error, result) => {
+                console.log(result)
+                AccessToken.getCurrentAccessToken().then(
+                  (data) => {
+                    console.log(data?.accessToken)
+                    const facebookCredential = auth.FacebookAuthProvider.credential(data?.accessToken)
+                    const user = auth().signInWithCredential(facebookCredential);
+                    console.log('user data', user);
+                  }
+                )
+              }
+          }
+        />
       </View>
       <Pressable onPress={() => navigation.navigate('SignUp')}>
         <Text>회원가입</Text>

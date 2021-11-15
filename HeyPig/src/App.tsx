@@ -25,6 +25,7 @@ import ExercisePage from './components/unit/homeScreen/exercise';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Profile} from 'react-native-fbsdk-next'
 
 function HomeScreen() {
   return (
@@ -153,20 +154,17 @@ export default function App() {
     SplashScreen.hide();
   }, []);
 
-  const user:any = auth().currentUser  
+  let user:any = auth().currentUser
   const signinDate:any = new Date(user?.metadata.creationTime.slice(0,10))
   const currentDate:any = new Date(new Date().toISOString().slice(0,10))
 
   React.useEffect(() => {
     setDate((currentDate-signinDate)/(3600000*24))
   },[])
-  
 
-  // console.log(new Date(new Date().toISOString().slice(0,10)))
 
   auth().onAuthStateChanged((user) => {
     if (user) {
-
     	setIsLoggedIn(true);
     } else {
     	setIsLoggedIn(false);
