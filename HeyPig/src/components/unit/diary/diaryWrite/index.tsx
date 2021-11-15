@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth'
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const styles = StyleSheet.create({
 
@@ -106,6 +107,7 @@ export function DiaryWrite({navigation, route}:any) {
     const [weight, setWeight] = React.useState('')
     const [food, setFood] = React.useState('')
     const [exercise, setExercise] = React.useState('')
+    const [image, setImage] = React.useState('')
 
     const user:any = auth().currentUser
 
@@ -116,9 +118,28 @@ export function DiaryWrite({navigation, route}:any) {
       setDate((currentDate-signinDate)/(3600000*24))
     },[])
 
+    const addImage = () => {
+
+        const options:any = {
+            takePhotoButtonTitle: '카메라',
+            chooseFromLibraryButtonTitle: '이미지 선택',
+            cancelButtonTitle: '취소'
+        };
+
+        launchCamera(options, response => {
+            console.log(response.assets[0].uri)
+            setImage(response.assets[0].uri)
+        })
+    }
+
     async function writeDiary() {
 
-        firestore().collection('Users').doc(String(user?.email)).collection("Diary").doc(`${String(date+1)}day`).set({ title, weight, food, exercise, createdAt: new Date().toISOString(), date:date+1 })
+        firestore()
+            .collection('Users')
+            .doc(String(user?.email))
+            .collection("Diary")
+            .doc(`${String(date+1)}day`)
+            .set({ title, weight, food, exercise, createdAt: new Date().toISOString(), date:date+1, image })
         navigation.navigate('DiaryMain')
     }
 
@@ -135,7 +156,10 @@ export function DiaryWrite({navigation, route}:any) {
                             defaultValue={route.params?.route.params.el.title}
                         />
                     </View>
-                    <Image style={styles.TopImage} source={{uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}}/>
+                    <Image style={styles.TopImage} source={image ? {uri:`${image}`} : {uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}}/>
+                    <TouchableOpacity onPress={addImage}>
+                        <Text>++이미지++</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.ContentsWrapper}>
                     <Text>체중 :</Text>
