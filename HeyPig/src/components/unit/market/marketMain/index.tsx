@@ -4,6 +4,9 @@ import { Image, Text, View, ScrollView, StyleSheet , Dimensions, Pressable} from
 import Carousel from './Carousel';
 // import styled from 'styled-components/native';
 import { FETCH_USED_ITEMS } from '~/components/commons/market.queries'
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+
 const styles = StyleSheet.create({
     Banner: {
         height: 200,
@@ -13,7 +16,7 @@ const styles = StyleSheet.create({
     },
     marketMain: {
       flexDirection: 'row',
-      height: '8%',
+      height: '13%',
       width: '94%', 
       borderRadius:10, 
       backgroundColor: "white", 
@@ -84,7 +87,22 @@ const PAGES = [
     },
   ];
 export function MarketMain({navigation}:any) {
-  const { data } = useQuery(FETCH_USED_ITEMS);
+  const [market,setMarket] = React.useState([])
+  let aaa : any = []
+  const user = auth().currentUser
+
+  React.useEffect(() => {
+    const doc = firestore()
+      .collection('Market')
+      .get()
+      .then(snapshot=>{
+        snapshot.forEach(doc=>{
+          aaa.push(doc.data())
+          // aaa.push({id:doc.id}) 
+      });
+      setMarket(aaa);
+    });    
+  }, [firestore().collection('Market').doc('').get()]);
     return(
       <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>    
         <ScrollView>
@@ -96,17 +114,20 @@ export function MarketMain({navigation}:any) {
             pageWidth={screenWidth} 
               //   pageWidth={screenWidth - (16 + 36) * 2}
           />
-         <View>
+        <View>
           <View  style={styles.Wrapper}>
-            {data?.fetchUseditems.map((el:any,i:number) =>
-              <Pressable key={i} style={styles.marketMain} onPress={() => navigation.navigate('MarketDetail', {useditemId : el._id})}>
+            {market.map((el:any,i:number) =>
+              <Pressable 
+                key={i} 
+                style={styles.marketMain} 
+                onPress={() => navigation.navigate('MarketDetail',{el})}>
                 <Image style={styles.marketImage} source={require('../../../../Assets/images/add.png')} />
                 <View> 
                   <View style={styles.contentsWrapper}>
-                    <Text >상품이름 : {el.name}</Text>
+                    <Text >상품이름 : {el.productname}</Text>
                     <Text style={styles.contents}>상품설명 : {el.contents}</Text>
                     <Text style={styles.price}>가격 : {el.price}</Text>
-                    <Text style={styles.name}>판매자 : {el.seller.name}</Text>
+                    <Text style={styles.name}>판매자 : {el.name}</Text>
                   </View>
                 </View>
               </Pressable>
@@ -114,7 +135,7 @@ export function MarketMain({navigation}:any) {
           </View>
         </View>
         </ScrollView>
-            {/* <Button title="detail" onPress={() => navigation.navigate('MarketDetail')}/> */}
+            
             <Pressable style={styles.ButtonStyle} onPress={() => navigation.navigate('MarketWrite')}>
               <Text style={{color: 'white', fontWeight: "bold"}}>상품등록</Text>
             </Pressable>
