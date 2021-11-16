@@ -8,17 +8,19 @@ import auth from '@react-native-firebase/auth';
 
 const styles = StyleSheet.create({
        Img:{
-           width: 400,
+           width: '100%',
            height: 200,
            backgroundColor:'gray',
        },
        Info__Wrapper:{
-            width: 400,
+           
+            width: '100%',
             height: 230,
             backgroundColor:'#ddf5ff',
             marginTop:25,
-            flexDirection:'row',
-            justifyContent:'space-between',
+            alignItems:'center',
+            // flexDirection:'row',
+            // justifyContent:'space-between',
             padding: 20,
             paddingRight:50,
             paddingLeft:30
@@ -34,6 +36,7 @@ const styles = StyleSheet.create({
         
        },
        Pick__Wrapper:{
+           marginLeft:'95%'
            
        },
        CommentBox:{
@@ -62,7 +65,9 @@ const styles = StyleSheet.create({
            marginBottom:10
        },
        BottomButton:{
-
+           width: '100%' ,
+           flexDirection:'row',
+           justifyContent:"space-evenly"
        }
 
 })
@@ -122,39 +127,36 @@ export function MarketDetail({navigation,route}:any) {
         <View style={styles.Img}/>
         <View style={styles.Info__Wrapper}>
             <View style={styles.Contents__Wrapper}>
-                <Text style={styles.productName}>{route.params.el.productName}</Text>
+                <Text style={styles.productName}>상품명 : {route.params.el.productName}</Text>
                 <Text style={styles.remarks}>{route.params.el.remarks}</Text>
-                <Text style={styles.price}>{route.params.el.price}</Text>    
+                <Text style={styles.price}>{route.params.el.price}원</Text>    
                 <Text style={styles.contents}>{route.params.el.contents}</Text>
             </View>
             <View style={styles.Pick__Wrapper}>
-            <Image style={styles.Heart} source={require('../../../../Assets/images/Heart.png')}/>
-            <Text>0</Text>
+                <Image style={styles.Heart} source={require('../../../../Assets/images/Heart.png')}/>
+                <Text>0</Text>
             </View>
             <Pressable>
-                <Text>구매하기</Text>
+                <Text style = {{ width:"100%"}}>구매하기</Text>
             </Pressable>
         </View>
         <View>
             <Text style={{marginTop:30}}>댓글</Text>
-            <TextInput style={styles.CommentBox}
+            <TextInput
+                style={styles.CommentBox}
                 placeholder="내용을 입력해주세요"
                 onChangeText={text=> setComment(text)}/>
-            <Pressable style={styles.CommentButton}
+            <Pressable
+                style={styles.CommentButton}
                 onPress={()=> SubmitComment()}>
                 <Text>입력</Text>
             </Pressable>
-            {/* {comments?.fetchUseditemQuestions.map((el:any, index:number) => (
-                <View key={el._id}>
-                    <Text>{el.user.name}</Text>
-                    <Text>{el.contents}</Text>
-                </View>
-            ))} */}
         </View>
+        
         <Pressable style={styles.BottomButton}>
             <Text onPress={onClickEdit} style={{backgroundColor:'#FFE1E1'}}>수정하기</Text>
             <Text onPress={onClickDelete} style={{backgroundColor:'#FFE1E1'}}>삭제하기</Text>
-            <Text style={{backgroundColor:'#FFE1E1'}}>목록으로</Text>
+            <Text onPress={()=> { navigation.navigate('MarketMain')}} style={{backgroundColor:'#FFE1E1'}}>목록으로</Text>
         </Pressable>
     </ScrollView>
     )

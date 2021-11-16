@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     },
     marketMain: {
       flexDirection: 'row',
-      height: '13%',
+      height: '9%',
       width: '94%', 
       borderRadius:10, 
       backgroundColor: "white", 
@@ -111,8 +111,9 @@ export function MarketMain({navigation}:any) {
             gap={5}
             offset={0} // left margin
             pages={PAGES}
-            pageWidth={screenWidth} 
-              //   pageWidth={screenWidth - (16 + 36) * 2}
+            // pageWidth={screenWidth} 
+
+                pageWidth={screenWidth - (2+1) * 2}
           />
         <View>
           <View  style={styles.Wrapper}>
@@ -124,7 +125,7 @@ export function MarketMain({navigation}:any) {
                 <Image style={styles.marketImage} source={require('../../../../Assets/images/add.png')} />
                 <View> 
                   <View style={styles.contentsWrapper}>
-                    <Text >상품이름 : {el.productname}</Text>
+                    <Text >상품명 : {el.productname}</Text>
                     <Text style={styles.contents}>상품설명 : {el.contents}</Text>
                     <Text style={styles.price}>가격 : {el.price}</Text>
                     <Text style={styles.name}>판매자 : {el.name}</Text>
