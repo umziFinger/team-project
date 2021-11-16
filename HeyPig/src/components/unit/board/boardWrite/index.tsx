@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export function BoardWrite({navigation}: any) {
+export function BoardWrite({navigation, route}: any) {
   const user = auth().currentUser;
 
   const writer = user?.email;
@@ -76,33 +76,69 @@ export function BoardWrite({navigation}: any) {
       navigation.navigate('BoardMain');
     }
   }
+  async function onClickEdit() {
+    firestore()
+      .collection('Board')
+      .doc(route.params.el[1].id)
+      .update({title, contents});
 
-  return (
-    <ScrollView style={styles.Wrapper}>
-      <Text style={styles.TextSelect}>게시판 선택</Text>
-      <View style={{flexDirection: 'row'}}>
-        <Pressable style={styles.ButtonStyle}>
-          <Text style={{color: 'white'}}>익명게시판</Text>
-        </Pressable>
-        <Pressable style={styles.Button}>
-          <Text style={{color: 'white'}}>자랑게시판</Text>
-        </Pressable>
-      </View>
-      <Text style={styles.TextWrite}>글작성</Text>
-      <TextInput
-        style={styles.Title}
-        onChangeText={text => setTitle(text)}
-        placeholder="제목을 입력해주세요"
-      />
+    navigation.navigate('BoardDetail', {el: route.params.el});
+  }
 
-      <TextInput
-        multiline={true}
-        style={styles.Contents}
-        onChangeText={text => setContents(text)}
-        placeholder="내용을 입력해주세요"
-      />
+  if (route.params.isEdit) {
+    return (
+      <ScrollView style={styles.Wrapper}>
+        <Text style={styles.TextSelect}>게시판 선택</Text>
+        <View style={{flexDirection: 'row'}}>
+          <Pressable style={styles.ButtonStyle}>
+            <Text style={{color: 'white'}}>익명게시판</Text>
+          </Pressable>
+        </View>
+        <Text style={styles.TextWrite}>글작성</Text>
+        <TextInput
+          style={styles.Title}
+          onChangeText={text => setTitle(text)}
+          defaultValue={route.params.el[0].title}
+        />
 
-      <Button title="write" onPress={() => onClickSubmit()} />
-    </ScrollView>
-  );
+        <TextInput
+          multiline={true}
+          style={styles.Contents}
+          onChangeText={text => setContents(text)}
+          defaultValue={route.params.el[0].contents}
+        />
+
+        <Button title="write" onPress={() => onClickEdit()} />
+      </ScrollView>
+    );
+  } else {
+    return (
+      <ScrollView style={styles.Wrapper}>
+        <Text style={styles.TextSelect}>게시판 선택</Text>
+        <View style={{flexDirection: 'row'}}>
+          <Pressable style={styles.ButtonStyle}>
+            <Text style={{color: 'white'}}>익명게시판</Text>
+          </Pressable>
+          <Pressable style={styles.Button}>
+            <Text style={{color: 'white'}}>자랑게시판</Text>
+          </Pressable>
+        </View>
+        <Text style={styles.TextWrite}>글작성</Text>
+        <TextInput
+          style={styles.Title}
+          onChangeText={text => setTitle(text)}
+          placeholder="제목을 입력해주세요"
+        />
+
+        <TextInput
+          multiline={true}
+          style={styles.Contents}
+          onChangeText={text => setContents(text)}
+          placeholder="내용을 입력해주세요"
+        />
+
+        <Button title="write" onPress={() => onClickSubmit()} />
+      </ScrollView>
+    );
+  }
 }

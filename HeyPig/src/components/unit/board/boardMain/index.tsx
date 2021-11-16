@@ -22,7 +22,7 @@ import {useState} from 'react';
 
 const styles = StyleSheet.create({
   BoardView: {
-    height: 30,
+    height: 50,
     width: 380,
     // borderRadius: 10,
     backgroundColor: 'white',
@@ -58,18 +58,20 @@ const styles = StyleSheet.create({
 
 export function BoardMain({navigation}: any) {
   const user = auth().currentUser;
-  let temp: any = [];
+  let tt: any = [];
   const [board, setBoard] = useState([]);
-  const doc = firestore()
+  firestore()
     .collection('Board')
     .orderBy('createdAt', 'desc')
     .get()
     .then(snapshot => {
       snapshot.forEach(doc => {
+        let temp: any = [];
         temp.push(doc.data());
         temp.push({id: doc.id});
+        tt.push(temp);
       });
-      setBoard(temp);
+      setBoard(tt);
     });
 
   //   const {data, fetchMore, refetch} = useQuery(FETCH_BOARDS);
@@ -154,14 +156,14 @@ export function BoardMain({navigation}: any) {
               key={i}
               style={styles.BoardView}
               onPress={() => navigation.navigate('BoardDetail', {el})}>
-              <Text>{el.title}</Text>
+              <Text>{el[0].title}</Text>
             </Pressable>
           );
         })}
       </ScrollView>
       <Pressable
         style={styles.ButtonStyle}
-        onPress={() => navigation.navigate('BoardWrite')}>
+        onPress={() => navigation.navigate('BoardWrite', {isEdit: false})}>
         <Text style={{color: 'white'}}>글쓰기</Text>
       </Pressable>
     </>
