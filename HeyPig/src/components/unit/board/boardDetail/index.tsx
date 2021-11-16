@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   Context: {
     fontSize: 20,
-    marginBottom: 10,
+    margin: 10,
   },
   CommentText: {
     margin: 10,
@@ -39,6 +39,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     marginBottom: 5,
+  },
+  EditButton: {
+    width: 40,
+    height: 30,
+    backgroundColor: 'orange',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
   },
   CommentButton: {
     width: 50,
@@ -91,128 +99,137 @@ export function BoardDetail({navigation, route}: any) {
     if (comment !== '') {
       firestore()
         .collection('Board')
-        .doc(route.params.el.id)
+        .doc(route.params.el[1].id)
         .collection('Comments')
         .add({writer: user?.email, contents: comment, createdAt: new Date()});
     }
   }
+  const isWriter = user.email === route.params.el[0].writer;
   function onClickdelete() {
     try {
-      firestore()
-        .collection('Board')
-        .doc(route.params.el.id)
-        .delete()
-        .then(() => {
-          console.log('Document successfully deleted!');
-        });
+      firestore().collection('Board').doc(route.params.el[1].id).delete();
       navigation.navigate('BoardMain');
     } catch (error) {
       console.log(error);
     }
   }
 
-  function onClickDeleteComment() {
+  function onClickDeleteComment(commentid: any) {
     try {
+      firestore()
+        .collection('Board')
+        .doc(route.params.el[1].id)
+        .collection('Comments')
+        .doc(commentid)
+        .delete();
     } catch (error) {
       console.log(error);
     }
   }
-  const temp: any = [];
+
   const [comments, setComments] = React.useState([]);
-  const id: any = [];
-  React.useEffect(() => {
-    firestore()
-      .collection('Board')
-      .doc(route.params.el.id)
-      .collection('Comments')
-      .orderBy('createdAt', 'desc')
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          const a = doc.data();
-          a.push(doc.id);
-          temp.push(a);
-        });
-        setComments(temp);
+  let tt: any = [];
+  firestore()
+    .collection('Board')
+    .doc(route.params.el[1].id)
+    .collection('Comments')
+    .orderBy('createdAt', 'desc')
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        const temp: any = [];
+        temp.push(doc.data());
+        temp.push({id: doc.id});
+        tt.push(temp);
       });
-  }, []);
-  console.log(comments);
+      setComments(tt);
+    });
 
   return (
-    <ScrollView>
-      <Text style={styles.BoardTitle}>익명게시판</Text>
-      <View style={styles.Wrapper}>
-        <View
-          style={{
-            marginBottom: 20,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <Text style={styles.Title}>
-            {route.params.el.title}
-            {/* {route ? route.params.el.title : 'loading'} */}
-          </Text>
-          <Pressable
-            style={styles.CommentButton}
-            onPress={() => onClickdelete()}>
-            <Text>삭제</Text>
-          </Pressable>
-        </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.Context}>익명(글쓴이)</Text>
-
-          {/* <Text style={styles.Context}>{route.params.el.createdAt}</Text> */}
-
-          {/* <Text style={styles.Context}>
-            {data ? data.fetchBoard.createdAt : 'loading...'}
-          </Text> */}
-        </View>
-        {/* {data &&
-          data.fetchBoard.images
-            ?.filter((el: string) => el)
-            .map((el: string) => (
-              <Image
-                style={{width: 300, height: 300}}
-                source={{uri: `https://storage.googleapis.com/${el}`}}
-              />
-            ))} */}
-        <Text style={styles.Context}>{route.params.el.contents}</Text>
-
-        <Text style={styles.CommentText}>
-          댓글({comments && comments.length})
-        </Text>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <TextInput
-            style={styles.CommentInput}
-            placeholder="댓글내용을 입력해주세요"
-            onChangeText={text => setComment(text)}
-          />
-          <Pressable
-            style={styles.CommentButton}
-            onPress={() => submitComment()}>
-            <Text>입력</Text>
-          </Pressable>
-        </View>
-
-        {comments?.map((el, index) => (
-          <View key={index} style={styles.CommentDiv}>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text>익명{index + 1}</Text>
-              {/* <Text>{el.createdAt}</Text> */}
-            </View>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text>{el.contents}</Text>
-              <Pressable
-                style={styles.DeleteCommentButton}
-                onPress={() => onClickDeleteComment()}>
-                <Text style={{fontSize: 15, color: 'white'}}>삭제</Text>
-              </Pressable>
-            </View>
+    <>
+      <ScrollView>
+        <Text style={styles.BoardTitle}>익명게시판</Text>
+        <View style={styles.Wrapper}>
+          <View
+            style={{
+              marginBottom: 20,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <Text style={styles.Title}>{route.params.el[0].title}</Text>
+            {isWriter && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <Pressable
+                  style={styles.EditButton}
+                  onPress={() =>
+                    navigation.navigate('BoardWrite', {
+                      isEdit: true,
+                      el: route.params.el,
+                    })
+                  }>
+                  <Text>수정</Text>
+                </Pressable>
+                <Pressable
+                  style={styles.EditButton}
+                  onPress={() => onClickdelete()}>
+                  <Text>삭제</Text>
+                </Pressable>
+              </View>
+            )}
           </View>
-        ))}
+          {/* <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={styles.Context}>글쓴이</Text>
+        </View> */}
+
+          <Text style={styles.Context}>{route.params.el[0].contents}</Text>
+
+          <Text style={styles.CommentText}>
+            댓글({comments && comments.length})
+          </Text>
+
+          {comments?.map((el, index) => (
+            <View key={index} style={styles.CommentDiv}>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text>익명{index + 1}</Text>
+                {/* <Text>{el.createdAt}</Text> */}
+              </View>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text>{el[0].contents}</Text>
+                {user.email === el[0].writer && (
+                  <Pressable
+                    style={styles.DeleteCommentButton}
+                    onPress={() => onClickDeleteComment(el[1].id)}>
+                    <Text style={{fontSize: 15, color: 'white'}}>삭제</Text>
+                  </Pressable>
+                )}
+              </View>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          position: 'absolute',
+          right: 10,
+          left: 10,
+          bottom: 0,
+        }}>
+        <TextInput
+          style={styles.CommentInput}
+          placeholder="댓글내용을 입력해주세요"
+          onChangeText={text => setComment(text)}
+        />
+        <Pressable style={styles.CommentButton} onPress={() => submitComment()}>
+          <Text>입력</Text>
+        </Pressable>
       </View>
-    </ScrollView>
+    </>
   );
 }
