@@ -75,12 +75,22 @@ export default function HomePage({navigation}:any) {
   },[])
 
   React.useEffect(() => {
-    firestore().collection("Users").doc(String(user?.email)).collection('Info').get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-            setInfoData(doc.data());
-        });
-      })
+    {user?.email === null
+      ?
+        firestore().collection("Users").doc(String(user?.uid)).collection('Info').get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+                setInfoData(doc.data());
+            });
+          })
+      :
+        firestore().collection("Users").doc(String(user?.email)).collection('Info').get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+                setInfoData(doc.data());
+            });
+          })
+    }
   },[firestore().collection("Users").doc(String(user?.email)).collection('Info').get()])
 
   

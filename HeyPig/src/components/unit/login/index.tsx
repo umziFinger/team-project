@@ -131,7 +131,7 @@ export function LoginScreen({navigation, setIsLoggedIn, setAccessToken}: any) {
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
                     console.log(data?.accessToken)
-                    const facebookCredential = auth.FacebookAuthProvider.credential(data?.accessToken)
+                    const facebookCredential = auth.FacebookAuthProvider.credential(String(data?.accessToken))
                     const user = auth().signInWithCredential(facebookCredential);
                     console.log('user data', user);
                   }

@@ -53,7 +53,22 @@ export default function GoalPage({navigation}:any) {
     const user = auth().currentUser;
     function onPressSignUp() {
       const user = auth().currentUser
-        firestore().collection('Users').doc(String(user?.email)).collection("Info").doc("myInfo").set({ goal, height, currentWeight })
+        {user?.email === null
+            ?
+                firestore()
+                    .collection('Users')
+                    .doc(String(user?.uid))
+                    .collection("Info")
+                    .doc("myInfo")
+                    .set({ goal, height, currentWeight })
+            :
+                firestore()
+                    .collection('Users')
+                    .doc(String(user?.email))
+                    .collection("Info")
+                    .doc("myInfo")
+                    .set({ goal, height, currentWeight })
+        }   
         navigation.navigate('HomePage')
         
     }
