@@ -47,6 +47,7 @@ export function MarketWrite({navigation,route}:any) {
     const [price,setPrice] =React.useState("")
     const [contents,setContents] = React.useState("")
     const [remarks,setRemarks] = React.useState("")
+    const [name, setName] = React.useState("")
     const [files , setFiles] = React.useState("")
 
     // const [createUseditem] = useMutation(CREATE_USED_ITEM)
@@ -88,6 +89,12 @@ export function MarketWrite({navigation,route}:any) {
     return(
     <View >
         <ScrollView>
+            <Text>판매자</Text>
+            <TextInput
+                style={styles.Inputbox}
+                onChangeText={text=>setName(text)}
+                // defaultValue={route.params?.route.params.el.name}
+            />
             <Text>상품명</Text>
             <TextInput
                 style={styles.Inputbox}

@@ -92,7 +92,9 @@ export function MarketDetail({navigation,route}:any) {
     //     })
     // }
     const [comment, setComment] = React.useState("");
-    const user: any = auth().currentUser;
+
+    const user = auth().currentUser;
+
     function SubmitComment(){
         if (comment !== '') {
             firestore()
@@ -110,6 +112,10 @@ export function MarketDetail({navigation,route}:any) {
         .then(() => {
             navigation.navigate('MarketMain')
         })
+    }
+
+    function onClickEdit() {
+        navigation.navigate('MarketWrite', {route})
     }
     return(
     <ScrollView>
@@ -146,9 +152,9 @@ export function MarketDetail({navigation,route}:any) {
             ))} */}
         </View>
         <Pressable style={styles.BottomButton}>
-            {/* <Text style={{backgroundColor:}}>수정하기</Text>
-            <Text style={{backgroundColor:}}>삭제하기</Text>
-            <Text style={{backgroundColor:}}>목록으로</Text> */}
+            <Text onPress={onClickEdit} style={{backgroundColor:'#FFE1E1'}}>수정하기</Text>
+            <Text onPress={onClickDelete} style={{backgroundColor:'#FFE1E1'}}>삭제하기</Text>
+            <Text style={{backgroundColor:'#FFE1E1'}}>목록으로</Text>
         </Pressable>
     </ScrollView>
     )
