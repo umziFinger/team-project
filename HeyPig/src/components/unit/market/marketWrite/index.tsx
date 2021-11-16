@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 100,
       },
-      
       ImageStyle:{
           height: 70,
           width: 70,
@@ -79,7 +78,7 @@ export function MarketWrite({navigation,route}:any) {
     async function onClickWriteProduct(){
         firestore()
         .collection('Market')
-        .add({writer,productName,price,remarks,contents})
+        .add({writer,productName,price,remarks,contents,name})
         navigation.navigate('MarketMain');
     }
     async function onClickUpdateImage() {

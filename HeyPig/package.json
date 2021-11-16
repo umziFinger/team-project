@@ -31,11 +31,13 @@
     "react": "17.0.2",
     "react-hook-form": "^7.18.1",
     "react-native": "0.66.1",
+    "react-native-chart-kit": "^6.11.0",
     "react-native-fbsdk-next": "^5.0.0",
     "react-native-image-picker": "^4.2.0",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.9.0",
     "react-native-splash-screen": "^3.2.0",
+    "react-native-svg": "^12.1.1",
     "react-native-vector-icons": "^9.0.0",
     "react-navigation": "^4.4.4",
     "styled-components": "^5.3.3"
