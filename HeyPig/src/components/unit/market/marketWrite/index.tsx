@@ -76,10 +76,12 @@ export function MarketWrite({navigation,route}:any) {
     //      }
     // }
     async function onClickWriteProduct(){
-        firestore()
-        .collection('Market')
-        .add({writer,productName,price,remarks,contents,name})
-        navigation.navigate('MarketMain');
+        if (price !=='' && contents !=='' && name !=='' && productName !=='') {
+            firestore()
+            .collection('Market')
+            .add({writer,productName,price,contents,name})
+            navigation.navigate('MarketMain');
+        }
     }
     async function onClickUpdateImage() {
 
@@ -92,31 +94,31 @@ export function MarketWrite({navigation,route}:any) {
             <TextInput
                 style={styles.Inputbox}
                 onChangeText={text=>setName(text)}
-                // defaultValue={route.params?.route.params.el.name}
+                defaultValue={route.params?.route.params.el.name}
             />
             <Text>상품명</Text>
             <TextInput
                 style={styles.Inputbox}
                 onChangeText={text=>setProductName(text)}
-                // defaultValue={route.params?.route.params.el.productname}
+                defaultValue={route.params?.route.params.el.productName}
                 />
             <Text>가격</Text>
             <TextInput 
                 style={styles.Inputbox} 
                 onChangeText={text=>setPrice(text)}
-                // defaultValue={route.params?.route.params.el.price}
+                defaultValue={route.params?.route.params.el.price}
                 />
-            <Text>한줄요약</Text>
+            {/* <Text>한줄요약</Text>
             <TextInput 
                 style={styles.Inputbox} 
                 onChangeText={text=>setRemarks(text)}
                 // defaultValue={route.params?.route.params.el.remarks}
-                />
+                /> */}
             <Text>내용</Text>
             <TextInput 
                 style={styles.InputContents} 
                 onChangeText={text=>setContents(text)}
-                // defaultValue={route.params?.route.params.el.contents}
+                defaultValue={route.params?.route.params.el.contents}
                 />
             <Pressable style={styles.ImageStyle} onPress={() => onClickUpdateImage()}>
                 <Text>+</Text>

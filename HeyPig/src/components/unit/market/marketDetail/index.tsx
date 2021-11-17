@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
            width: '100%',
            height: 200,
            backgroundColor:'gray',
+           borderRadius:10
        },
        Info__Wrapper:{
            
@@ -23,7 +24,8 @@ const styles = StyleSheet.create({
             // justifyContent:'space-between',
             padding: 20,
             paddingRight:50,
-            paddingLeft:30
+            paddingLeft:30,
+            borderRadius:10
        },
        Heart:{
            justifyContent:'flex-end',
@@ -68,34 +70,15 @@ const styles = StyleSheet.create({
            width: '100%' ,
            flexDirection:'row',
            justifyContent:"space-evenly"
+       },
+       CommentName:{
+           fontWeight:'bold',
+           fontSize:14
        }
 
 })
 
 export function MarketDetail({navigation,route}:any) {
-    // const {data} = useQuery(FETCH_USED_ITEM , {
-    //     variables: {useditemId:props.route.params.useditemId}
-    // });
-    // const {data: comments} = useQuery(FETCH_USED_ITEM_QUESTIONS, {
-    //     variables: {useditemId: props.route.params.useditemId},
-    //   });
-    // const[createUseditemQuestion] = useMutation(CREATE_USED_ITEM_QUESTION)
-    // function SubmitComment(){
-    //     createUseditemQuestion({
-    //         variables:{
-    //             useditemId : props.route.params.useditemId,
-    //             createUseditemQuestionInput :{
-    //                 contents
-    //             }
-    //         },
-    //         refetchQueries: [
-    //             {
-    //               query: FETCH_USED_ITEM,
-    //               variables: {useditemId: props.route.params.useditemId},
-    //             },
-    //         ],
-    //     })
-    // }
     const [comment, setComment] = React.useState("");
 
     const user = auth().currentUser;
@@ -118,7 +101,6 @@ export function MarketDetail({navigation,route}:any) {
             navigation.navigate('MarketMain')
         })
     }
-
     function onClickEdit() {
         navigation.navigate('MarketWrite', {route})
     }
@@ -128,20 +110,18 @@ export function MarketDetail({navigation,route}:any) {
         <View style={styles.Info__Wrapper}>
             <View style={styles.Contents__Wrapper}>
                 <Text style={styles.productName}>상품명 : {route.params.el.productName}</Text>
-                <Text style={styles.remarks}>{route.params.el.remarks}</Text>
-                <Text style={styles.price}>{route.params.el.price}원</Text>    
+                <Text style={styles.price}>{route.params.el.price}원</Text>
                 <Text style={styles.contents}>{route.params.el.contents}</Text>
-            </View>
-            <View style={styles.Pick__Wrapper}>
-                <Image style={styles.Heart} source={require('../../../../Assets/images/Heart.png')}/>
-                <Text>0</Text>
+                <Text>판매자 : {route.params.el.name}</Text>
             </View>
             <Pressable>
-                <Text style = {{ width:"100%"}}>구매하기</Text>
+                <Text style={{ width:100 , height:30, backgroundColor: "pink",borderRadius:10,textAlign:'center',paddingTop:5,marginTop:50}}>
+                    구매하기
+                </Text>
             </Pressable>
         </View>
         <View>
-            <Text style={{marginTop:30}}>댓글</Text>
+            <Text style={{margin:15}}>댓글</Text>
             <TextInput
                 style={styles.CommentBox}
                 placeholder="내용을 입력해주세요"
@@ -149,14 +129,24 @@ export function MarketDetail({navigation,route}:any) {
             <Pressable
                 style={styles.CommentButton}
                 onPress={()=> SubmitComment()}>
-                <Text>입력</Text>
+                <Text style={{width:50,height:30,backgroundColor:"#fff884", borderRadius:10,textAlign:'center',paddingTop:5 ,margin:10} }>입력</Text>
             </Pressable>
+            <View> 
+                <View style={{height:"100%",flexDirection:'column', margin:15 ,backgroundColor:"white",padding:15,}}>
+                    <Text style={{fontWeight:'bold',fontSize:14}}>김송박
+                    </Text>
+                    <Text style={{marginTop:10}}>내용</Text>
+                </View>
+                <View>
+                    <View></View>
+                </View>
+            </View>
         </View>
-        
+
         <Pressable style={styles.BottomButton}>
             <Text onPress={onClickEdit} style={{backgroundColor:'#FFE1E1'}}>수정하기</Text>
-            <Text onPress={onClickDelete} style={{backgroundColor:'#FFE1E1'}}>삭제하기</Text>
-            <Text onPress={()=> { navigation.navigate('MarketMain')}} style={{backgroundColor:'#FFE1E1'}}>목록으로</Text>
+            <Text onPress={onClickDelete} style={{backgroundColor:'#030101'}}>삭제하기</Text>
+            <Text onPress={()=> {navigation.navigate('MarketMain')}} style={{backgroundColor:'#FFE1E1'}}>목록으로</Text>
         </Pressable>
     </ScrollView>
     )

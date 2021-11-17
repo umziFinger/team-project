@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     },
     marketMain: {
       flexDirection: 'row',
-      height: '9%',
+      // height: '10%',
       width: '94%', 
       borderRadius:10, 
       backgroundColor: "white", 
@@ -25,24 +25,23 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       paddingHorizontal: 30,
       elevation: 3,
-        
     },
     marketImage: {
         justifyContent:'center', 
         alignItems:'center',
         
-        marginRight:20
+        marginRight:30
     },
     BestProduct:{
         fontSize:18,
         fontWeight:'bold',
     },
     Wrapper:{
-        // flexDirection: 'row'
+
         
     },
     contentsWrapper:{
-
+      
     },
     contents:{
 
@@ -103,9 +102,22 @@ export function MarketMain({navigation}:any) {
       setMarket(aaa);
     });    
   }, [firestore().collection('Market').doc('').get()]);
+
+  // firestore()
+  //   .collection('Market')
+  //   .get()
+  //   .then(snapshop => {
+  //     snapshop.forEach(doc => {
+  //       let bbb : any = []
+  //       bbb.push(doc.data())
+  //       bbb.push({id:doc.id})
+  //       aaa.push(bbb)
+  //     })
+  //     setMarket(aaa)
+  //   })
     return(
-      <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>    
-        <ScrollView>
+      <View style={{flex: 1, justifyContent:'center',alignItems:'center'}}>    
+        <ScrollView >
              <Text style={styles.BestProduct}>Best 상품</Text>
           <Carousel
             gap={5}
@@ -117,7 +129,7 @@ export function MarketMain({navigation}:any) {
           />
         <View>
           <View  style={styles.Wrapper}>
-            {market.map((el:any,i:number) =>
+            {market?.map((el:any,i:number) =>
               <Pressable 
                 key={i} 
                 style={styles.marketMain} 
@@ -125,7 +137,7 @@ export function MarketMain({navigation}:any) {
                 <Image style={styles.marketImage} source={require('../../../../Assets/images/add.png')} />
                 <View> 
                   <View style={styles.contentsWrapper}>
-                    <Text >상품명 : {el.productname}</Text>
+                    <Text >상품명 : {el.productName}</Text>
                     <Text style={styles.contents}>상품설명 : {el.contents}</Text>
                     <Text style={styles.price}>가격 : {el.price}</Text>
                     <Text style={styles.name}>판매자 : {el.name}</Text>
