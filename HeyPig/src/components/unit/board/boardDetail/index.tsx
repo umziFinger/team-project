@@ -98,7 +98,7 @@ export function BoardDetail({navigation, route}: any) {
   function submitComment() {
     if (comment !== '') {
       firestore()
-        .collection('Board')
+        .collection(route.params.el[1].board)
         .doc(route.params.el[1].id)
         .collection('Comments')
         .add({writer: user?.email, contents: comment, createdAt: new Date()});
@@ -107,7 +107,10 @@ export function BoardDetail({navigation, route}: any) {
   const isWriter = user.email === route.params.el[0].writer;
   function onClickdelete() {
     try {
-      firestore().collection('Board').doc(route.params.el[1].id).delete();
+      firestore()
+        .collection(route.params.el[1].board)
+        .doc(route.params.el[1].id)
+        .delete();
       navigation.navigate('BoardMain');
     } catch (error) {
       console.log(error);
@@ -117,7 +120,7 @@ export function BoardDetail({navigation, route}: any) {
   function onClickDeleteComment(commentid: any) {
     try {
       firestore()
-        .collection('Board')
+        .collection(route.params.el[1].board)
         .doc(route.params.el[1].id)
         .collection('Comments')
         .doc(commentid)
@@ -126,6 +129,7 @@ export function BoardDetail({navigation, route}: any) {
       console.log(error);
     }
   }
+  console.log(route.params.el[1].board);
 
   const [comments, setComments] = React.useState([]);
   let tt: any = [];
@@ -144,6 +148,12 @@ export function BoardDetail({navigation, route}: any) {
       });
       setComments(tt);
     });
+
+  //   React.useEffect(() => {
+
+  //   }, []);
+
+  //   console.log(comments);
 
   return (
     <>

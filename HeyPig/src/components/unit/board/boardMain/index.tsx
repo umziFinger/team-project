@@ -57,6 +57,8 @@ const styles = StyleSheet.create({
 });
 
 export function BoardMain({navigation}: any) {
+  const [isAnonymous, setisAnonymous] = useState(true);
+
   const user = auth().currentUser;
   let tt: any = [];
   const [board, setBoard] = useState([]);
@@ -68,10 +70,25 @@ export function BoardMain({navigation}: any) {
       snapshot.forEach(doc => {
         let temp: any = [];
         temp.push(doc.data());
-        temp.push({id: doc.id});
+        temp.push({id: doc.id, board: 'Board'});
         tt.push(temp);
       });
       setBoard(tt);
+    });
+  let t: any = [];
+  const [board2, setBoard2] = useState([]);
+  firestore()
+    .collection('Board2')
+    .orderBy('createdAt', 'desc')
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        let temp: any = [];
+        temp.push(doc.data());
+        temp.push({id: doc.id, board: 'Board2'});
+        t.push(temp);
+      });
+      setBoard2(t);
     });
 
   //   const {data, fetchMore, refetch} = useQuery(FETCH_BOARDS);
@@ -127,9 +144,17 @@ export function BoardMain({navigation}: any) {
             justifyContent: 'space-around',
             margin: 15,
           }}>
-          <Text>익명게시판</Text>
+          <Text
+            style={{color: isAnonymous ? 'hotpink' : 'black'}}
+            onPress={() => setisAnonymous(true)}>
+            익명게시판
+          </Text>
           <Text> | </Text>
-          <Text>자랑게시판</Text>
+          <Text
+            style={{color: !isAnonymous ? 'hotpink' : 'black'}}
+            onPress={() => setisAnonymous(false)}>
+            자랑게시판
+          </Text>
         </View>
         {/* {best?.fetchBoardsOfTheBest.map(function aa(el: any) {
           //   const comments = comment(el._id);
@@ -150,16 +175,27 @@ export function BoardMain({navigation}: any) {
             </Pressable>
           );
         })} */}
-        {board?.map(function aaa(el: any, i: number) {
-          return (
-            <Pressable
-              key={i}
-              style={styles.BoardView}
-              onPress={() => navigation.navigate('BoardDetail', {el})}>
-              <Text>{el[0].title}</Text>
-            </Pressable>
-          );
-        })}
+        {isAnonymous
+          ? board?.map(function aaa(el: any, i: number) {
+              return (
+                <Pressable
+                  key={i}
+                  style={styles.BoardView}
+                  onPress={() => navigation.navigate('BoardDetail', {el})}>
+                  <Text>{el[0].title}</Text>
+                </Pressable>
+              );
+            })
+          : board2?.map(function aaa(el: any, i: number) {
+              return (
+                <Pressable
+                  key={i}
+                  style={styles.BoardView}
+                  onPress={() => navigation.navigate('BoardDetail', {el})}>
+                  <Text>{el[0].title}</Text>
+                </Pressable>
+              );
+            })}
       </ScrollView>
       <Pressable
         style={styles.ButtonStyle}
