@@ -37,14 +37,20 @@ export default function WeightPage() {
 
   return (
     <View style={{flex: 1,alignItems: 'center'}}>
-      <LineChart  style={{marginTop:30, marginRight : 30}}
-      fromZero={true}
+      <LineChart  
+        style={{
+          marginTop:30, 
+          marginRight:30, 
+          elevation:4, 
+          backgroundColor:'white',
+          borderRadius: 5
+        }}
+        fromZero={true}
         data={data}
         width={screenWidth}
         height={220}
         chartConfig={chartConfig}
       />
-      
     </View>
   );
 }
