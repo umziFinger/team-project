@@ -172,12 +172,12 @@ export default function App() {
   });
 
     const email = user?.email
-    const arr = firestore().collection('Users').get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-            console.log('aaa',doc.data());
-        });
-    })
+    // const arr = firestore().collection('Users').get()
+    //   .then(snapshot => {
+    //     snapshot.forEach(doc => {
+    //         console.log('aaa',doc.data());
+    //     });
+    // })
 
   const client = new ApolloClient({
     uri: 'http://backend03.codebootcamp.co.kr/graphql',

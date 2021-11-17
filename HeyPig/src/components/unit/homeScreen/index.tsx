@@ -5,6 +5,7 @@ import auth from '@react-native-firebase/auth';
 import {
   LineChart,
 } from "react-native-chart-kit";
+import WeightPage from './weight';
 
 const styles = StyleSheet.create({
   GoalView: {
@@ -135,18 +136,7 @@ export default function HomePage({navigation}:any) {
 
   return (
     <ScrollView style={{flex: 1}}>
-      <View style={{flex: 1,alignItems: 'center'}}>
-        <LineChart
-          style={{
-            margin: 25,
-          }}
-          fromZero={true}
-          data={data}
-          width={screenWidth}
-          height={250}
-          chartConfig={chartConfig}
-        />
-      </View>
+      <WeightPage/>
       <Pressable
         style={styles.GoalView}
         onPress={() => navigation.navigate('GoalPage')}>
