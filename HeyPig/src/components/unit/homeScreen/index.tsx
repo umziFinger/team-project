@@ -108,7 +108,7 @@ export default function HomePage({navigation}:any) {
 
 
   return (
-    <ScrollView>
+    <ScrollView style={{flex: 1}}>
       <Pressable
         style={styles.GoalView}
         onPress={() => navigation.navigate('GoalPage')}>
