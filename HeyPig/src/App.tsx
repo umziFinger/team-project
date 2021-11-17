@@ -148,7 +148,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useState('');
-  const [date, setDate]:any = useState()
+  const [date, setDate]:any = useState(0)
 
   useEffect(() => {
     SplashScreen.hide();
@@ -160,7 +160,7 @@ export default function App() {
 
   React.useEffect(() => {
     setDate((currentDate-signinDate)/(3600000*24))
-  },[])
+  },[signinDate])
 
 
   auth().onAuthStateChanged((user) => {
