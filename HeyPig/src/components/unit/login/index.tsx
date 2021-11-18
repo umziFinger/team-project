@@ -91,7 +91,7 @@ export function LoginScreen({navigation, setIsLoggedIn, setAccessToken}: any) {
 
   const currentProfile = Profile.getCurrentProfile().then(
     function(currentProfile){
-      console.log(currentProfile)
+      // console.log(currentProfile)
     }
   )
 
@@ -127,13 +127,10 @@ export function LoginScreen({navigation, setIsLoggedIn, setAccessToken}: any) {
           style={{width: 222, height: 35, marginTop: 5}}
           onLoginFinished={
             (error, result) => {
-                console.log(result)
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
-                    console.log(data?.accessToken)
                     const facebookCredential = auth.FacebookAuthProvider.credential(String(data?.accessToken))
                     const user = auth().signInWithCredential(facebookCredential);
-                    console.log('user data', user);
                   }
                 )
               }
