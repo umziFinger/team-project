@@ -90,6 +90,7 @@ export function BoardMain({navigation}: any) {
       });
       setBoard2(t);
     });
+  console.log(board);
 
   //   const {data, fetchMore, refetch} = useQuery(FETCH_BOARDS);
   //   refetch();

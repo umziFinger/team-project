@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import {BoardComment} from '../boardComment';
 
 const styles = StyleSheet.create({
   Wrapper: {
@@ -117,38 +118,6 @@ export function BoardDetail({navigation, route}: any) {
     }
   }
 
-  function onClickDeleteComment(commentid: any) {
-    try {
-      firestore()
-        .collection(route.params.el[1].board)
-        .doc(route.params.el[1].id)
-        .collection('Comments')
-        .doc(commentid)
-        .delete();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  console.log(route.params.el[1].board);
-
-  const [comments, setComments] = React.useState([]);
-  let tt: any = [];
-  firestore()
-    .collection('Board')
-    .doc(route.params.el[1].id)
-    .collection('Comments')
-    .orderBy('createdAt', 'desc')
-    .get()
-    .then(snapshot => {
-      snapshot.forEach(doc => {
-        const temp: any = [];
-        temp.push(doc.data());
-        temp.push({id: doc.id});
-        tt.push(temp);
-      });
-      setComments(tt);
-    });
-
   //   React.useEffect(() => {
 
   //   }, []);
@@ -195,31 +164,7 @@ export function BoardDetail({navigation, route}: any) {
         </View> */}
 
           <Text style={styles.Context}>{route.params.el[0].contents}</Text>
-
-          <Text style={styles.CommentText}>
-            댓글({comments && comments.length})
-          </Text>
-
-          {comments?.map((el, index) => (
-            <View key={index} style={styles.CommentDiv}>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text>익명{index + 1}</Text>
-                {/* <Text>{el.createdAt}</Text> */}
-              </View>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text>{el[0].contents}</Text>
-                {user.email === el[0].writer && (
-                  <Pressable
-                    style={styles.DeleteCommentButton}
-                    onPress={() => onClickDeleteComment(el[1].id)}>
-                    <Text style={{fontSize: 15, color: 'white'}}>삭제</Text>
-                  </Pressable>
-                )}
-              </View>
-            </View>
-          ))}
+          <BoardComment el={route.params.el} />
         </View>
       </ScrollView>
       <View
