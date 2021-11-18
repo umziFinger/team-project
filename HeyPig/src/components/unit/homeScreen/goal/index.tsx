@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         width: 250,
         height: 50,
         borderRadius: 10,
-        backgroundColor: "#58ccff",
+        backgroundColor: "#ffd600",
         justifyContent: "center",
         alignItems: "center",
         margin: 30
@@ -81,7 +81,7 @@ export default function GoalPage({navigation}:any) {
                 <TextInput style={styles.SignupInput} placeholder="목표 몸무게를 입력해주세요." onChangeText={text => setGoal(text)}/>
             </View>
             <Pressable style={styles.SignupButton} onPress={onPressSignUp}>
-                <Text>목표 설정</Text>
+                <Text style={{fontFamily:'Yangjin'}}>목표 설정</Text>
             </Pressable>
         </View>
     )

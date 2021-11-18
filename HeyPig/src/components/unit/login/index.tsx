@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor:'#ffd600'
   },
 
   LoginInput: {
@@ -44,10 +45,11 @@ const styles = StyleSheet.create({
     width: 250,
     height: 50,
     borderRadius: 10,
-    backgroundColor: '#58ccff',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     margin: 30,
+    elevation:4
   },
 
   LogoImage: {
@@ -99,7 +101,7 @@ export function LoginScreen({navigation, setIsLoggedIn, setAccessToken}: any) {
     <View style={styles.WrapperView}>
       <Image
         style={styles.LogoImage}
-        source={require('../../../Assets/images/logo.png')}
+        source={require('../../../Assets/images/vanishlogo.png')}
       />
       <Text style={{color: 'red', margin: 5, fontSize: 15}}>{error}</Text>
       <View>
@@ -137,9 +139,9 @@ export function LoginScreen({navigation, setIsLoggedIn, setAccessToken}: any) {
           }
         />
       </View>
-      <Pressable onPress={() => navigation.navigate('SignUp')}>
+      {/* <Pressable onPress={() => navigation.navigate('SignUp')}>
         <Text>회원가입</Text>
-      </Pressable>
+      </Pressable> */}
     </View>
   );
 }

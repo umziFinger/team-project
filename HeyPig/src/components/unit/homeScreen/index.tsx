@@ -6,6 +6,7 @@ import {
   LineChart,
 } from "react-native-chart-kit";
 import WeightPage from './weight';
+import { GlobalContext } from '~/App';
 
 const styles = StyleSheet.create({
   GoalView: {
@@ -13,10 +14,10 @@ const styles = StyleSheet.create({
     width: 350,
     margin: 20,
     borderRadius: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#ffd600',
     paddingHorizontal: 15,
     elevation: 3,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
     width: 350,
     margin: 20,
     borderRadius: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#ffd600',
     paddingHorizontal: 15,
     elevation: 3,
     flexDirection: 'row',
@@ -39,12 +40,10 @@ const styles = StyleSheet.create({
     width: 350,
     margin: 20,
     borderRadius: 10,
-    backgroundColor: 'white',
-    paddingHorizontal: 15,
+    backgroundColor: '#ffd600',
+    paddingTop: 20,
+    paddingLeft: 20,
     elevation: 3,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 
   MealView: {
@@ -52,63 +51,17 @@ const styles = StyleSheet.create({
     width: 350,
     margin: 20,
     borderRadius: 10,
-    backgroundColor: 'white',
-    paddingHorizontal: 15,
+    backgroundColor: '#ffd600',
+    paddingTop: 20,
+    paddingLeft: 20,
     elevation: 3,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 
 });
 
 export default function HomePage({navigation}:any) {
 
-  const [date, setDate] = React.useState(0)
-
-  const [infoData, setInfoData]:any = React.useState({})
-  const [diaryData, setDiaryData]:any = React.useState({})
-
-
-  const user:any = auth().currentUser  
-  const signinDate:any = new Date(user?.metadata.creationTime.slice(0,10))
-  const currentDate:any = new Date(new Date().toISOString().slice(0,10))
-
-  React.useEffect(() => {
-    setDate((currentDate-signinDate)/(3600000*24))
-  },[])
-
-  React.useEffect(() => {
-    {user?.email === null
-      ?
-        firestore().collection("Users").doc(String(user?.uid)).collection('Info').get()
-          .then(snapshot => {
-            snapshot.forEach(doc => {
-                setInfoData(doc.data());
-            });
-          })
-      :
-        firestore().collection("Users").doc(String(user?.email)).collection('Info').get()
-          .then(snapshot => {
-            snapshot.forEach(doc => {
-                setInfoData(doc.data());
-            });
-          })
-    }
-  },[firestore().collection("Users").doc(String(user?.email)).collection('Info').get()])
-
-  
-  // 다이어리에 쓴 내용(오늘의 식단, 오늘의 운동)을 불러와서 홈화면에 띄울려고 했는데 
-  // 이거 쓰니까 속도가 현저히 떨어져서 일단 보류
-  
-  // React.useEffect(() => {
-  //   firestore().collection("Users").doc(String(user?.email)).collection('Diary').where('date','==', date+1).get()
-  //     .then(snapshot => {
-  //       snapshot.forEach(doc => {
-  //           setDiaryData(doc.data());
-  //       });
-  //     })
-  // },[firestore().collection("Users").doc(String(user?.email)).collection('Diary').get()])
+  const {infoData, user, diary, date}:any = React.useContext(GlobalContext)
 
   const chartConfig = {
     backgroundGradientFrom: "#1E2923",
@@ -134,28 +87,47 @@ export default function HomePage({navigation}:any) {
     legend: [] // optional
   };
 
+  const leftWeight = Number(diary[0]?.weight)-Number(infoData?.goal)
+
+  const today = diary.filter((el:any) => el.date===date+1)
+
   return (
-    <ScrollView style={{flex: 1}}>
+    <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
       <WeightPage/>
       <Pressable
         style={styles.GoalView}
         onPress={() => navigation.navigate('GoalPage')}>
-        <Text style={{fontSize:50}}>{infoData.goal ? `${infoData.goal}kg` : '목표!'}</Text>
+        {diary[0]?.weight && <Text style={{position:'absolute', width: 300, height:160, color:'#ec407a', fontWeight:'bold'}}>
+          {leftWeight > 0 ? `${leftWeight}kg 남았습니다!` : `목표달성(현재 : ${diary[0]?.weight}kg)`}
+        </Text>}
+        <Text style={{fontSize:50, fontFamily: 'Yangjin'}}>{infoData.goal ? `${infoData.goal}kg` : '목표!'}</Text>
       </Pressable>
-      <Pressable
+      {/* <Pressable
         style={styles.WeightView}
         onPress={() => navigation.navigate('WeightPage')}>
         <Text>weight</Text>
-      </Pressable>
+      </Pressable> */}
       <Pressable
         style={styles.ExerciseView}
-        onPress={() => navigation.navigate('ExercisePage')}>
-        {/* <Text>{diaryData.exercise ? diaryData.exercise : '오늘 할 운동'}</Text> */}
+        // onPress={() => navigation.navigate('ExercisePage')}
+      >
+        <Text style={{fontSize:20, fontFamily: 'Yangjin'}}>오늘 할 운동</Text>
+        <View style={{marginLeft: 170, marginTop: 30}}>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ {today[0]?.exercise}</Text>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ 윗몸일으키기</Text>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ 팔굽혀펴기</Text>
+        </View>
       </Pressable>
       <Pressable
         style={styles.MealView}
-        onPress={() => navigation.navigate('MealPage')}>
-        {/* <Text>{diaryData.food ? diaryData.food : '오늘 먹을 음식'}</Text> */}
+        // onPress={() => navigation.navigate('MealPage')}
+      >
+        <Text style={{fontSize:20, fontFamily: 'Yangjin'}}>오늘 먹을 음식</Text>
+        <View style={{marginLeft: 170, marginTop: 30}}>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ {today[0]?.food}</Text>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ 토마토</Text>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ 닭가슴살</Text>
+        </View>
       </Pressable>
     </ScrollView>
   );
