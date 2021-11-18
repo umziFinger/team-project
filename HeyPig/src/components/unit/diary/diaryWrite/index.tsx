@@ -147,6 +147,7 @@ export function DiaryWrite({navigation, route}:any) {
     const [image, setImage] = React.useState('')
 
     const user:any = auth().currentUser
+    const email = user?.email
 
     const signinDate:any = new Date(user?.metadata.creationTime.slice(0,10))
     const currentDate:any = new Date(new Date().toISOString().slice(0,10))
@@ -198,15 +199,25 @@ export function DiaryWrite({navigation, route}:any) {
     }
 
     async function writeDiary() {
-
-        firestore()
-            .collection('Users')
-            .doc(String(user?.email))
-            .collection("Diary")
-            .doc(`${String(date+1)}day`)
-            .set({ title, weight, food, exercise, createdAt: new Date().toISOString(), date:date+1, image })
+        {email === null 
+          ?
+            firestore()
+              .collection('Users')
+              .doc(String(user?.uid))
+              .collection("Diary")
+              .doc(`${String(date+1)}day`)
+              .set({ title, weight, food, exercise, createdAt: new Date().toISOString(), date:date+1, image })
+          :
+            firestore()
+              .collection('Users')
+              .doc(String(user?.email))
+              .collection("Diary")
+              .doc(`${String(date+1)}day`)
+              .set({ title, weight, food, exercise, createdAt: new Date().toISOString(), date:date+1, image })
+        }
         navigation.navigate('DiaryMain')
     }
+
     const [modalVisible, setModalVisible] = React.useState(false);
     return(
         <ScrollView>

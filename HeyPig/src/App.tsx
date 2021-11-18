@@ -25,7 +25,7 @@ import ExercisePage from './components/unit/homeScreen/exercise';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Profile} from 'react-native-fbsdk-next'
+import {Profile, LoginButton} from 'react-native-fbsdk-next'
 
 function HomeScreen() {
   return (
@@ -148,7 +148,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useState('');
-  const [date, setDate]:any = useState()
+  const [date, setDate]:any = useState(0)
 
   useEffect(() => {
     SplashScreen.hide();
@@ -160,7 +160,7 @@ export default function App() {
 
   React.useEffect(() => {
     setDate((currentDate-signinDate)/(3600000*24))
-  },[])
+  },[signinDate])
 
 
   auth().onAuthStateChanged((user) => {
@@ -172,12 +172,12 @@ export default function App() {
   });
 
     const email = user?.email
-    const arr = firestore().collection('Users').get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-            console.log('aaa',doc.data());
-        });
-    })
+    // const arr = firestore().collection('Users').get()
+    //   .then(snapshot => {
+    //     snapshot.forEach(doc => {
+    //         console.log('aaa',doc.data());
+    //     });
+    // })
 
   const client = new ApolloClient({
     uri: 'http://backend03.codebootcamp.co.kr/graphql',

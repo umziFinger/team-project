@@ -9,8 +9,47 @@ import {
   StackedBarChart
 } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 export default function WeightPage() {
+
+  const [weightsData, setWeightsData] = React.useState([])
+
+
+  const user:any = auth().currentUser  
+  let weights:any = []
+  React.useEffect(() => {
+    {user?.email === null
+      ?
+        firestore()
+          .collection('Users')
+          .doc(String(user?.uid))
+          .collection('Diary')
+          .get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              doc.data()
+            })
+          })
+  
+      :
+        firestore()
+          .collection('Users')
+          .doc(String(user?.email))
+          .collection('Diary')
+          .get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              weights.push(Number(doc.data().weight))
+            })
+            setWeightsData(weights)
+          })
+          
+    }
+  },[])
+  
+
   const chartConfig = {
     backgroundGradientFrom: "#1E2923",
     backgroundGradientFromOpacity: 0,
@@ -37,14 +76,16 @@ export default function WeightPage() {
 
   return (
     <View style={{flex: 1,alignItems: 'center'}}>
-      <LineChart  style={{marginTop:30, marginRight : 30}}
-      fromZero={true}
+      <LineChart  
+        style={{
+          marginTop:25
+        }}
+        fromZero={true}
         data={data}
         width={screenWidth}
         height={220}
         chartConfig={chartConfig}
       />
-      
     </View>
   );
 }

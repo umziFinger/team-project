@@ -72,20 +72,38 @@ export function DiaryMain({navigation}: any) {
   const [diary, setDiary] = React.useState([]);
   let aaa: any = [];
   const user = auth().currentUser;
+  const email = user?.email
 
   React.useEffect(() => {
-    const doc = firestore()
-      .collection('Users')
-      .doc(String(user?.email))
-      .collection('Diary')
-      .orderBy('date', 'asc')
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          aaa.push(doc.data());
+    {email === null 
+      ? 
+        firestore()
+        .collection('Users')
+        .doc(String(user?.uid))
+        .collection('Diary')
+        .orderBy('date', 'asc')
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            aaa.push(doc.data());
+          });
+          setDiary(aaa.reverse());
+        })
+      :
+        firestore()
+        .collection('Users')
+        .doc(String(user?.email))
+        .collection('Diary')
+        .orderBy('date', 'asc')
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            aaa.push(doc.data());
+          });
+          setDiary(aaa.reverse());
         });
-        setDiary(aaa.reverse());
-      });
+    }
+    
   }, [firestore().collection('Users').doc('').collection('Diary').get()]);
 
   return (
