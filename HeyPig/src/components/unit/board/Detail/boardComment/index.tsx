@@ -63,7 +63,7 @@ export function BoardComment(props: any) {
   const [comment, setComment] = useState('');
   const isWriter = user.email === props.el.writer;
   const [comments, setComments] = useState([]);
-  let tt: any = [];
+  let temp: any = [];
   React.useEffect(() => {
     let isComponentMounted = true;
     const fetchData = () => {
@@ -75,13 +75,10 @@ export function BoardComment(props: any) {
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
-            const temp: any = [];
-            temp.push(doc.data());
-            temp.push({id: doc.id});
-            tt.push(temp);
+            temp.push({...doc.data(), id: doc.id});
           });
           if (isComponentMounted) {
-            setComments(tt);
+            setComments(temp);
           }
         });
     };
@@ -103,7 +100,6 @@ export function BoardComment(props: any) {
       console.log(error);
     }
   }
-  console.log(comments);
   return (
     <View>
       <Text style={styles.CommentText}>

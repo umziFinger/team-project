@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     backgroundColor: 'purple',
+    color: 'white',
   },
   Title: {
     fontSize: 30,

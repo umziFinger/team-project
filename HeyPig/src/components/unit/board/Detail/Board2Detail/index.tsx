@@ -17,6 +17,7 @@ import {
   DELETE_BOARD_COMMENT,
   FETCH_BOARD,
   FETCH_BOARD_COMMENTS,
+  LIKE_BOARD,
 } from '~/components/commons/board.queries';
 
 const styles = StyleSheet.create({
@@ -28,6 +29,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     backgroundColor: 'purple',
+    color: 'white',
   },
   Title: {
     fontSize: 30,
@@ -63,6 +65,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  Heart: {
+    width: 20,
+    height: 20,
   },
 });
 
@@ -149,84 +155,119 @@ export function Board2Detail(props) {
       console.log(error);
     }
   }
+
+  const [likeBoard] = useMutation(LIKE_BOARD);
+  const [liked, setLiked] = useState(true);
+  function onClickLike() {
+    likeBoard({
+      variables: {boardId: props.boardId},
+      refetchQueries: [
+        {
+          query: FETCH_BOARD,
+          variables: {boardId: props.boardId},
+        },
+      ],
+    });
+    setLiked(false);
+  }
+
   return (
-    <ScrollView>
-      <Text style={styles.BoardTitle}>자랑게시판</Text>
-      <View style={styles.Wrapper}>
-        <View
-          style={{
-            marginBottom: 20,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <Text style={styles.Title}>
-            {data ? data.fetchBoard.title : 'loading...'}
-          </Text>
-          <Pressable
-            style={styles.CommentButton}
-            onPress={() => onClickdelete()}>
-            <Text>삭제</Text>
-          </Pressable>
-        </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.Context}>
-            익명(글쓴이)
-            {/* {data ? data.fetchBoard.title : 'loading...'} */}
-          </Text>
+    <>
+      <ScrollView>
+        <Text style={styles.BoardTitle}>자랑게시판</Text>
+        <View style={styles.Wrapper}>
+          <View
+            style={{
+              marginBottom: 20,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <Text style={styles.Title}>
+              {data ? data.fetchBoard.title : 'loading...'}
+            </Text>
+            <Pressable
+              style={styles.CommentButton}
+              onPress={() => onClickdelete()}>
+              <Text>삭제</Text>
+            </Pressable>
+          </View>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={styles.Context}>
+              익명(글쓴이)
+              {/* {data ? data.fetchBoard.title : 'loading...'} */}
+            </Text>
 
-          <Text style={styles.Context}>
-            {when(data?.fetchBoard?.createdAt)}
-          </Text>
+            <Text style={styles.Context}>
+              {when(data?.fetchBoard?.createdAt)}
+            </Text>
 
-          {/* <Text style={styles.Context}>
+            {/* <Text style={styles.Context}>
             {data ? data.fetchBoard.createdAt : 'loading...'}
           </Text> */}
-        </View>
-        {data &&
-          data.fetchBoard.images
-            ?.filter((el: string) => el)
-            .map((el: string) => (
-              <Image
-                style={{width: 300, height: 300}}
-                source={{uri: `https://storage.googleapis.com/${el}`}}
-              />
-            ))}
-        <Text style={styles.Context}>{data && data.fetchBoard.contents}</Text>
-
-        <Text style={styles.CommentText}>
-          댓글({comments?.fetchBoardComments.length})
-        </Text>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <TextInput
-            style={styles.CommentInput}
-            placeholder="댓글내용을 입력해주세요"
-            onChangeText={text => setComment(text)}
-          />
-          <Pressable
-            style={styles.CommentButton}
-            onPress={() => submitComment()}>
-            <Text>입력</Text>
-          </Pressable>
-        </View>
-        {comments?.fetchBoardComments.map((el, index) => (
-          <View key={el._id} style={styles.CommentDiv}>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text>익명{index + 1}</Text>
-              <Text>{when(el.createdAt)}</Text>
-            </View>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text>{el.contents}</Text>
-              <Pressable
-                style={styles.DeleteCommentButton}
-                onPress={() => onClickDeleteComment(el._id)}>
-                <Text style={{fontSize: 15, color: 'white'}}>삭제</Text>
-              </Pressable>
-            </View>
           </View>
-        ))}
+          {data &&
+            data.fetchBoard.images
+              ?.filter((el: string) => el)
+              .map((el: string) => (
+                <Image
+                  style={{width: 300, height: 300}}
+                  source={{uri: `https://storage.googleapis.com/${el}`}}
+                />
+              ))}
+          <Text style={styles.Context}>{data && data.fetchBoard.contents}</Text>
+
+          {liked ? (
+            <Pressable onPress={() => onClickLike()}>
+              <Image
+                style={styles.Heart}
+                source={require('../../../../../Assets/images/emptyheart.png')}
+              />
+            </Pressable>
+          ) : (
+            <Image
+              style={styles.Heart}
+              source={require('../../../../../Assets/images/Heart.png')}
+            />
+          )}
+
+          <Text style={styles.CommentText}>
+            댓글({comments?.fetchBoardComments.length})
+          </Text>
+          {comments?.fetchBoardComments.map((el, index) => (
+            <View key={el._id} style={styles.CommentDiv}>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text>익명{index + 1}</Text>
+                <Text>{when(el.createdAt)}</Text>
+              </View>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text>{el.contents}</Text>
+                <Pressable
+                  style={styles.DeleteCommentButton}
+                  onPress={() => onClickDeleteComment(el._id)}>
+                  <Text style={{fontSize: 15, color: 'white'}}>삭제</Text>
+                </Pressable>
+              </View>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          margin: 5,
+        }}>
+        <TextInput
+          style={styles.CommentInput}
+          placeholder="댓글내용을 입력해주세요"
+          onChangeText={text => setComment(text)}
+        />
+        <Pressable style={styles.CommentButton} onPress={() => submitComment()}>
+          <Text>입력</Text>
+        </Pressable>
       </View>
-    </ScrollView>
+    </>
   );
 }

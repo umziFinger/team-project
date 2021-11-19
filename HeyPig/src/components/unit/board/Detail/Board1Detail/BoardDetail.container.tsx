@@ -3,7 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import BoardDetailUI from './BoardDetail.presenter';
 import * as React from 'react';
-import {Board2Detail} from '../Board2Detail/Board2';
+import {Board2Detail} from '../Board2Detail/Board2Detail';
 
 export function BoardDetailContainer({navigation, route}: any) {
   function when(then: any) {
