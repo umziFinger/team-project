@@ -121,6 +121,14 @@ export function Board2Main(props: any) {
           );
         })}
       </ScrollView>
+<<<<<<< HEAD
+=======
+      <Pressable
+        style={styles.ButtonStyle}
+        onPress={() => props.navigation.navigate('BoardWrite')}>
+        <Text style={{color: 'white'}}>글쓰기</Text>
+      </Pressable>
+>>>>>>> c12cd21 (rebase)
     </>
   );
 }

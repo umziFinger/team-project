@@ -147,15 +147,113 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useState('');
+<<<<<<< HEAD
   const [date, setDate]: any = useState(0);
+=======
+<<<<<<< HEAD
+  const [date, setDate]:any = useState(0)
+  const [diary, setDiary] = React.useState([]);
+  const [infoData, setInfoData]:any = React.useState({})
+
+  let user:any = auth().currentUser
+
+  const value:any = {
+    diary,
+    infoData,
+    user,
+    date
+  }
+
+  
+  let aaa: any = [];
+
+  React.useEffect(() => {
+    
+    const getData = async() =>
+    {email === null 
+      ? 
+        await firestore()
+        .collection('Users')
+        .doc(String(user?.uid))
+        .collection('Diary')
+        .orderBy('date', 'asc')
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            aaa.push(doc.data());
+          });
+          setDiary(aaa.reverse());
+        })
+      :
+        await firestore()
+        .collection('Users')
+        .doc(String(user?.email))
+        .collection('Diary')
+        .orderBy('date', 'asc')
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            aaa.push(doc.data());
+          });
+          setDiary(aaa.reverse());
+        });
+    }
+    getData()
+  }, [firestore().collection('Users').doc('').collection('Diary').get()]);
+
+  React.useEffect(() => {
+
+    const getData = async() => 
+    {user?.email === null
+      ?
+        await firestore()
+          .collection("Users")
+          .doc(String(user?.uid))
+          .collection('Info')
+          .get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+                setInfoData(doc.data());
+            });
+          })
+      :
+        await firestore()
+          .collection("Users")
+          .doc(String(user?.email))
+          .collection('Info')
+          .get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+                setInfoData(doc.data());
+            });
+          })
+    }
+    getData()
+  },[firestore().collection("Users").doc(String(user?.email)).collection('Info').get()])
+=======
+  const [date, setDate]: any = useState(0);
+>>>>>>> a198b13 (Day15_backend_O)
+>>>>>>> c12cd21 (rebase)
 
   useEffect(() => {
     SplashScreen.hide();
   }, []);
 
+<<<<<<< HEAD
   let user: any = auth().currentUser;
   const signinDate: any = new Date(user?.metadata.creationTime.slice(0, 10));
   const currentDate: any = new Date(new Date().toISOString().slice(0, 10));
+=======
+<<<<<<< HEAD
+
+  const signinDate:any = new Date(user?.metadata.creationTime.slice(0,10))
+  const currentDate:any = new Date(new Date().toISOString().slice(0,10))
+=======
+  let user: any = auth().currentUser;
+  const signinDate: any = new Date(user?.metadata.creationTime.slice(0, 10));
+  const currentDate: any = new Date(new Date().toISOString().slice(0, 10));
+>>>>>>> a198b13 (Day15_backend_O)
+>>>>>>> c12cd21 (rebase)
 
   React.useEffect(() => {
     setDate((currentDate - signinDate) / (3600000 * 24));
@@ -183,6 +281,84 @@ export default function App() {
   });
 
   return (
+<<<<<<< HEAD
+    <ApolloProvider client={client}>
+      {isLoggedIn ? (
+        <NavigationContainer>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              marginBottom: 5,
+=======
+<<<<<<< HEAD
+    <GlobalContext.Provider value={value}>
+      <ApolloProvider client={client}>
+        {isLoggedIn ? (
+          <NavigationContainer>
+            <View style={{
+              // backgroundColor:'#ffd600',
+              flexDirection:'row', 
+              justifyContent:'flex-end', 
+              alignItems:'center',
+              height:50,
+              borderBottomColor:'#ffd600',
+              borderBottomWidth: 3
+>>>>>>> c12cd21 (rebase)
+            }}>
+            <View
+              style={{
+                backgroundColor: 'yellow',
+                width: 330,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginBottom: 20,
+              }}>
+              <Text
+                style={{
+                  position: 'absolute',
+                  marginLeft: 10,
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                }}>
+                다이어트 {date + 1}일째
+              </Text>
+              <Text style={{position: 'absolute', marginLeft: 200}}>
+                {user?.displayName}님 환영합니다!
+              </Text>
+            </View>
+            <View>
+              <Ionicons
+                style={{
+                  fontSize: 30,
+                  color: '#58ccff',
+                  marginLeft: 5,
+                  marginRight: 15,
+                }}
+                name={'log-out-outline'}
+                onPress={() => auth().signOut()}
+              />
+<<<<<<< HEAD
+=======
+              <Tab.Screen
+                name="Market"
+                component={Market}
+                options={{headerShown: false}}
+              />
+              <Tab.Screen
+                name="Diary"
+                component={Diary}
+                options={{headerShown: false}}
+              />
+            </Tab.Navigator>
+          </NavigationContainer>
+        ) : (
+          <NavigationContainer>
+            <LoginSignup
+              setIsLoggedIn={setIsLoggedIn}
+              setAccessToken={setAccessToken}
+=======
     <ApolloProvider client={client}>
       {isLoggedIn ? (
         <NavigationContainer>
@@ -225,6 +401,7 @@ export default function App() {
                 name={'log-out-outline'}
                 onPress={() => auth().signOut()}
               />
+>>>>>>> c12cd21 (rebase)
               {/* <Text style={{
                 backgroundColor: '#58ccff', 
                 width: 60, 
@@ -279,6 +456,10 @@ export default function App() {
               name="Diary"
               component={Diary}
               options={{headerShown: false}}
+<<<<<<< HEAD
+=======
+>>>>>>> a198b13 (Day15_backend_O)
+>>>>>>> c12cd21 (rebase)
             />
           </Tab.Navigator>
         </NavigationContainer>

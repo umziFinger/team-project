@@ -100,6 +100,7 @@ export function BoardComment(props: any) {
       console.log(error);
     }
   }
+  console.log(comments);
   return (
     <View>
       <Text style={styles.CommentText}>
