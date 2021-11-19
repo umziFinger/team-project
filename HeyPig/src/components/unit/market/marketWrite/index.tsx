@@ -1,9 +1,11 @@
 import { useMutation } from '@apollo/client';
 import * as React from 'react';
-import { Text, View, TextInput, StyleSheet, Button, ScrollView, Pressable} from "react-native";
+import { Image,Text, View, TextInput, StyleSheet, Button, ScrollView, Pressable, Modal,TouchableOpacity} from "react-native";
 import {CREATE_USED_ITEM} from '~/components/commons/market.queries';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+
 
 const styles = StyleSheet.create({
     Inputbox: {
@@ -29,52 +31,102 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 100,
       },
-      ImageStyle:{
-          height: 70,
-          width: 70,
+      ImageAddtion:{
+          height: 150,
+          width: 150,
           backgroundColor:"gray",
           justifyContent:'center',
           alignItems:'center',
           margin: 20
-      }
+      },
+    button: {
+        marginTop: 10,
+        marginLeft: 170,
+        width: 50,
+        padding: 5,
+    },
+      
+    buttonClose: {
+        // backgroundColor: "#2196F3",
+        },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+        },
+
+    modalView: {
+        width: 250,
+        height: 160,
+        backgroundColor: "white",
+        padding: 20,
+        elevation: 5,
+        borderRadius: 5,
+     },
+    modalText: {
+        marginBottom: 15,
+        fontSize: 18,
+        fontWeight: 'bold'
+       },
+    textStyle: {
+        fontWeight: "bold",
+        textAlign: "center"
+        },
 })
 
 export function MarketWrite({navigation,route}:any) {
-    const user = auth().currentUser;
+
+    const [modalVisible, setModalVisible] = React.useState(false);
+    const addCameraImage = () => {
+
+        const options:any = {
+            takePhotoButtonTitle: '카메라',
+            chooseFromLibraryButtonTitle: '이미지 선택',
+            cancelButtonTitle: '취소'
+        };
+
+        launchCamera(options, (response:any) => {
+            console.log(response)
+            if(response.didCancel){
+                console.log("취소됨")
+            }else if (response.error) {
+                console.log('ImagePicker Error: ', response.error)
+            }else{
+                setImage(response.assets[0].uri)
+            }
+        })
+        setModalVisible(!modalVisible)
+    }
+    const addGalleryImage = () => {
+
+        const options:any = {
+            takePhotoButtonTitle: '카메라',
+            chooseFromLibraryButtonTitle: '이미지 선택',
+            cancelButtonTitle: '취소'
+        };
+
+        launchImageLibrary(options, (response:any) => {
+            console.log(response)
+            if(response.didCancel){
+                console.log("취소됨")
+            }else if (response.error) {
+                console.log('ImagePicker Error: ', response.error)
+            }else{
+                setImage(response.assets[0].uri)
+            }
+        })
+        setModalVisible(!modalVisible)
+    }
+    const user:any = auth().currentUser;
     const writer = user?.email;
     const [productName, setProductName] = React.useState("")
     const [price,setPrice] =React.useState("")
     const [contents,setContents] = React.useState("")
-    const [remarks,setRemarks] = React.useState("")
     const [name, setName] = React.useState("")
-    const [files , setFiles] = React.useState("")
+    const [image, setImage] = React.useState("")
+    
 
-    // const [createUseditem] = useMutation(CREATE_USED_ITEM)
-    // async function onClickSubmit() {
-    //    try{ if(
-    //         name !== '' && 
-    //         price !== '' &&
-    //         contents !== '' 
-    //         // &&
-    //         // files !== ''
-    //     ) {
-    //         const result = await createUseditem({
-    //             variables:{
-    //                 createUseditemInput:{
-    //                     name,
-    //                     price,
-    //                     remarks,
-    //                     contents,
-    //                     // files
-    //                 }
-    //             }
-    //         })
-             
-    //         console.log(result)
-    //      }} catch(error) {
-    //          console.log(error)
-    //      }
-    // }
     async function onClickWriteProduct(){
         if (price !=='' && contents !=='' && name !=='' && productName !=='') {
             firestore()
@@ -90,38 +142,61 @@ export function MarketWrite({navigation,route}:any) {
     return(
     <View >
         <ScrollView>
-            <Text>판매자</Text>
+            <Modal
+                    // animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>사진</Text>
+                        <TouchableOpacity style={{marginTop: 7}} onPress={addCameraImage}>
+                            <Text>카메라</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{marginTop: 5}} onPress={addGalleryImage}>
+                            <Text>이미지 선택</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setModalVisible(!modalVisible)}
+                        >
+                            <Text style={styles.textStyle}>취소</Text>
+                        </TouchableOpacity>
+                    </View>
+                    </View>
+                </Modal>
+            <Text style={{marginLeft:10}} >판매자</Text>
             <TextInput
                 style={styles.Inputbox}
                 onChangeText={text=>setName(text)}
                 defaultValue={route.params?.route.params.el.name}
             />
-            <Text>상품명</Text>
+            <Text style={{marginLeft:10}}>상품명</Text>
             <TextInput
                 style={styles.Inputbox}
                 onChangeText={text=>setProductName(text)}
                 defaultValue={route.params?.route.params.el.productName}
                 />
-            <Text>가격</Text>
+            <Text style={{marginLeft:10}}>가격</Text>
             <TextInput 
                 style={styles.Inputbox} 
                 onChangeText={text=>setPrice(text)}
                 defaultValue={route.params?.route.params.el.price}
                 />
-            {/* <Text>한줄요약</Text>
-            <TextInput 
-                style={styles.Inputbox} 
-                onChangeText={text=>setRemarks(text)}
-                // defaultValue={route.params?.route.params.el.remarks}
-                /> */}
-            <Text>내용</Text>
+            <Text style={{marginLeft:10}}>내용</Text>
             <TextInput 
                 style={styles.InputContents} 
                 onChangeText={text=>setContents(text)}
                 defaultValue={route.params?.route.params.el.contents}
                 />
-            <Pressable style={styles.ImageStyle} onPress={() => onClickUpdateImage()}>
-                <Text>+</Text>
+            <Text style={{marginLeft:10}}>사진</Text>
+            <Pressable onPress={() => onClickUpdateImage()}>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+                <Image style={styles.ImageAddtion} source={image ? {uri:`${image}`} : {uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}} />
+            </TouchableOpacity>
             </Pressable>
         </ScrollView>
         <Pressable style={styles.ButtonStyle} onPress={() => onClickWriteProduct()} >

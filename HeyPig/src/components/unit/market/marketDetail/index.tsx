@@ -1,9 +1,6 @@
-import {gql, useMutation, useQuery} from '@apollo/client';
 import firestore from '@react-native-firebase/firestore';
 import * as React from 'react';
 import { Text, View, Image ,StyleSheet, ScrollView, TextInput, Pressable } from "react-native";
-import { TabRouter } from 'react-navigation';
-import { FETCH_USED_ITEM,CREATE_USED_ITEM_QUESTION, FETCH_USED_ITEM_QUESTIONS } from '~/components/commons/market.queries';
 import auth from '@react-native-firebase/auth';
 
 const styles = StyleSheet.create({
@@ -75,13 +72,14 @@ const styles = StyleSheet.create({
            fontWeight:'bold',
            fontSize:14
        }
-
 })
 
 export function MarketDetail({navigation,route}:any) {
     const [comment, setComment] = React.useState("");
+    const [comments, setComments] = React.useState("");
 
-    const user = auth().currentUser;
+    const user:any = auth().currentUser;
+    const isWriter = user.email === route.params.el.writer; // ?
 
     function SubmitComment(){
         if (comment !== '') {
@@ -90,16 +88,35 @@ export function MarketDetail({navigation,route}:any) {
               .doc(route.params.el.id)
               .collection('Comments')
               .add({writer: user?.email, contents: comment});
-          }
+        }
     }
+    // let tt: any = [];
+    // ???
+    // firestore()
+    // .collection('Market')
+    // .doc(route.params.el.id)
+    // .collection('Comments')
+    // .get()
+    // .then(snapshot => {
+    //   snapshot.forEach(doc => {
+    //     const temp: any = [];
+    //     temp.push(doc.data());
+    //     temp.push({id: doc.id});
+    //     tt.push(temp);
+    //   });
+    //   setComments(tt);
+    // });
+
     function onClickDelete() {
+        try{
         firestore()
         .collection('Market')
         .doc(route.params.el.id)
-        .delete()
-        .then(() => {
-            navigation.navigate('MarketMain')
-        })
+        .delete();
+        navigation.navigate('MarketMain')
+        } catch (error) {
+            console.log(error)
+        }
     }
     function onClickEdit() {
         navigation.navigate('MarketWrite', {route})
@@ -125,27 +142,25 @@ export function MarketDetail({navigation,route}:any) {
             <TextInput
                 style={styles.CommentBox}
                 placeholder="내용을 입력해주세요"
-                onChangeText={text=> setComment(text)}/>
+                onChangeText={text=> setComment(text)}
+            />
             <Pressable
                 style={styles.CommentButton}
                 onPress={()=> SubmitComment()}>
                 <Text style={{width:50,height:30,backgroundColor:"#fff884", borderRadius:10,textAlign:'center',paddingTop:5 ,margin:10} }>입력</Text>
             </Pressable>
+            
             <View> 
-                <View style={{height:"100%",flexDirection:'column', margin:15 ,backgroundColor:"white",padding:15,}}>
-                    <Text style={{fontWeight:'bold',fontSize:14}}>김송박
-                    </Text>
+                <View style={{flexDirection:'column', margin:15 ,backgroundColor:"white",padding:15,}}>
+                    <Text style={{fontWeight:'bold',fontSize:14}}>김송박</Text>
                     <Text style={{marginTop:10}}>내용</Text>
                 </View>
-                <View>
-                    <View></View>
-                </View>
             </View>
-        </View>
 
+        </View>
         <Pressable style={styles.BottomButton}>
             <Text onPress={onClickEdit} style={{backgroundColor:'#FFE1E1'}}>수정하기</Text>
-            <Text onPress={onClickDelete} style={{backgroundColor:'#030101'}}>삭제하기</Text>
+            <Text onPress={onClickDelete} style={{backgroundColor:'#FFE1E1'}}>삭제하기</Text>
             <Text onPress={()=> {navigation.navigate('MarketMain')}} style={{backgroundColor:'#FFE1E1'}}>목록으로</Text>
         </Pressable>
     </ScrollView>

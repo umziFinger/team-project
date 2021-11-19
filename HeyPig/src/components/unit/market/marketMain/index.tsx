@@ -17,10 +17,11 @@ const styles = StyleSheet.create({
     marketMain: {
       flexDirection: 'row',
       // height: '10%',
-      width: '94%', 
+      width: '90%', 
+      height: 120,
       borderRadius:10, 
       backgroundColor: "white", 
-      margin: '3%', 
+      margin: '5%', 
       justifyContent:'flex-start', 
       alignItems: 'center',
       paddingHorizontal: 30,
@@ -32,9 +33,13 @@ const styles = StyleSheet.create({
         
         marginRight:30
     },
-    BestProduct:{
-        fontSize:18,
-        fontWeight:'bold',
+    supermarket:{
+      width: 150,
+      height: 40,
+      marginRight: 250,
+      marginTop: 10,
+      marginBottom: 10,
+      marginLeft:5
     },
     Wrapper:{
 
@@ -87,7 +92,7 @@ const PAGES = [
   ];
 export function MarketMain({navigation}:any) {
   const [market,setMarket] = React.useState([])
-  let aaa : any = []
+  let tt : any = []
   const user = auth().currentUser
 
   React.useEffect(() => {
@@ -96,10 +101,12 @@ export function MarketMain({navigation}:any) {
       .get()
       .then(snapshot=>{
         snapshot.forEach(doc=>{
+          let aaa : any = []
           aaa.push(doc.data())
-          // aaa.push({id:doc.id}) 
+          aaa.push({id:doc.id}) 
+          tt.push(aaa)
       });
-      setMarket(aaa);
+      setMarket(tt);
     });    
   }, [firestore().collection('Market').doc('').get()]);
 
@@ -118,7 +125,9 @@ export function MarketMain({navigation}:any) {
     return(
       <View style={{flex: 1, justifyContent:'center',alignItems:'center'}}>    
         <ScrollView >
-             <Text style={styles.BestProduct}>Best 상품</Text>
+             {/* <Text style={styles.BestProduct}>Best 상품</Text> */}
+             <Image style={styles.supermarket} source={require('../../../../Assets/images/supermarket.png')}/>
+            
           <Carousel
             gap={5}
             offset={0} // left margin
