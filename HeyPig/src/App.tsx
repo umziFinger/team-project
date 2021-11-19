@@ -25,7 +25,7 @@ import ExercisePage from './components/unit/homeScreen/exercise';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Profile, LoginButton} from 'react-native-fbsdk-next'
+import {Profile, LoginButton} from 'react-native-fbsdk-next';
 
 function HomeScreen() {
   return (
@@ -64,7 +64,6 @@ const Stack = createNativeStackNavigator();
 function LoginSignup(parentProps: any) {
   return (
     <Stack.Navigator>
-      
       <Stack.Screen name="Login" options={{headerShown: false}}>
         {props => <LoginScreen {...props} {...parentProps} />}
       </Stack.Screen>
@@ -148,36 +147,35 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useState('');
-  const [date, setDate]:any = useState(0)
+  const [date, setDate]: any = useState(0);
 
   useEffect(() => {
     SplashScreen.hide();
   }, []);
 
-  let user:any = auth().currentUser
-  const signinDate:any = new Date(user?.metadata.creationTime.slice(0,10))
-  const currentDate:any = new Date(new Date().toISOString().slice(0,10))
+  let user: any = auth().currentUser;
+  const signinDate: any = new Date(user?.metadata.creationTime.slice(0, 10));
+  const currentDate: any = new Date(new Date().toISOString().slice(0, 10));
 
   React.useEffect(() => {
-    setDate((currentDate-signinDate)/(3600000*24))
-  },[signinDate])
+    setDate((currentDate - signinDate) / (3600000 * 24));
+  }, [signinDate]);
 
-
-  auth().onAuthStateChanged((user) => {
+  auth().onAuthStateChanged(user => {
     if (user) {
-    	setIsLoggedIn(true);
+      setIsLoggedIn(true);
     } else {
-    	setIsLoggedIn(false);
+      setIsLoggedIn(false);
     }
   });
 
-    const email = user?.email
-    // const arr = firestore().collection('Users').get()
-    //   .then(snapshot => {
-    //     snapshot.forEach(doc => {
-    //         console.log('aaa',doc.data());
-    //     });
-    // })
+  const email = user?.email;
+  // const arr = firestore().collection('Users').get()
+  //   .then(snapshot => {
+  //     snapshot.forEach(doc => {
+  //         console.log('aaa',doc.data());
+  //     });
+  // })
 
   const client = new ApolloClient({
     uri: 'http://backend03.codebootcamp.co.kr/graphql',
@@ -188,18 +186,45 @@ export default function App() {
     <ApolloProvider client={client}>
       {isLoggedIn ? (
         <NavigationContainer>
-          <View style={{
-            flexDirection:'row', 
-            justifyContent:'flex-end', 
-            alignItems:'center',
-            marginBottom:5
-          }}>
-            <View style={{backgroundColor:'yellow', width: 330, flexDirection: 'row', justifyContent:'space-between', marginBottom: 20}}>
-              <Text style={{position:'absolute', marginLeft: 10, fontSize:18, fontWeight:'bold'}}>다이어트 {date+1}일째</Text>
-              <Text style={{position:'absolute', marginLeft: 200}}>{user?.displayName}님 환영합니다!</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              marginBottom: 5,
+            }}>
+            <View
+              style={{
+                backgroundColor: 'yellow',
+                width: 330,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginBottom: 20,
+              }}>
+              <Text
+                style={{
+                  position: 'absolute',
+                  marginLeft: 10,
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                }}>
+                다이어트 {date + 1}일째
+              </Text>
+              <Text style={{position: 'absolute', marginLeft: 200}}>
+                {user?.displayName}님 환영합니다!
+              </Text>
             </View>
             <View>
-              <Ionicons style={{fontSize: 30, color:'#58ccff', marginLeft: 5, marginRight: 15}} name={'log-out-outline'}  onPress={() => auth().signOut()}/>
+              <Ionicons
+                style={{
+                  fontSize: 30,
+                  color: '#58ccff',
+                  marginLeft: 5,
+                  marginRight: 15,
+                }}
+                name={'log-out-outline'}
+                onPress={() => auth().signOut()}
+              />
               {/* <Text style={{
                 backgroundColor: '#58ccff', 
                 width: 60, 
@@ -216,31 +241,29 @@ export default function App() {
             </View>
           </View>
           <Tab.Navigator
-            screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused, color, size }) => {
-                let iconName:any;
-    
+            screenOptions={({route}) => ({
+              tabBarIcon: ({focused, color, size}) => {
+                let iconName: any;
+
                 if (route.name === 'Home') {
                   iconName = focused ? 'home' : 'home-outline';
-                } else if (route.name === 'Board'){
+                } else if (route.name === 'Board') {
                   iconName = focused ? 'clipboard' : 'clipboard-outline';
-                } else if (route.name === 'Market'){
+                } else if (route.name === 'Market') {
                   iconName = focused ? 'cart' : 'cart-outline';
-                } else if (route.name === 'Diary'){
+                } else if (route.name === 'Diary') {
                   iconName = focused ? 'checkbox' : 'checkbox-outline';
                 }
 
-                return <Ionicons name={iconName} size={size}  color={color}/>;
+                return <Ionicons name={iconName} size={size} color={color} />;
               },
               tabBarActiveTintColor: 'tomato',
               tabBarInactiveTintColor: 'gray',
-            })}
-          >
+            })}>
             <Tab.Screen
               name="Home"
               component={HomeScreen}
               options={{headerShown: false}}
-               
             />
             <Tab.Screen
               name="Board"

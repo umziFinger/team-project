@@ -80,7 +80,7 @@ export function BoardWrite({navigation, route}: any) {
   }
   async function onClickEdit() {
     firestore()
-      .collection('Board')
+      .collection(route.params.el[1].board)
       .doc(route.params.el[1].id)
       .update({title, contents});
 

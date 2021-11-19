@@ -61,15 +61,15 @@ const styles = StyleSheet.create({
 export function BoardComment(props: any) {
   const user: any = auth().currentUser;
   const [comment, setComment] = useState('');
-  const isWriter = user.email === props.el[0].writer;
+  const isWriter = user.email === props.el.writer;
   const [comments, setComments] = useState([]);
   let tt: any = [];
   React.useEffect(() => {
     let isComponentMounted = true;
     const fetchData = () => {
       firestore()
-        .collection(props.el[1].board)
-        .doc(props.el[1].id)
+        .collection(props.el.board)
+        .doc(props.el.id)
         .collection('Comments')
         .orderBy('createdAt', 'desc')
         .get()
@@ -89,19 +89,13 @@ export function BoardComment(props: any) {
     return () => {
       isComponentMounted = false;
     };
-  }, [
-    firestore()
-      .collection(props.el[1].board)
-      .doc(props.el[1].id)
-      .collection('Comments')
-      .get(),
-  ]);
+  }, []);
 
   function onClickDeleteComment(commentid: any) {
     try {
       firestore()
-        .collection(props.el[1].board)
-        .doc(props.el[1].id)
+        .collection(props.el.board)
+        .doc(props.el.id)
         .collection('Comments')
         .doc(commentid)
         .delete();
@@ -109,6 +103,7 @@ export function BoardComment(props: any) {
       console.log(error);
     }
   }
+  console.log(comments);
   return (
     <View>
       <Text style={styles.CommentText}>
@@ -122,11 +117,11 @@ export function BoardComment(props: any) {
             {/* <Text>{el.createdAt}</Text> */}
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text>{el[0].contents}</Text>
-            {user.email === el[0].writer && (
+            <Text>{el.contents}</Text>
+            {user.email === el.writer && (
               <Pressable
                 style={styles.DeleteCommentButton}
-                onPress={() => onClickDeleteComment(el[1].id)}>
+                onPress={() => onClickDeleteComment(el.id)}>
                 <Text style={{fontSize: 15, color: 'white'}}>삭제</Text>
               </Pressable>
             )}
