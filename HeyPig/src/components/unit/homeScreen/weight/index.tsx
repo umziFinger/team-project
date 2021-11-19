@@ -11,44 +11,20 @@ import {
 import { Dimensions } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import { GlobalContext } from '~/App';
 
 export default function WeightPage() {
 
-  const [weightsData, setWeightsData] = React.useState([])
+  const [weightsData, setWeightsData] = React.useState([0,0,0,0,0])
+  const {diary, user}:any = React.useContext(GlobalContext)
 
-
-  const user:any = auth().currentUser  
   let weights:any = []
-  React.useEffect(() => {
-    {user?.email === null
-      ?
-        firestore()
-          .collection('Users')
-          .doc(String(user?.uid))
-          .collection('Diary')
-          .get()
-          .then(snapshot => {
-            snapshot.forEach(doc => {
-              doc.data()
-            })
-          })
-  
-      :
-        firestore()
-          .collection('Users')
-          .doc(String(user?.email))
-          .collection('Diary')
-          .get()
-          .then(snapshot => {
-            snapshot.forEach(doc => {
-              weights.push(Number(doc.data().weight))
-            })
-            setWeightsData(weights)
-          })
-          
-    }
+
+  React.useEffect(()=> {
+    diary.map((el:any) => (weights.push(Number(el.weight))))
+    setWeightsData(weights)
+
   },[])
-  
 
   const chartConfig = {
     backgroundGradientFrom: "#1E2923",
@@ -66,12 +42,12 @@ export default function WeightPage() {
     labels: [],
     datasets: [
       {
-        data: [23, 45, 28, 80, 99, 43],
+        data: [10,40,30,35,25,55,33,66,44],
         color: (opacity = 0) => `rgba(0,0,0, ${opacity})`, // optional
         strokeWidth: 2 // optional
       }
     ],
-    legend: ["your weight"] // optional
+    // legend: ["your weight"] // optional
   };
 
   return (
