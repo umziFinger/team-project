@@ -144,116 +144,96 @@ function Diary() {
 
 const Tab = createBottomTabNavigator();
 
+export const GlobalContext = React.createContext(null);
+
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useState('');
-<<<<<<< HEAD
   const [date, setDate]: any = useState(0);
-=======
-<<<<<<< HEAD
-  const [date, setDate]:any = useState(0)
   const [diary, setDiary] = React.useState([]);
-  const [infoData, setInfoData]:any = React.useState({})
+  const [infoData, setInfoData]: any = React.useState({});
 
-  let user:any = auth().currentUser
+  let user: any = auth().currentUser;
 
-  const value:any = {
+  const value: any = {
     diary,
     infoData,
     user,
-    date
-  }
+    date,
+  };
 
-  
   let aaa: any = [];
 
   React.useEffect(() => {
-    
-    const getData = async() =>
-    {email === null 
-      ? 
-        await firestore()
-        .collection('Users')
-        .doc(String(user?.uid))
-        .collection('Diary')
-        .orderBy('date', 'asc')
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            aaa.push(doc.data());
-          });
-          setDiary(aaa.reverse());
-        })
-      :
-        await firestore()
-        .collection('Users')
-        .doc(String(user?.email))
-        .collection('Diary')
-        .orderBy('date', 'asc')
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            aaa.push(doc.data());
-          });
-          setDiary(aaa.reverse());
-        });
-    }
-    getData()
+    const getData = async () => {
+      email === null
+        ? await firestore()
+            .collection('Users')
+            .doc(String(user?.uid))
+            .collection('Diary')
+            .orderBy('date', 'asc')
+            .get()
+            .then(snapshot => {
+              snapshot.forEach(doc => {
+                aaa.push(doc.data());
+              });
+              setDiary(aaa.reverse());
+            })
+        : await firestore()
+            .collection('Users')
+            .doc(String(user?.email))
+            .collection('Diary')
+            .orderBy('date', 'asc')
+            .get()
+            .then(snapshot => {
+              snapshot.forEach(doc => {
+                aaa.push(doc.data());
+              });
+              setDiary(aaa.reverse());
+            });
+    };
+    getData();
   }, [firestore().collection('Users').doc('').collection('Diary').get()]);
 
   React.useEffect(() => {
-
-    const getData = async() => 
-    {user?.email === null
-      ?
-        await firestore()
-          .collection("Users")
-          .doc(String(user?.uid))
-          .collection('Info')
-          .get()
-          .then(snapshot => {
-            snapshot.forEach(doc => {
+    const getData = async () => {
+      user?.email === null
+        ? await firestore()
+            .collection('Users')
+            .doc(String(user?.uid))
+            .collection('Info')
+            .get()
+            .then(snapshot => {
+              snapshot.forEach(doc => {
                 setInfoData(doc.data());
-            });
-          })
-      :
-        await firestore()
-          .collection("Users")
-          .doc(String(user?.email))
-          .collection('Info')
-          .get()
-          .then(snapshot => {
-            snapshot.forEach(doc => {
+              });
+            })
+        : await firestore()
+            .collection('Users')
+            .doc(String(user?.email))
+            .collection('Info')
+            .get()
+            .then(snapshot => {
+              snapshot.forEach(doc => {
                 setInfoData(doc.data());
+              });
             });
-          })
-    }
-    getData()
-  },[firestore().collection("Users").doc(String(user?.email)).collection('Info').get()])
-=======
-  const [date, setDate]: any = useState(0);
->>>>>>> a198b13 (Day15_backend_O)
->>>>>>> c12cd21 (rebase)
+    };
+    getData();
+  }, [
+    firestore()
+      .collection('Users')
+      .doc(String(user?.email))
+      .collection('Info')
+      .get(),
+  ]);
 
   useEffect(() => {
     SplashScreen.hide();
   }, []);
 
-<<<<<<< HEAD
-  let user: any = auth().currentUser;
   const signinDate: any = new Date(user?.metadata.creationTime.slice(0, 10));
   const currentDate: any = new Date(new Date().toISOString().slice(0, 10));
-=======
-<<<<<<< HEAD
-
-  const signinDate:any = new Date(user?.metadata.creationTime.slice(0,10))
-  const currentDate:any = new Date(new Date().toISOString().slice(0,10))
-=======
-  let user: any = auth().currentUser;
-  const signinDate: any = new Date(user?.metadata.creationTime.slice(0, 10));
-  const currentDate: any = new Date(new Date().toISOString().slice(0, 10));
->>>>>>> a198b13 (Day15_backend_O)
->>>>>>> c12cd21 (rebase)
 
   React.useEffect(() => {
     setDate((currentDate - signinDate) / (3600000 * 24));
@@ -281,66 +261,88 @@ export default function App() {
   });
 
   return (
-<<<<<<< HEAD
-    <ApolloProvider client={client}>
-      {isLoggedIn ? (
-        <NavigationContainer>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              marginBottom: 5,
-=======
-<<<<<<< HEAD
     <GlobalContext.Provider value={value}>
       <ApolloProvider client={client}>
         {isLoggedIn ? (
           <NavigationContainer>
-            <View style={{
-              // backgroundColor:'#ffd600',
-              flexDirection:'row', 
-              justifyContent:'flex-end', 
-              alignItems:'center',
-              height:50,
-              borderBottomColor:'#ffd600',
-              borderBottomWidth: 3
->>>>>>> c12cd21 (rebase)
-            }}>
             <View
               style={{
-                backgroundColor: 'yellow',
-                width: 330,
+                // backgroundColor:'#ffd600',
                 flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginBottom: 20,
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                height: 50,
+                borderBottomColor: '#ffd600',
+                borderBottomWidth: 3,
               }}>
-              <Text
+              <View
                 style={{
-                  position: 'absolute',
-                  marginLeft: 10,
-                  fontSize: 18,
-                  fontWeight: 'bold',
+                  width: 330,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginBottom: 20,
                 }}>
-                다이어트 {date + 1}일째
-              </Text>
-              <Text style={{position: 'absolute', marginLeft: 200}}>
-                {user?.displayName}님 환영합니다!
-              </Text>
+                <Text
+                  style={{
+                    position: 'absolute',
+                    marginLeft: 10,
+                    fontSize: 18,
+                    fontFamily: 'Yangjin',
+                  }}>
+                  다이어트 {date + 1}일째
+                </Text>
+                <Text
+                  style={{
+                    position: 'absolute',
+                    marginLeft: 200,
+                    fontFamily: 'Yangjin',
+                  }}>
+                  {user?.displayName}님 환영합니다!
+                </Text>
+              </View>
+              <View>
+                <Ionicons
+                  style={{
+                    fontSize: 30,
+                    color: '#ffd600',
+                    marginLeft: 5,
+                    marginRight: 15,
+                  }}
+                  name={'log-out-outline'}
+                  onPress={() => auth().signOut()}
+                />
+              </View>
             </View>
-            <View>
-              <Ionicons
-                style={{
-                  fontSize: 30,
-                  color: '#58ccff',
-                  marginLeft: 5,
-                  marginRight: 15,
-                }}
-                name={'log-out-outline'}
-                onPress={() => auth().signOut()}
+            <Tab.Navigator
+              screenOptions={({route}) => ({
+                tabBarIcon: ({focused, color, size}) => {
+                  let iconName: any;
+
+                  if (route.name === 'Home') {
+                    iconName = focused ? 'home' : 'home-outline';
+                  } else if (route.name === 'Board') {
+                    iconName = focused ? 'clipboard' : 'clipboard-outline';
+                  } else if (route.name === 'Market') {
+                    iconName = focused ? 'cart' : 'cart-outline';
+                  } else if (route.name === 'Diary') {
+                    iconName = focused ? 'checkbox' : 'checkbox-outline';
+                  }
+
+                  return <Ionicons name={iconName} size={size} color={color} />;
+                },
+                tabBarActiveTintColor: 'tomato',
+                tabBarInactiveTintColor: 'gray',
+              })}>
+              <Tab.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{headerShown: false}}
               />
-<<<<<<< HEAD
-=======
+              <Tab.Screen
+                name="Board"
+                component={Board}
+                options={{headerShown: false}}
+              />
               <Tab.Screen
                 name="Market"
                 component={Market}
@@ -358,119 +360,10 @@ export default function App() {
             <LoginSignup
               setIsLoggedIn={setIsLoggedIn}
               setAccessToken={setAccessToken}
-=======
-    <ApolloProvider client={client}>
-      {isLoggedIn ? (
-        <NavigationContainer>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              marginBottom: 5,
-            }}>
-            <View
-              style={{
-                backgroundColor: 'yellow',
-                width: 330,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginBottom: 20,
-              }}>
-              <Text
-                style={{
-                  position: 'absolute',
-                  marginLeft: 10,
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                }}>
-                다이어트 {date + 1}일째
-              </Text>
-              <Text style={{position: 'absolute', marginLeft: 200}}>
-                {user?.displayName}님 환영합니다!
-              </Text>
-            </View>
-            <View>
-              <Ionicons
-                style={{
-                  fontSize: 30,
-                  color: '#58ccff',
-                  marginLeft: 5,
-                  marginRight: 15,
-                }}
-                name={'log-out-outline'}
-                onPress={() => auth().signOut()}
-              />
->>>>>>> c12cd21 (rebase)
-              {/* <Text style={{
-                backgroundColor: '#58ccff', 
-                width: 60, 
-                height: 30, 
-                textAlign: 'center', 
-                fontSize: 15, 
-                fontWeight:'bold', 
-                color:'white', 
-                padding:3, 
-                borderRadius: 3,
-                marginLeft: 5,
-                marginRight: 5
-              }} onPress={() => auth().signOut()}>Logout</Text> */}
-            </View>
-          </View>
-          <Tab.Navigator
-            screenOptions={({route}) => ({
-              tabBarIcon: ({focused, color, size}) => {
-                let iconName: any;
-
-                if (route.name === 'Home') {
-                  iconName = focused ? 'home' : 'home-outline';
-                } else if (route.name === 'Board') {
-                  iconName = focused ? 'clipboard' : 'clipboard-outline';
-                } else if (route.name === 'Market') {
-                  iconName = focused ? 'cart' : 'cart-outline';
-                } else if (route.name === 'Diary') {
-                  iconName = focused ? 'checkbox' : 'checkbox-outline';
-                }
-
-                return <Ionicons name={iconName} size={size} color={color} />;
-              },
-              tabBarActiveTintColor: 'tomato',
-              tabBarInactiveTintColor: 'gray',
-            })}>
-            <Tab.Screen
-              name="Home"
-              component={HomeScreen}
-              options={{headerShown: false}}
             />
-            <Tab.Screen
-              name="Board"
-              component={Board}
-              options={{headerShown: false}}
-            />
-            <Tab.Screen
-              name="Market"
-              component={Market}
-              options={{headerShown: false}}
-            />
-            <Tab.Screen
-              name="Diary"
-              component={Diary}
-              options={{headerShown: false}}
-<<<<<<< HEAD
-=======
->>>>>>> a198b13 (Day15_backend_O)
->>>>>>> c12cd21 (rebase)
-            />
-          </Tab.Navigator>
-        </NavigationContainer>
-      ) : (
-        <NavigationContainer>
-          <LoginSignup
-            setIsLoggedIn={setIsLoggedIn}
-            setAccessToken={setAccessToken}
-          />
-        </NavigationContainer>
-      )}
-    </ApolloProvider>
+          </NavigationContainer>
+        )}
+      </ApolloProvider>
+    </GlobalContext.Provider>
   );
 }

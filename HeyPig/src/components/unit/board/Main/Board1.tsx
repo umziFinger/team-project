@@ -27,29 +27,17 @@ const styles = StyleSheet.create({
 export function Board1Main(props: any) {
   let temp: any = [];
   const [board, setBoard] = useState([]);
-<<<<<<< HEAD
-
-=======
->>>>>>> c12cd21 (rebase)
   firestore()
     .collection('Board')
     .orderBy('createdAt', 'desc')
     .get()
     .then(snapshot => {
-<<<<<<< HEAD
-      snapshot.forEach((doc, collection) => {
-=======
       snapshot.forEach(doc => {
->>>>>>> c12cd21 (rebase)
         temp.push({...doc.data(), id: doc.id, board: 'Board'});
       });
       setBoard(temp);
     });
-<<<<<<< HEAD
-
-=======
   console.log(board);
->>>>>>> c12cd21 (rebase)
   return (
     <View>
       {board?.map(function aaa(el: any, i: number) {
