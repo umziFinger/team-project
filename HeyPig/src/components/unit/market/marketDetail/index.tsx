@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
        Info__Wrapper:{
            
             width: '100%',
-            height: 230,
+            height: 280,
             backgroundColor:'#ddf5ff',
             marginTop:25,
             alignItems:'center',
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
            marginBottom:10
        },
        contents:{
-           fontSize:14,
+           fontSize:16,
            marginBottom:10
        },
        BottomButton:{
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
 
 export function MarketDetail({navigation,route}:any) {
     const [comment, setComment] = React.useState("");
-    const [comments, setComments] = React.useState("");
+    const [comments, setComments] = React.useState([]);
 
     const user:any = auth().currentUser;
     const isWriter = user.email === route.params.el.writer; // ?
@@ -85,11 +85,28 @@ export function MarketDetail({navigation,route}:any) {
         if (comment !== '') {
             firestore()
               .collection('Market')
-              .doc(route.params.el.id)
+              .doc(route.params.el[1].id)
               .collection('Comments')
               .add({writer: user?.email, contents: comment});
         }
     }
+    
+    let tt: any = [];
+    firestore()
+        .collection('Market')
+        .doc(route.params.el[1].id)
+        .collection('Comments')
+        .orderBy('createdAt', 'desc')
+        .get()
+        .then(snapshot => {
+        snapshot.forEach(doc => {
+            const temp: any = [];
+            temp.push(doc.data());
+            temp.push({id: doc.id});
+            tt.push(temp);
+        });
+        setComments(tt);
+        });
     // let tt: any = [];
     // ???
     // firestore()
@@ -111,7 +128,7 @@ export function MarketDetail({navigation,route}:any) {
         try{
         firestore()
         .collection('Market')
-        .doc(route.params.el.id)
+        .doc(route.params.el[1].id)
         .delete();
         navigation.navigate('MarketMain')
         } catch (error) {
@@ -121,15 +138,30 @@ export function MarketDetail({navigation,route}:any) {
     function onClickEdit() {
         navigation.navigate('MarketWrite', {route})
     }
+    function onClickDeleteComment(commentid: any) {
+        try {
+          firestore()
+            .collection('Market')
+            .doc(route.params.el[1].id)
+            .collection('Comments')
+            .doc(commentid)
+            .delete();
+        } catch (error) {
+          console.log(error);
+        }
+      }    
+    const writer1 = route.params.el[0].writer.split("@")
+    // console.log(writer1)
     return(
     <ScrollView>
         <View style={styles.Img}/>
         <View style={styles.Info__Wrapper}>
             <View style={styles.Contents__Wrapper}>
-                <Text style={styles.productName}>상품명 : {route.params.el.productName}</Text>
-                <Text style={styles.price}>{route.params.el.price}원</Text>
-                <Text style={styles.contents}>{route.params.el.contents}</Text>
-                <Text>판매자 : {route.params.el.name}</Text>
+                <Text style={styles.productName}>상품명 : {route.params.el[0].productName}</Text>
+                <Text style={styles.price}>{route.params.el[0].price}원</Text>
+                <Text style={styles.contents}>{route.params.el[0].contents}</Text>
+                <Text >거래가능지역 : {route.params.el[0].setTreadArea}</Text>
+                <Text style={{margin:10}}>판매자 : {writer1[0]}</Text>
             </View>
             <Pressable>
                 <Text style={{ width:100 , height:30, backgroundColor: "pink",borderRadius:10,textAlign:'center',paddingTop:5,marginTop:50}}>
@@ -149,14 +181,14 @@ export function MarketDetail({navigation,route}:any) {
                 onPress={()=> SubmitComment()}>
                 <Text style={{width:50,height:30,backgroundColor:"#fff884", borderRadius:10,textAlign:'center',paddingTop:5 ,margin:10} }>입력</Text>
             </Pressable>
-            
-            <View> 
-                <View style={{flexDirection:'column', margin:15 ,backgroundColor:"white",padding:15,}}>
-                    <Text style={{fontWeight:'bold',fontSize:14}}>김송박</Text>
-                    <Text style={{marginTop:10}}>내용</Text>
+            {/* {comments?. map((el,index) => ( */}
+                <View > 
+                    <View style={{flexDirection:'column', margin:15 ,backgroundColor:"white",padding:10,}}>
+                        <Text style={{fontWeight:'bold',fontSize:14}}>{writer1[0]}</Text>
+                        <Text style={{marginTop:10, width:"100%" ,borderBottomColor:'gray',borderBottomWidth:1}}>내용</Text>
+                    </View>
                 </View>
-            </View>
-
+            {/* ))} */}
         </View>
         <Pressable style={styles.BottomButton}>
             <Text onPress={onClickEdit} style={{backgroundColor:'#FFE1E1'}}>수정하기</Text>

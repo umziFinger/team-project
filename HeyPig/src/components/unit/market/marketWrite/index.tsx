@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
 import * as React from 'react';
 import { Image,Text, View, TextInput, StyleSheet, Button, ScrollView, Pressable, Modal,TouchableOpacity} from "react-native";
+import {Picker} from '@react-native-picker/picker';
 import {CREATE_USED_ITEM} from '~/components/commons/market.queries';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
 })
 
 export function MarketWrite({navigation,route}:any) {
-
+    const [selectedLanguage, setSelectedLanguage] = React.useState("");
     const [modalVisible, setModalVisible] = React.useState(false);
     const addCameraImage = () => {
 
@@ -123,22 +124,21 @@ export function MarketWrite({navigation,route}:any) {
     const [productName, setProductName] = React.useState("")
     const [price,setPrice] =React.useState("")
     const [contents,setContents] = React.useState("")
-    const [name, setName] = React.useState("")
+    const [treadArea, setTreadArea] = React.useState("")
     const [image, setImage] = React.useState("")
     
 
     async function onClickWriteProduct(){
-        if (price !=='' && contents !=='' && name !=='' && productName !=='') {
+        if (price !=='' && contents !=='' && treadArea !=='' && productName !=='') {
             firestore()
             .collection('Market')
-            .add({writer,productName,price,contents,name})
+            .add({writer,productName,price,contents,treadArea})
             navigation.navigate('MarketMain');
         }
     }
     async function onClickUpdateImage() {
 
     }
-
     return(
     <View >
         <ScrollView>
@@ -168,12 +168,12 @@ export function MarketWrite({navigation,route}:any) {
                     </View>
                     </View>
                 </Modal>
-            <Text style={{marginLeft:10}} >판매자</Text>
+            {/* <Text style={{marginLeft:10}} >판매자</Text>
             <TextInput
                 style={styles.Inputbox}
                 onChangeText={text=>setName(text)}
                 defaultValue={route.params?.route.params.el.name}
-            />
+            /> */}
             <Text style={{marginLeft:10}}>상품명</Text>
             <TextInput
                 style={styles.Inputbox}
@@ -188,9 +188,15 @@ export function MarketWrite({navigation,route}:any) {
                 />
             <Text style={{marginLeft:10}}>내용</Text>
             <TextInput 
-                style={styles.InputContents} 
+                style={styles.InputContents}
                 onChangeText={text=>setContents(text)}
                 defaultValue={route.params?.route.params.el.contents}
+                />
+            <Text style={{marginLeft:10}}>거래가능지역</Text>
+            <TextInput
+                style={styles.Inputbox}
+                onChangeText={text=>setTreadArea(text)}
+                defaultValue={route.params?.route.params.el.treadArea}
                 />
             <Text style={{marginLeft:10}}>사진</Text>
             <Pressable onPress={() => onClickUpdateImage()}>

@@ -90,11 +90,23 @@ const PAGES = [
       color: '#CCABD8',
     },
   ];
-export function MarketMain({navigation}:any) {
-  const [market,setMarket] = React.useState([])
-  let tt : any = []
+export function MarketMain({navigation,route}:any) {
+  // const writer1 = route.params.el[0].writer.split("@")
   const user = auth().currentUser
+  let temp : any = []
+  const [market,setMarket] = React.useState([]);
+  // firestore()
+  // .collection('Market')
+  // .orderBy('createdAt', 'desc')
+  // .get()
+  // .then(snapshot => {
+  //   snapshot.forEach(doc => {
 
+  //     temp.push({...doc.data(), id:doc.id});
+  //   });
+  //   setMarket(temp);
+  // });
+  let tt : any = []
   React.useEffect(() => {
     const doc = firestore()
       .collection('Market')
@@ -103,25 +115,13 @@ export function MarketMain({navigation}:any) {
         snapshot.forEach(doc=>{
           let aaa : any = []
           aaa.push(doc.data())
-          aaa.push({id:doc.id}) 
+          aaa.push({id:doc.id})  
           tt.push(aaa)
       });
       setMarket(tt);
-    });    
+    }); 
   }, [firestore().collection('Market').doc('').get()]);
 
-  // firestore()
-  //   .collection('Market')
-  //   .get()
-  //   .then(snapshop => {
-  //     snapshop.forEach(doc => {
-  //       let bbb : any = []
-  //       bbb.push(doc.data())
-  //       bbb.push({id:doc.id})
-  //       aaa.push(bbb)
-  //     })
-  //     setMarket(aaa)
-  //   })
     return(
       <View style={{flex: 1, justifyContent:'center',alignItems:'center'}}>    
         <ScrollView >
@@ -138,7 +138,8 @@ export function MarketMain({navigation}:any) {
           />
         <View>
           <View  style={styles.Wrapper}>
-            {market?.map((el:any,i:number) =>
+            {market?.map(function(el:any,i:number) {
+              return(
               <Pressable 
                 key={i} 
                 style={styles.marketMain} 
@@ -146,20 +147,21 @@ export function MarketMain({navigation}:any) {
                 <Image style={styles.marketImage} source={require('../../../../Assets/images/add.png')} />
                 <View> 
                   <View style={styles.contentsWrapper}>
-                    <Text >상품명 : {el.productName}</Text>
-                    <Text style={styles.contents}>상품설명 : {el.contents}</Text>
-                    <Text style={styles.price}>가격 : {el.price}</Text>
-                    <Text style={styles.name}>판매자 : {el.name}</Text>
+                    <Text >상품명 : {el[0].productName}</Text>
+                    <Text style={styles.contents}>상품설명 : {el[0].contents}</Text>
+                    <Text style={styles.price}>가격 : {el[0].price}</Text>
+                    <Text style={styles.name}>거래가능지역 : {el[0].treadArea}</Text>
                   </View>
                 </View>
               </Pressable>
-            )}
+              );
+            })}
           </View>
         </View>
         </ScrollView>
             
             <Pressable style={styles.ButtonStyle} onPress={() => navigation.navigate('MarketWrite')}>
-              <Text style={{color: 'white', fontWeight: "bold"}}>상품등록</Text>
+              <Text style={{color: 'white', fontWeight: "bold",}}>상품등록</Text>
             </Pressable>
       </View>
     )
