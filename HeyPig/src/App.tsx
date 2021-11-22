@@ -3,7 +3,7 @@ import SplashScreen from 'react-native-splash-screen';
 import {Button, Text, TextInput, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {DiaryMain} from './components/unit/diary/diaryMain';
+import { DiaryMain } from './components/unit/diary/diaryMain';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 import {BoardMain} from './components/unit/board/boardMain';
@@ -167,67 +167,74 @@ export default function App() {
   let aaa: any = [];
 
   React.useEffect(() => {
-    
-    const getData = async() =>
-    {email === null 
-      ? 
-        await firestore()
-        .collection('Users')
-        .doc(String(user?.uid))
-        .collection('Diary')
-        .orderBy('date', 'asc')
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            aaa.push(doc.data());
+    try{
+      const getData = async() =>
+      {email === null 
+        ? 
+          await firestore()
+          .collection('Users')
+          .doc(String(user?.uid))
+          .collection('Diary')
+          .orderBy('date', 'asc')
+          .get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              aaa.push(doc.data());
+            });
+            setDiary(aaa.reverse());
+          })
+        :
+          await firestore()
+          .collection('Users')
+          .doc(String(user?.email))
+          .collection('Diary')
+          .orderBy('date', 'asc')
+          .get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              aaa.push(doc.data());
+            });
+            setDiary(aaa.reverse());
           });
-          setDiary(aaa.reverse());
-        })
-      :
-        await firestore()
-        .collection('Users')
-        .doc(String(user?.email))
-        .collection('Diary')
-        .orderBy('date', 'asc')
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            aaa.push(doc.data());
-          });
-          setDiary(aaa.reverse());
-        });
+      }
+      getData()
+    }catch(err){
+      console.log(err)
     }
-    getData()
   }, [firestore().collection('Users').doc('').collection('Diary').get()]);
 
   React.useEffect(() => {
 
-    const getData = async() => 
-    {user?.email === null
-      ?
-        await firestore()
-          .collection("Users")
-          .doc(String(user?.uid))
-          .collection('Info')
-          .get()
-          .then(snapshot => {
-            snapshot.forEach(doc => {
-                setInfoData(doc.data());
-            });
-          })
-      :
-        await firestore()
-          .collection("Users")
-          .doc(String(user?.email))
-          .collection('Info')
-          .get()
-          .then(snapshot => {
-            snapshot.forEach(doc => {
-                setInfoData(doc.data());
-            });
-          })
+    try{
+      const getData = async() => 
+      {user?.email === null
+        ?
+          await firestore()
+            .collection("Users")
+            .doc(String(user?.uid))
+            .collection('Info')
+            .get()
+            .then(snapshot => {
+              snapshot.forEach(doc => {
+                  setInfoData(doc.data());
+              });
+            })
+        :
+          await firestore()
+            .collection("Users")
+            .doc(String(user?.email))
+            .collection('Info')
+            .get()
+            .then(snapshot => {
+              snapshot.forEach(doc => {
+                  setInfoData(doc.data());
+              });
+            })
+      }
+      getData()
+    }catch(err){
+      console.log(err)
     }
-    getData()
   },[firestore().collection("Users").doc(String(user?.email)).collection('Info').get()])
 
   useEffect(() => {
@@ -260,7 +267,7 @@ export default function App() {
     // })
 
   const client = new ApolloClient({
-    uri: 'http://backend03.codebootcamp.co.kr/graphql',
+    uri: 'http://backend03.codebootcamp.co.kr/graphql01',
     cache: new InMemoryCache(),
   });
 

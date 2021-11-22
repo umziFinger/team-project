@@ -118,3 +118,4 @@ export function DiaryMain({navigation}: any) {
     </View>
   );
 }
+

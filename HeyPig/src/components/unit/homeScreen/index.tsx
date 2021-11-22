@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {
@@ -7,6 +7,7 @@ import {
 } from "react-native-chart-kit";
 import WeightPage from './weight';
 import { GlobalContext } from '~/App';
+import { Draggable } from './draggable';
 
 const styles = StyleSheet.create({
   GoalView: {
@@ -102,18 +103,19 @@ export default function HomePage({navigation}:any) {
         </Text>}
         <Text style={{fontSize:50, fontFamily: 'Yangjin'}}>{infoData.goal ? `${infoData.goal}kg` : '목표!'}</Text>
       </Pressable>
+      <Draggable/>
       {/* <Pressable
         style={styles.WeightView}
         onPress={() => navigation.navigate('WeightPage')}>
         <Text>weight</Text>
       </Pressable> */}
-      <Pressable
+      {/* <Pressable
         style={styles.ExerciseView}
         // onPress={() => navigation.navigate('ExercisePage')}
       >
         <Text style={{fontSize:20, fontFamily: 'Yangjin'}}>오늘 할 운동</Text>
         <View style={{marginLeft: 170, marginTop: 30}}>
-          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ {today[0]?.exercise}</Text>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ {today[0] ? today[0]?.exercise : '입력해주세요'}</Text>
           <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ 윗몸일으키기</Text>
           <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ 팔굽혀펴기</Text>
         </View>
@@ -124,11 +126,11 @@ export default function HomePage({navigation}:any) {
       >
         <Text style={{fontSize:20, fontFamily: 'Yangjin'}}>오늘 먹을 음식</Text>
         <View style={{marginLeft: 170, marginTop: 30}}>
-          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ {today[0]?.food}</Text>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ {today[0] ? today[0]?.food : '입력해주세요'}</Text>
           <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ 토마토</Text>
           <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ 닭가슴살</Text>
         </View>
-      </Pressable>
+      </Pressable> */}
     </ScrollView>
   );
 }
