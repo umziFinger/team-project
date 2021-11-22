@@ -176,7 +176,7 @@ export function MarketDetail({navigation,route}:any) {
                         <Text style={{marginTop:10, width:"100%" }}>{el[0].contents}</Text>
                         {user.email === el[0].writer && (
                             <Pressable
-                            style={{width:100,height:30,backgroundColor:'skyblue',alignItems:'center'}}
+                            style={{width:100,height:30,backgroundColor:'skyblue',alignItems:'center',paddingTop:5,borderRadius:10,marginLeft:250,}}
                             onPress={()=> onClickDeleteComment(el[1].id)}>
                             <Text>삭제</Text>
                             </Pressable>
