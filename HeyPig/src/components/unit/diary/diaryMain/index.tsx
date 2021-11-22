@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import { GlobalContext } from '~/App';
 
 const FETCH_BOARDS = gql`
   query {
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
 
   ButtonStyle: {
     position: 'absolute',
-    backgroundColor: '#58ccff',
+    backgroundColor: '#ffd600',
     right: 30,
     bottom: 30,
     height: 60,
@@ -69,45 +70,13 @@ const styles = StyleSheet.create({
 });
 
 export function DiaryMain({navigation}: any) {
-  const [diary, setDiary] = React.useState([]);
-  let aaa: any = [];
-  const user = auth().currentUser;
+
+  const {diary, user}:any = React.useContext(GlobalContext)
+
   const email = user?.email
 
-  React.useEffect(() => {
-    {email === null 
-      ? 
-        firestore()
-        .collection('Users')
-        .doc(String(user?.uid))
-        .collection('Diary')
-        .orderBy('date', 'asc')
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            aaa.push(doc.data());
-          });
-          setDiary(aaa.reverse());
-        })
-      :
-        firestore()
-        .collection('Users')
-        .doc(String(user?.email))
-        .collection('Diary')
-        .orderBy('date', 'asc')
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            aaa.push(doc.data());
-          });
-          setDiary(aaa.reverse());
-        });
-    }
-    
-  }, [firestore().collection('Users').doc('').collection('Diary').get()]);
-
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 5}}>
       <Image
         style={styles.DiaryTitle}
         source={require('../../../../Assets/images/diary.png')}
@@ -125,14 +94,14 @@ export function DiaryMain({navigation}: any) {
                 />
                 <View>
                   <Text>제목 : {el.title}</Text>
-                  <Text>체중 : {el.weight}</Text>
+                  <Text>체중 : {el.weight}kg</Text>
                 </View>
                 <Text
                   style={{
                     position: 'absolute',
-                    fontSize: 18,
-                    fontWeight: 'bold',
+                    fontSize: 16,
                     marginLeft: 280,
+                    fontFamily:'Yangjin'
                   }}>
                   {el.date}일차
                 </Text>
@@ -144,7 +113,7 @@ export function DiaryMain({navigation}: any) {
       <Pressable
         style={styles.ButtonStyle}
         onPress={() => navigation.navigate('DiaryWrite')}>
-        <Text style={{color: 'white', fontWeight: 'bold'}}>New</Text>
+        <Text style={{ fontFamily:'Yangjin'}}>New</Text>
       </Pressable>
     </View>
   );

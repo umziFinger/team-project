@@ -2,9 +2,11 @@ import * as React from 'react';
 import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import {LineChart} from 'react-native-chart-kit';
+import {
+  LineChart,
+} from "react-native-chart-kit";
 import WeightPage from './weight';
-import {GlobalContext} from '~/App';
+import { GlobalContext } from '~/App';
 
 const styles = StyleSheet.create({
   GoalView: {
@@ -54,22 +56,24 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     elevation: 3,
   },
+
 });
 
-export default function HomePage({navigation}: any) {
-  const {infoData, user, diary, date}: any = React.useContext(GlobalContext);
+export default function HomePage({navigation}:any) {
+
+  const {infoData, user, diary, date}:any = React.useContext(GlobalContext)
 
   const chartConfig = {
-    backgroundGradientFrom: '#1E2923',
+    backgroundGradientFrom: "#1E2923",
     backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: '#08130D',
+    backgroundGradientTo: "#08130D",
     backgroundGradientToOpacity: 0,
     color: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
     strokeWidth: 2, // optional, default 3
     barPercentage: 0.5,
-    useShadowColorFromDataset: false, // optional
+    useShadowColorFromDataset: false // optional
   };
-  const screenWidth = 400;
+  const screenWidth = 400
   // const screenWidth = Dimensions.get("window").width;
   const data = {
     labels: [],
@@ -77,39 +81,26 @@ export default function HomePage({navigation}: any) {
       {
         data: [23, 45, 28, 80, 99, 43],
         color: (opacity = 0) => `rgba(0,0,0, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
+        strokeWidth: 2 // optional
+      }
     ],
-    legend: [], // optional
+    legend: [] // optional
   };
 
-  const leftWeight = Number(diary[0]?.weight) - Number(infoData?.goal);
+  const leftWeight = Number(diary[0]?.weight)-Number(infoData?.goal)
 
-  const today = diary.filter((el: any) => el.date === date + 1);
+  const today = diary.filter((el:any) => el.date===date+1)
 
   return (
     <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
-      <WeightPage />
+      <WeightPage/>
       <Pressable
         style={styles.GoalView}
         onPress={() => navigation.navigate('GoalPage')}>
-        {diary[0]?.weight && (
-          <Text
-            style={{
-              position: 'absolute',
-              width: 300,
-              height: 160,
-              color: '#ec407a',
-              fontWeight: 'bold',
-            }}>
-            {leftWeight > 0
-              ? `${leftWeight}kg 남았습니다!`
-              : `목표달성(현재 : ${diary[0]?.weight}kg)`}
-          </Text>
-        )}
-        <Text style={{fontSize: 50, fontFamily: 'Yangjin'}}>
-          {infoData.goal ? `${infoData.goal}kg` : '목표!'}
-        </Text>
+        {diary[0]?.weight && <Text style={{position:'absolute', width: 300, height:160, color:'#ec407a', fontWeight:'bold'}}>
+          {leftWeight > 0 ? `${leftWeight}kg 남았습니다!` : `목표달성(현재 : ${diary[0]?.weight}kg)`}
+        </Text>}
+        <Text style={{fontSize:50, fontFamily: 'Yangjin'}}>{infoData.goal ? `${infoData.goal}kg` : '목표!'}</Text>
       </Pressable>
       {/* <Pressable
         style={styles.WeightView}
@@ -120,36 +111,22 @@ export default function HomePage({navigation}: any) {
         style={styles.ExerciseView}
         // onPress={() => navigation.navigate('ExercisePage')}
       >
-        <Text style={{fontSize: 20, fontFamily: 'Yangjin'}}>오늘 할 운동</Text>
+        <Text style={{fontSize:20, fontFamily: 'Yangjin'}}>오늘 할 운동</Text>
         <View style={{marginLeft: 170, marginTop: 30}}>
-          <Text style={{margin: 5, fontSize: 17, fontWeight: 'bold'}}>
-            ▶︎ {today[0]?.exercise}
-          </Text>
-          <Text style={{margin: 5, fontSize: 17, fontWeight: 'bold'}}>
-            ▶︎ 윗몸일으키기
-          </Text>
-          <Text style={{margin: 5, fontSize: 17, fontWeight: 'bold'}}>
-            ▶︎ 팔굽혀펴기
-          </Text>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ {today[0]?.exercise}</Text>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ 윗몸일으키기</Text>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ 팔굽혀펴기</Text>
         </View>
       </Pressable>
       <Pressable
         style={styles.MealView}
         // onPress={() => navigation.navigate('MealPage')}
       >
-        <Text style={{fontSize: 20, fontFamily: 'Yangjin'}}>
-          오늘 먹을 음식
-        </Text>
+        <Text style={{fontSize:20, fontFamily: 'Yangjin'}}>오늘 먹을 음식</Text>
         <View style={{marginLeft: 170, marginTop: 30}}>
-          <Text style={{margin: 5, fontSize: 17, fontWeight: 'bold'}}>
-            ▶︎ {today[0]?.food}
-          </Text>
-          <Text style={{margin: 5, fontSize: 17, fontWeight: 'bold'}}>
-            ▶︎ 토마토
-          </Text>
-          <Text style={{margin: 5, fontSize: 17, fontWeight: 'bold'}}>
-            ▶︎ 닭가슴살
-          </Text>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ {today[0]?.food}</Text>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ 토마토</Text>
+          <Text style={{margin:5, fontSize:17, fontWeight:'bold'}}>▶︎ 닭가슴살</Text>
         </View>
       </Pressable>
     </ScrollView>

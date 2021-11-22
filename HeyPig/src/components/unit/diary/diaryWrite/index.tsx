@@ -15,14 +15,13 @@ const styles = StyleSheet.create({
 
     ImageWrapper: {
         width: 350,
-        height: 400,
+        height: 370,
         borderRadius: 10,
         backgroundColor: "white",
         flexDirection: "column",
         alignItems:'center',
         elevation: 4,
         margin:15,
-        padding: 25
     },
 
     ContentsWrapper: {
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
     },
 
     SubmitButton: {
-        backgroundColor: '#58ccff',
+        backgroundColor: '#ffd600',
         width: 120,
         height: 40,
         borderRadius: 5,
@@ -253,7 +252,7 @@ export function DiaryWrite({navigation, route}:any) {
                 <Image style={styles.DiaryTitle} source={require('../../../../Assets/images/diary.png')}/>
                 <View style={styles.ImageWrapper}>
                     <View style={styles.TitleWrapper}>
-                        <Text style={{fontSize: 20, fontWeight: 'bold'}}>{date+1}일차</Text>
+                        <Text style={{fontSize: 20, fontFamily: 'Yangjin'}}>{date+1}일차</Text>
                         <TextInput 
                             placeholder="제목을 입력해주세요" 
                             onChangeText={text => setTitle(text)}
@@ -268,7 +267,7 @@ export function DiaryWrite({navigation, route}:any) {
                     <Text>체중 :</Text>
                     <TextInput 
                         style={styles.InputStyle} 
-                        placeholder="체중을 입력해주세요." 
+                        placeholder="체중을 입력해주세요(kg생략)." 
                         defaultValue={route.params?.route.params.el.weight} 
                         onChangeText={text => setWeight(text)}
                     />
@@ -295,7 +294,7 @@ export function DiaryWrite({navigation, route}:any) {
                     <View style={styles.WorkOutColorLine}></View>
                 </View>
                 <TouchableOpacity style={styles.SubmitButton} onPress={writeDiary}>
-                    <Text style={{ color: 'white', fontWeight: 'bold'}}>등록하기</Text>
+                    <Text style={{ fontFamily:'Yangjin'}}>등록하기</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>

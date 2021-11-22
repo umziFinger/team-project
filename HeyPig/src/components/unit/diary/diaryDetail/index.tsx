@@ -9,7 +9,8 @@ const styles = StyleSheet.create({
         flex:1,
         flexDirection: "column",
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
+        // backgroundColor: '#ffd600'
     },
 
     TitleWrapper: {
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
 
     DateText: {
         fontSize: 20,
-        fontWeight: 'bold'
+        fontFamily:'Yangjin'
     },
 
     TitleText: {
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
 
     ImageWrapper: {
         width: 350,
-        height: 350,
+        height: 370,
         borderRadius: 10,
         backgroundColor: "white",
         flexDirection: "column",
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
         flexDirection:'row', 
         justifyContent:'center', 
         alignItems:'center', 
-        backgroundColor: '#58ccff',
+        backgroundColor: '#ffd600',
         borderRadius:5,
     },
 
@@ -136,18 +137,18 @@ export function DiaryDetail({navigation, route}:any) {
                     <Image style={styles.TopImage} source={route.params.el.image ? {uri:`${route.params.el.image}`} : {uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}}/>
                 </View>
                 <View style={styles.ContentsWrapper}>
-                    <Text>체중 :</Text>
-                    <Text>{route.params.el.weight}</Text>
+                    <Text style={{fontFamily:'Yangjin'}}>체중 :</Text>
+                    <Text style={{fontFamily:'Yangjin', fontSize: 20}}>{route.params.el.weight}kg</Text>
                     <View style={styles.WeightColorLine}></View>
                 </View>
                 <View style={styles.ContentsWrapper}>
-                    <Text>식단 :</Text>
-                    <Text>{route.params.el.food}</Text>
+                    <Text style={{fontFamily:'Yangjin'}}>식단 :</Text>
+                    <Text style={{fontFamily:'Yangjin', fontSize: 20}}>{route.params.el.food}</Text>
                     <View style={styles.FoodColorLine}></View>
                 </View>
                 <View style={styles.ContentsWrapper}>
-                    <Text>운동 :</Text>
-                    <Text>{route.params.el.exercise}</Text>
+                    <Text style={{fontFamily:'Yangjin'}}>운동 :</Text>
+                    <Text style={{fontFamily:'Yangjin', fontSize: 20}}>{route.params.el.exercise}</Text>
                     <View style={styles.WorkOutColorLine}></View>
                 </View>
                 <View style={{flexDirection: 'row', alignItems:'center', marginLeft: 140, marginTop: 20, marginBottom: 20}}>
