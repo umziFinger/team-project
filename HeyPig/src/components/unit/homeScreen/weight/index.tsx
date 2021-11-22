@@ -1,63 +1,28 @@
 import * as React from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart,
+} from 'react-native-chart-kit';
+import {Dimensions} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import {LineChart} from 'react-native-chart-kit';
-import WeightPage from './weight';
 import {GlobalContext} from '~/App';
 
-const styles = StyleSheet.create({
-  GoalView: {
-    height: 200,
-    width: 350,
-    margin: 20,
-    borderRadius: 10,
-    backgroundColor: '#ffd600',
-    paddingHorizontal: 15,
-    elevation: 3,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+export default function WeightPage() {
+  const [weightsData, setWeightsData] = React.useState([0, 0, 0, 0, 0]);
+  const {diary, user}: any = React.useContext(GlobalContext);
 
-  WeightView: {
-    height: 200,
-    width: 350,
-    margin: 20,
-    borderRadius: 10,
-    backgroundColor: '#ffd600',
-    paddingHorizontal: 15,
-    elevation: 3,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  let weights: any = [];
 
-  ExerciseView: {
-    height: 200,
-    width: 350,
-    margin: 20,
-    borderRadius: 10,
-    backgroundColor: '#ffd600',
-    paddingTop: 20,
-    paddingLeft: 20,
-    elevation: 3,
-  },
-
-  MealView: {
-    height: 200,
-    width: 350,
-    margin: 20,
-    borderRadius: 10,
-    backgroundColor: '#ffd600',
-    paddingTop: 20,
-    paddingLeft: 20,
-    elevation: 3,
-  },
-});
-
-export default function HomePage({navigation}: any) {
-  const {infoData, user, diary, date}: any = React.useContext(GlobalContext);
+  React.useEffect(() => {
+    diary.map((el: any) => weights.push(Number(el.weight)));
+    setWeightsData(weights);
+  }, []);
 
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
@@ -75,83 +40,26 @@ export default function HomePage({navigation}: any) {
     labels: [],
     datasets: [
       {
-        data: [23, 45, 28, 80, 99, 43],
+        data: [10, 40, 30, 35, 25, 55, 33, 66, 44],
         color: (opacity = 0) => `rgba(0,0,0, ${opacity})`, // optional
         strokeWidth: 2, // optional
       },
     ],
-    legend: [], // optional
+    // legend: ["your weight"] // optional
   };
 
-  const leftWeight = Number(diary[0]?.weight) - Number(infoData?.goal);
-
-  const today = diary.filter((el: any) => el.date === date + 1);
-
   return (
-    <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
-      <WeightPage />
-      <Pressable
-        style={styles.GoalView}
-        onPress={() => navigation.navigate('GoalPage')}>
-        {diary[0]?.weight && (
-          <Text
-            style={{
-              position: 'absolute',
-              width: 300,
-              height: 160,
-              color: '#ec407a',
-              fontWeight: 'bold',
-            }}>
-            {leftWeight > 0
-              ? `${leftWeight}kg 남았습니다!`
-              : `목표달성(현재 : ${diary[0]?.weight}kg)`}
-          </Text>
-        )}
-        <Text style={{fontSize: 50, fontFamily: 'Yangjin'}}>
-          {infoData.goal ? `${infoData.goal}kg` : '목표!'}
-        </Text>
-      </Pressable>
-      {/* <Pressable
-        style={styles.WeightView}
-        onPress={() => navigation.navigate('WeightPage')}>
-        <Text>weight</Text>
-      </Pressable> */}
-      <Pressable
-        style={styles.ExerciseView}
-        // onPress={() => navigation.navigate('ExercisePage')}
-      >
-        <Text style={{fontSize: 20, fontFamily: 'Yangjin'}}>오늘 할 운동</Text>
-        <View style={{marginLeft: 170, marginTop: 30}}>
-          <Text style={{margin: 5, fontSize: 17, fontWeight: 'bold'}}>
-            ▶︎ {today[0]?.exercise}
-          </Text>
-          <Text style={{margin: 5, fontSize: 17, fontWeight: 'bold'}}>
-            ▶︎ 윗몸일으키기
-          </Text>
-          <Text style={{margin: 5, fontSize: 17, fontWeight: 'bold'}}>
-            ▶︎ 팔굽혀펴기
-          </Text>
-        </View>
-      </Pressable>
-      <Pressable
-        style={styles.MealView}
-        // onPress={() => navigation.navigate('MealPage')}
-      >
-        <Text style={{fontSize: 20, fontFamily: 'Yangjin'}}>
-          오늘 먹을 음식
-        </Text>
-        <View style={{marginLeft: 170, marginTop: 30}}>
-          <Text style={{margin: 5, fontSize: 17, fontWeight: 'bold'}}>
-            ▶︎ {today[0]?.food}
-          </Text>
-          <Text style={{margin: 5, fontSize: 17, fontWeight: 'bold'}}>
-            ▶︎ 토마토
-          </Text>
-          <Text style={{margin: 5, fontSize: 17, fontWeight: 'bold'}}>
-            ▶︎ 닭가슴살
-          </Text>
-        </View>
-      </Pressable>
-    </ScrollView>
+    <View style={{flex: 1, alignItems: 'center'}}>
+      <LineChart
+        style={{
+          marginTop: 25,
+        }}
+        fromZero={true}
+        data={data}
+        width={screenWidth}
+        height={220}
+        chartConfig={chartConfig}
+      />
+    </View>
   );
 }

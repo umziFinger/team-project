@@ -37,7 +37,6 @@ export function Board1Main(props: any) {
       });
       setBoard(temp);
     });
-  console.log(board);
   return (
     <View>
       {board?.map(function aaa(el: any, i: number) {

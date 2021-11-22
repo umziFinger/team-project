@@ -189,7 +189,7 @@ export default function App() {
               snapshot.forEach(doc => {
                 aaa.push(doc.data());
               });
-              setDiary(aaa.reverse());
+              //   setDiary(aaa.reverse());
             });
     };
     getData();

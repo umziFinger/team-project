@@ -46,9 +46,9 @@ const styles = StyleSheet.create({
 
 export function Board2Main(props: any) {
   const {data, fetchMore, refetch} = useQuery(FETCH_BOARDS);
-  refetch();
+
   const {data: best, refetch: refetchBest} = useQuery(FETCH_BOARDS_OF_THE_BEST);
-  refetchBest();
+
   let page = 1;
   function onScroll() {
     if (!data) return;
