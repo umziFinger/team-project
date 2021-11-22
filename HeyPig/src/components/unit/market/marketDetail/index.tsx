@@ -3,10 +3,11 @@ import * as React from 'react';
 import { Text, View, Image ,StyleSheet, ScrollView, TextInput, Pressable } from "react-native";
 import auth from '@react-native-firebase/auth';
 
+
 const styles = StyleSheet.create({
        Img:{
            width: '100%',
-           height: 200,
+           height: 300,
            backgroundColor:'gray',
            borderRadius:10
        },
@@ -14,7 +15,7 @@ const styles = StyleSheet.create({
            
             width: '100%',
             height: 280,
-            backgroundColor:'#ddf5ff',
+            backgroundColor:'#ffffff',
             marginTop:25,
             alignItems:'center',
             // flexDirection:'row',
@@ -64,9 +65,9 @@ const styles = StyleSheet.create({
            marginBottom:10
        },
        BottomButton:{
-           width: '100%' ,
+           width: '90%' ,
            flexDirection:'row',
-           justifyContent:"space-evenly"
+           justifyContent:"space-around"
        },
        CommentName:{
            fontWeight:'bold',
@@ -79,7 +80,7 @@ export function MarketDetail({navigation,route}:any) {
     const [comments, setComments] = React.useState([]);
 
     const user:any = auth().currentUser;
-    const isWriter = user.email === route.params.el.writer; // ?
+    const isWriter = user.email === route.params.el[0].writer; // ?
 
     function SubmitComment(){
         if (comment !== '') {
@@ -87,7 +88,7 @@ export function MarketDetail({navigation,route}:any) {
               .collection('Market')
               .doc(route.params.el[1].id)
               .collection('Comments')
-              .add({writer: user?.email, contents: comment});
+              .add({writer: user?.email, contents: comment, createdAt:new Date()});
         }
     }
     
@@ -107,22 +108,6 @@ export function MarketDetail({navigation,route}:any) {
         });
         setComments(tt);
         });
-    // let tt: any = [];
-    // ???
-    // firestore()
-    // .collection('Market')
-    // .doc(route.params.el.id)
-    // .collection('Comments')
-    // .get()
-    // .then(snapshot => {
-    //   snapshot.forEach(doc => {
-    //     const temp: any = [];
-    //     temp.push(doc.data());
-    //     temp.push({id: doc.id});
-    //     tt.push(temp);
-    //   });
-    //   setComments(tt);
-    // });
 
     function onClickDelete() {
         try{
@@ -152,9 +137,12 @@ export function MarketDetail({navigation,route}:any) {
       }    
     const writer1 = route.params.el[0].writer.split("@")
     // console.log(writer1)
+    // const CommentWriter = tt.temp.el[0].writer.split("@")
     return(
     <ScrollView>
-        <View style={styles.Img}/>
+        <Image 
+            source={route.params.el[0].image ? {uri:`${route.params.el[0].image[0].image}`} : {uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}}
+            style={styles.Img}/>
         <View style={styles.Info__Wrapper}>
             <View style={styles.Contents__Wrapper}>
                 <Text style={styles.productName}>상품명 : {route.params.el[0].productName}</Text>
@@ -164,7 +152,7 @@ export function MarketDetail({navigation,route}:any) {
                 <Text style={{margin:10}}>판매자 : {writer1[0]}</Text>
             </View>
             <Pressable>
-                <Text style={{ width:100 , height:30, backgroundColor: "pink",borderRadius:10,textAlign:'center',paddingTop:5,marginTop:50}}>
+                <Text style={{ width:100 , height:30,textAlign:'center', backgroundColor: "pink",borderRadius:10,paddingTop:5,marginTop:50}}>
                     구매하기
                 </Text>
             </Pressable>
@@ -181,20 +169,33 @@ export function MarketDetail({navigation,route}:any) {
                 onPress={()=> SubmitComment()}>
                 <Text style={{width:50,height:30,backgroundColor:"#fff884", borderRadius:10,textAlign:'center',paddingTop:5 ,margin:10} }>입력</Text>
             </Pressable>
-            {/* {comments?. map((el,index) => ( */}
-                <View > 
+            {comments?.map((el,index) => (
+                <View key = {index}> 
                     <View style={{flexDirection:'column', margin:15 ,backgroundColor:"white",padding:10,}}>
-                        <Text style={{fontWeight:'bold',fontSize:14}}>{writer1[0]}</Text>
-                        <Text style={{marginTop:10, width:"100%" ,borderBottomColor:'gray',borderBottomWidth:1}}>내용</Text>
+                        <Text style={{fontWeight:'bold',fontSize:14}}>{el[0].writer.split("@")[0]}</Text>
+                        <Text style={{marginTop:10, width:"100%" }}>{el[0].contents}</Text>
+                        {user.email === el[0].writer && (
+                            <Pressable
+                            style={{width:100,height:30,backgroundColor:'skyblue',alignItems:'center'}}
+                            onPress={()=> onClickDeleteComment(el[1].id)}>
+                            <Text>삭제</Text>
+                            </Pressable>
+                        )}
                     </View>
                 </View>
-            {/* ))} */}
+            ))}
         </View>
-        <Pressable style={styles.BottomButton}>
-            <Text onPress={onClickEdit} style={{backgroundColor:'#FFE1E1'}}>수정하기</Text>
-            <Text onPress={onClickDelete} style={{backgroundColor:'#FFE1E1'}}>삭제하기</Text>
-            <Text onPress={()=> {navigation.navigate('MarketMain')}} style={{backgroundColor:'#FFE1E1'}}>목록으로</Text>
-        </Pressable>
+            <Pressable style={styles.BottomButton}>
+                {isWriter && (
+                    <View style={{flexDirection:'row',justifyContent:'space-around', width:'65%'}}>
+                        <Text onPress={onClickEdit} style={{width:75 , height:30,textAlign:'center', backgroundColor: "pink",borderRadius:10,paddingTop:5}}>수정하기</Text>
+                        <Text onPress={onClickDelete} style={{width:75 , height:30,textAlign:'center', backgroundColor: "pink",borderRadius:10,paddingTop:5}}>삭제하기</Text>
+                    </View>
+                )}
+                <View>
+                    <Text onPress={()=> {navigation.navigate('MarketMain')}} style={{width:75 , height:30,textAlign:'center', backgroundColor: "pink",borderRadius:10,paddingTop:5}}>목록으로</Text>
+                </View>
+            </Pressable>
     </ScrollView>
     )
 }

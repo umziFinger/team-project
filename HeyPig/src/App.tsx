@@ -197,7 +197,7 @@ export default function App() {
           setDiary(aaa.reverse());
         });
     }
-    getData()
+    // getData()
   }, [firestore().collection('Users').doc('').collection('Diary').get()]);
 
   React.useEffect(() => {

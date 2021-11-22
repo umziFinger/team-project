@@ -6,6 +6,8 @@ import {CREATE_USED_ITEM} from '~/components/commons/market.queries';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import RNPickerSelect from 'react-native-picker-select';
+
 
 
 const styles = StyleSheet.create({
@@ -132,7 +134,7 @@ export function MarketWrite({navigation,route}:any) {
         if (price !=='' && contents !=='' && treadArea !=='' && productName !=='') {
             firestore()
             .collection('Market')
-            .add({writer,productName,price,contents,treadArea})
+            .add({writer,productName,price,contents,treadArea,image,createAt:new Date()})
             navigation.navigate('MarketMain');
         }
     }

@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
     marketImage: {
         justifyContent:'center', 
         alignItems:'center',
-        
+        width: 80,
+        height: 80,
         marginRight:30
     },
     supermarket:{
@@ -110,6 +111,7 @@ export function MarketMain({navigation,route}:any) {
   React.useEffect(() => {
     const doc = firestore()
       .collection('Market')
+      // .orderBy('createdAt', 'desc')
       .get()
       .then(snapshot=>{
         snapshot.forEach(doc=>{
@@ -125,16 +127,13 @@ export function MarketMain({navigation,route}:any) {
     return(
       <View style={{flex: 1, justifyContent:'center',alignItems:'center'}}>    
         <ScrollView >
-             {/* <Text style={styles.BestProduct}>Best 상품</Text> */}
              <Image style={styles.supermarket} source={require('../../../../Assets/images/supermarket.png')}/>
             
           <Carousel
             gap={5}
             offset={0} // left margin
             pages={PAGES}
-            // pageWidth={screenWidth} 
-
-                pageWidth={screenWidth - (2+1) * 2}
+            pageWidth={screenWidth - (2+1) * 2}
           />
         <View>
           <View  style={styles.Wrapper}>
@@ -144,8 +143,11 @@ export function MarketMain({navigation,route}:any) {
                 key={i} 
                 style={styles.marketMain} 
                 onPress={() => navigation.navigate('MarketDetail',{el})}>
-                <Image style={styles.marketImage} source={require('../../../../Assets/images/add.png')} />
-                <View> 
+                <Image 
+                  style={styles.marketImage} 
+                  source={el[0].image ? {uri:`${el[0].image}`} : {uri:'https://storage.googleapis.com/codecamp-file-storage/2021/10/26/banner4.jpeg'}}
+                />
+                <View>
                   <View style={styles.contentsWrapper}>
                     <Text >상품명 : {el[0].productName}</Text>
                     <Text style={styles.contents}>상품설명 : {el[0].contents}</Text>
@@ -159,7 +161,6 @@ export function MarketMain({navigation,route}:any) {
           </View>
         </View>
         </ScrollView>
-            
             <Pressable style={styles.ButtonStyle} onPress={() => navigation.navigate('MarketWrite')}>
               <Text style={{color: 'white', fontWeight: "bold",}}>상품등록</Text>
             </Pressable>
