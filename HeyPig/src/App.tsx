@@ -3,7 +3,7 @@ import SplashScreen from 'react-native-splash-screen';
 import {Button, Text, TextInput, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {DiaryMain} from './components/unit/diary/diaryMain';
+import { DiaryMain } from './components/unit/diary/diaryMain';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 import {BoardMain} from './components/unit/board/boardMain';
@@ -25,7 +25,7 @@ import ExercisePage from './components/unit/homeScreen/exercise';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Profile, LoginButton} from 'react-native-fbsdk-next';
+import {Profile, LoginButton} from 'react-native-fbsdk-next'
 
 function HomeScreen() {
   return (
@@ -64,6 +64,7 @@ const Stack = createNativeStackNavigator();
 function LoginSignup(parentProps: any) {
   return (
     <Stack.Navigator>
+      
       <Stack.Screen name="Login" options={{headerShown: false}}>
         {props => <LoginScreen {...props} {...parentProps} />}
       </Stack.Screen>
@@ -149,114 +150,124 @@ export const GlobalContext = React.createContext(null);
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useState('');
-  const [date, setDate]: any = useState(0);
+  const [date, setDate]:any = useState(0)
   const [diary, setDiary] = React.useState([]);
-  const [infoData, setInfoData]: any = React.useState({});
+  const [infoData, setInfoData]:any = React.useState({})
 
-  let user: any = auth().currentUser;
+  let user:any = auth().currentUser
 
-  const value: any = {
+  const value:any = {
     diary,
     infoData,
     user,
-    date,
-  };
+    date
+  }
 
+  
   let aaa: any = [];
 
   React.useEffect(() => {
-    const getData = async () => {
-      email === null
-        ? await firestore()
-            .collection('Users')
-            .doc(String(user?.uid))
-            .collection('Diary')
-            .orderBy('date', 'asc')
-            .get()
-            .then(snapshot => {
-              snapshot.forEach(doc => {
-                aaa.push(doc.data());
-              });
-              setDiary(aaa.reverse());
-            })
-        : await firestore()
-            .collection('Users')
-            .doc(String(user?.email))
-            .collection('Diary')
-            .orderBy('date', 'asc')
-            .get()
-            .then(snapshot => {
-              snapshot.forEach(doc => {
-                aaa.push(doc.data());
-              });
-              //   setDiary(aaa.reverse());
+    try{
+      const getData = async() =>
+      {email === null 
+        ? 
+          await firestore()
+          .collection('Users')
+          .doc(String(user?.uid))
+          .collection('Diary')
+          .orderBy('date', 'asc')
+          .get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              aaa.push(doc.data());
             });
-    };
-    getData();
+            setDiary(aaa.reverse());
+          })
+        :
+          await firestore()
+          .collection('Users')
+          .doc(String(user?.email))
+          .collection('Diary')
+          .orderBy('date', 'asc')
+          .get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              aaa.push(doc.data());
+            });
+            setDiary(aaa.reverse());
+          });
+      }
+      getData()
+    }catch(err){
+      console.log(err)
+    }
   }, [firestore().collection('Users').doc('').collection('Diary').get()]);
 
   React.useEffect(() => {
-    const getData = async () => {
-      user?.email === null
-        ? await firestore()
-            .collection('Users')
+
+    try{
+      const getData = async() => 
+      {user?.email === null
+        ?
+          await firestore()
+            .collection("Users")
             .doc(String(user?.uid))
             .collection('Info')
             .get()
             .then(snapshot => {
               snapshot.forEach(doc => {
-                setInfoData(doc.data());
+                  setInfoData(doc.data());
               });
             })
-        : await firestore()
-            .collection('Users')
+        :
+          await firestore()
+            .collection("Users")
             .doc(String(user?.email))
             .collection('Info')
             .get()
             .then(snapshot => {
               snapshot.forEach(doc => {
-                setInfoData(doc.data());
+                  setInfoData(doc.data());
               });
-            });
-    };
-    getData();
-  }, [
-    firestore()
-      .collection('Users')
-      .doc(String(user?.email))
-      .collection('Info')
-      .get(),
-  ]);
+            })
+      }
+      getData()
+    }catch(err){
+      console.log(err)
+    }
+  },[firestore().collection("Users").doc(String(user?.email)).collection('Info').get()])
 
   useEffect(() => {
     SplashScreen.hide();
   }, []);
 
-  const signinDate: any = new Date(user?.metadata.creationTime.slice(0, 10));
-  const currentDate: any = new Date(new Date().toISOString().slice(0, 10));
+
+  const signinDate:any = new Date(user?.metadata.creationTime.slice(0,10))
+  const currentDate:any = new Date(new Date().toISOString().slice(0,10))
 
   React.useEffect(() => {
-    setDate((currentDate - signinDate) / (3600000 * 24));
-  }, [signinDate]);
+    setDate((currentDate-signinDate)/(3600000*24))
+  },[signinDate])
 
-  auth().onAuthStateChanged(user => {
+
+  auth().onAuthStateChanged((user) => {
     if (user) {
-      setIsLoggedIn(true);
+    	setIsLoggedIn(true);
     } else {
-      setIsLoggedIn(false);
+    	setIsLoggedIn(false);
     }
   });
 
-  const email = user?.email;
-  // const arr = firestore().collection('Users').get()
-  //   .then(snapshot => {
-  //     snapshot.forEach(doc => {
-  //         console.log('aaa',doc.data());
-  //     });
-  // })
+    const email = user?.email
+    // const arr = firestore().collection('Users').get()
+    //   .then(snapshot => {
+    //     snapshot.forEach(doc => {
+    //         console.log('aaa',doc.data());
+    //     });
+    // })
 
   const client = new ApolloClient({
-    uri: 'http://backend03.codebootcamp.co.kr/graphql',
+    uri: 'http://backend03.codebootcamp.co.kr/graphql01',
     cache: new InMemoryCache(),
   });
 
@@ -265,74 +276,44 @@ export default function App() {
       <ApolloProvider client={client}>
         {isLoggedIn ? (
           <NavigationContainer>
-            <View
-              style={{
-                // backgroundColor:'#ffd600',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                height: 50,
-                borderBottomColor: '#ffd600',
-                borderBottomWidth: 3,
-              }}>
-              <View
-                style={{
-                  width: 330,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginBottom: 20,
-                }}>
-                <Text
-                  style={{
-                    position: 'absolute',
-                    marginLeft: 10,
-                    fontSize: 18,
-                    fontFamily: 'Yangjin',
-                  }}>
-                  다이어트 {date + 1}일째
-                </Text>
-                <Text
-                  style={{
-                    position: 'absolute',
-                    marginLeft: 200,
-                    fontFamily: 'Yangjin',
-                  }}>
-                  {user?.displayName}님 환영합니다!
-                </Text>
-              </View>
+            <View style={{
+              // backgroundColor:'#ffd600',
+              flexDirection:'row', 
+              justifyContent:'flex-end', 
+              alignItems:'center',
+              height:50,
+              borderBottomColor:'#ffd600',
+              borderBottomWidth: 3
+            }}>
+                <View style={{width: 330, flexDirection: 'row', justifyContent:'space-between', marginBottom: 20}}>
+                  <Text style={{position:'absolute', marginLeft: 10, fontSize:18, fontFamily:'Yangjin'}}>다이어트 {date+1}일째</Text>
+                  <Text style={{position:'absolute', marginLeft: 200, fontFamily:'Yangjin'}}>{user?.displayName}님 환영합니다!</Text>
+                </View>
               <View>
-                <Ionicons
-                  style={{
-                    fontSize: 30,
-                    color: '#ffd600',
-                    marginLeft: 5,
-                    marginRight: 15,
-                  }}
-                  name={'log-out-outline'}
-                  onPress={() => auth().signOut()}
-                />
+                <Ionicons style={{fontSize: 30, color:'#ffd600', marginLeft: 5, marginRight: 15}} name={'log-out-outline'}  onPress={() => auth().signOut()}/>
               </View>
             </View>
             <Tab.Navigator
-              screenOptions={({route}) => ({
-                tabBarIcon: ({focused, color, size}) => {
-                  let iconName: any;
-
+              screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                  let iconName:any;
+      
                   if (route.name === 'Home') {
                     iconName = focused ? 'home' : 'home-outline';
-                  } else if (route.name === 'Board') {
+                  } else if (route.name === 'Board'){
                     iconName = focused ? 'clipboard' : 'clipboard-outline';
-                  } else if (route.name === 'Market') {
+                  } else if (route.name === 'Market'){
                     iconName = focused ? 'cart' : 'cart-outline';
-                  } else if (route.name === 'Diary') {
+                  } else if (route.name === 'Diary'){
                     iconName = focused ? 'checkbox' : 'checkbox-outline';
                   }
 
-                  return <Ionicons name={iconName} size={size} color={color} />;
+                  return <Ionicons name={iconName} size={size}  color={color}/>;
                 },
                 tabBarActiveTintColor: 'tomato',
                 tabBarInactiveTintColor: 'gray',
-              })}>
+              })}
+            >
               <Tab.Screen
                 name="Home"
                 component={HomeScreen}
