@@ -52,5 +52,6 @@
 ![drag](https://user-images.githubusercontent.com/89247938/143441779-70b34ebc-2af5-47c5-9f95-139b36aa1cd3.gif)
 
 ## Splash Screen
+
 ![splashscreen](https://user-images.githubusercontent.com/89247938/143442674-2b2d27ff-d9ca-4e73-bbfd-8004a5b8458d.gif)
 
